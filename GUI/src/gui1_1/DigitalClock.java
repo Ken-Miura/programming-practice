@@ -10,8 +10,6 @@ import java.awt.Insets;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -28,7 +26,9 @@ public final class DigitalClock extends Frame {
 	private static final String TITLE = "DIGITAL CLOCK";
 	private static final int FONT_SIZE = 128;
 	private static final long INTERVAL = 1000; /* ミリ秒単位 */
+	private final int stringHeight;
 	private final Canvas canvas;
+	private final Timer timer;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(() -> {
@@ -41,9 +41,6 @@ public final class DigitalClock extends Frame {
 	 * 時刻の更新のために、バックグラウンドで動くタイマースレッド（デーモンスレッド）を起動する。<br>
 	 * ウィンドウのxボタンを押下すると、アプリケーションが終了する。
 	 */
-	/*
-	 * TODO 必要があればprivateからpublicに再設定
-	 */
 	private DigitalClock() {
 		super(TITLE);
 		setResizable(false);
@@ -53,19 +50,21 @@ public final class DigitalClock extends Frame {
 		FontMetrics fm = getGraphics().getFontMetrics(font);
 		Insets insets = getInsets();
 		int frameWidth = insets.left + fm.stringWidth("00:00:00") + insets.right;
-		int height = fm.getAscent(); /* 数字のみの表示で、ベースラインから上端までで十分なのでgetAscent */
-		int frameHeight = insets.top + height + insets.bottom;
+		stringHeight = fm.getAscent(); /* 数字のみの表示で、ベースラインから上端までで十分なのでgetAscent */
+		int margin = stringHeight / 3; /* 数字の下側のマージン。値は見た目を調整しながら適当に */
+		int frameHeight = insets.top + stringHeight + margin + insets.bottom;
 		setSize(frameWidth, frameHeight);
+		
 		canvas = new Canvas() {
 			@Override
 			public void paint(Graphics graphics) {
 				LocalTime localTime = LocalTime.now();
-				graphics.drawString(localTime.format(DateTimeFormatter
-						.ofLocalizedTime(FormatStyle.MEDIUM)), 0, height);
+				graphics.drawString(String.format("%02d:%02d:%02d", localTime.getHour(), localTime.getMinute(), localTime.getSecond()), 0, stringHeight);
 			}
 		};
 		add(canvas);
-		Timer timer = new Timer(true);
+		
+		timer = new Timer(true);
 		timer.scheduleAtFixedRate(new TimerTask() {
 			@Override
 			public void run() {
@@ -74,6 +73,7 @@ public final class DigitalClock extends Frame {
 				});
 			}
 		}, new Date(), INTERVAL);
+		
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
