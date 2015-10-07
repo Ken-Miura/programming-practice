@@ -68,9 +68,7 @@ public final class DigitalClock extends Frame {
 		timer.scheduleAtFixedRate(new TimerTask() {
 			@Override
 			public void run() {
-				EventQueue.invokeLater(() -> {
-					canvas.repaint();
-				});
+				canvas.repaint();
 			}
 		}, new Date(), INTERVAL);
 		
