@@ -1,6 +1,7 @@
 package gui1_2;
 
 import java.awt.Canvas;
+import java.awt.Dialog;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.FontMetrics;
@@ -8,6 +9,11 @@ import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Insets;
+import java.awt.Menu;
+import java.awt.MenuBar;
+import java.awt.MenuItem;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.time.LocalTime;
@@ -25,7 +31,7 @@ import java.util.TimerTask;
 public final class DigitalClock extends Frame {
 
 	private static final String TITLE = "DIGITAL CLOCK";
-	private static final int FONT_SIZE = 128;
+	private static final int FONT_SIZE = 256;
 	private static final long INTERVAL = 500; /* ミリ秒単位 */
 	private final int frameTop;
 	private final int frameBottom;
@@ -69,6 +75,28 @@ public final class DigitalClock extends Frame {
 		canvasHeight = stringHeight + margin;
 		int frameHeight = frameTop + canvasHeight + frameBottom;
 		setSize(frameWidth, frameHeight);
+		
+		MenuBar menuBar = new MenuBar();
+		Menu menu = new Menu("menu");
+		MenuItem menuItem = new MenuItem("menuItem");
+		Dialog d = new Dialog(this, "property", true);
+		d.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				d.setVisible(false);
+			}
+		});
+		menuItem.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				d.setVisible(true);
+				System.out.println("after");
+			}
+		});
+		menu.add(menuItem);
+		menuBar.add(menu);
+		setMenuBar(menuBar);
 		
 		canvas = new Canvas() {
 			@Override
