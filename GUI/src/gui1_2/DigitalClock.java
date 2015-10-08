@@ -27,9 +27,16 @@ public final class DigitalClock extends Frame {
 	private static final String TITLE = "DIGITAL CLOCK";
 	private static final int FONT_SIZE = 128;
 	private static final long INTERVAL = 500; /* ミリ秒単位 */
-	private final int stringHeight;
+	private final int frameTop;
+	private final int frameBottom;
+	private final int frameLeft;
+	private final int frameRight;
 	private final Canvas canvas;
 	private final Timer timer;
+	private int canvasWidth;
+	private int canvasHeight;
+	private Font font;
+	private FontMetrics fontMetrics;
 	private Image buffer;
 
 	public static void main(String[] args) {
@@ -47,21 +54,27 @@ public final class DigitalClock extends Frame {
 		super(TITLE);
 		setResizable(false);
 		setVisible(true); /* ボーダーの長さを取得するために先に可視化 */
-		Font font = new Font(null, Font.PLAIN, FONT_SIZE);
-		setFont(font);
-		FontMetrics fm = getGraphics().getFontMetrics(font);
 		Insets insets = getInsets();
-		int frameWidth = insets.left + fm.stringWidth("00:00:00") + insets.right;
-		stringHeight = fm.getAscent(); /* 数字のみの表示で、ベースラインから上端までで十分なのでgetAscent */
+		frameTop = insets.top;
+		frameBottom = insets.bottom;
+		frameLeft = insets.left;
+		frameRight = insets.right;
+		font = new Font(null, Font.PLAIN, FONT_SIZE);
+		setFont(font);
+		fontMetrics = getGraphics().getFontMetrics(font);
+		canvasWidth = fontMetrics.stringWidth("00:00:00");
+		int frameWidth = frameLeft + canvasWidth + frameRight;
+		int stringHeight = fontMetrics.getAscent(); /* 数字のみの表示で、ベースラインから上端までで十分なのでgetAscent */
 		int margin = stringHeight / 3; /* 数字の下側のマージン。値は見た目を調整しながら適当に */
-		int frameHeight = insets.top + stringHeight + margin + insets.bottom;
+		canvasHeight = stringHeight + margin;
+		int frameHeight = frameTop + canvasHeight + frameBottom;
 		setSize(frameWidth, frameHeight);
 		
 		canvas = new Canvas() {
 			@Override
 			public void paint(Graphics graphics) {
 				LocalTime localTime = LocalTime.now();
-				buffer = createImage(fm.stringWidth("00:00:00"), stringHeight + margin);
+				buffer = createImage(canvasWidth, canvasHeight);
 				Graphics bufferGraphics = buffer.getGraphics();
 				bufferGraphics.drawString(String.format("%02d:%02d:%02d", localTime.getHour(), localTime.getMinute(), localTime.getSecond()), 0, stringHeight);
 				graphics.drawImage(buffer, 0, 0, canvas);
