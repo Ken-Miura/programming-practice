@@ -59,22 +59,6 @@ public final class DigitalClock extends Frame {
 	private DigitalClock() {
 		super(TITLE);
 		setResizable(false);
-		setVisible(true); /* ボーダーの長さを取得するために先に可視化 */
-		Insets insets = getInsets();
-		frameTop = insets.top;
-		frameBottom = insets.bottom;
-		frameLeft = insets.left;
-		frameRight = insets.right;
-		font = new Font(null, Font.PLAIN, FONT_SIZE);
-		setFont(font);
-		fontMetrics = getGraphics().getFontMetrics(font);
-		canvasWidth = fontMetrics.stringWidth("00:00:00");
-		int frameWidth = frameLeft + canvasWidth + frameRight;
-		int stringHeight = fontMetrics.getAscent(); /* 数字のみの表示で、ベースラインから上端までで十分なのでgetAscent */
-		int margin = stringHeight / 3; /* 数字の下側のマージン。値は見た目を調整しながら適当に */
-		canvasHeight = stringHeight + margin;
-		int frameHeight = frameTop + canvasHeight + frameBottom;
-		setSize(frameWidth, frameHeight);
 		
 		MenuBar menuBar = new MenuBar();
 		Menu menu = new Menu("menu");
@@ -83,7 +67,7 @@ public final class DigitalClock extends Frame {
 		d.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
-				d.setVisible(false);
+				d.dispose();
 			}
 		});
 		menuItem.addActionListener(new ActionListener() {
@@ -91,14 +75,35 @@ public final class DigitalClock extends Frame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				d.setVisible(true);
-				System.out.println("after");
 			}
 		});
 		menu.add(menuItem);
 		menuBar.add(menu);
 		setMenuBar(menuBar);
 		
+		setVisible(true); /* ボーダーの長さを取得するために先に可視化 */
+		Insets insets = getInsets();
+		frameTop = insets.top;
+		frameBottom = insets.bottom;
+		frameLeft = insets.left;
+		frameRight = insets.right;
+		font = new Font(null, Font.PLAIN, FONT_SIZE);
+		Graphics graphics = getGraphics();
+		fontMetrics = graphics.getFontMetrics(font);
+		graphics.dispose();
+		canvasWidth = fontMetrics.stringWidth("00:00:00");
+		int frameWidth = frameLeft + canvasWidth + frameRight;
+		int stringHeight = fontMetrics.getAscent(); /* 数字のみの表示で、ベースラインから上端までで十分なのでgetAscent */
+		int margin = stringHeight / 3; /* 数字の下側のマージン。値は見た目を調整しながら適当に */
+		canvasHeight = stringHeight + margin;
+		int frameHeight = frameTop + canvasHeight + frameBottom;
+		setSize(frameWidth, frameHeight);
+		
 		canvas = new Canvas() {
+			
+			{
+				setFont(font);
+			}
 			@Override
 			public void paint(Graphics graphics) {
 				LocalTime localTime = LocalTime.now();
