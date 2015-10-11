@@ -8,11 +8,13 @@ import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Frame;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Insets;
 import java.awt.Menu;
 import java.awt.MenuBar;
 import java.awt.MenuItem;
+import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -32,7 +34,7 @@ import java.util.TimerTask;
 public final class DigitalClock extends Frame {
 
 	private static final String TITLE = "DIGITAL CLOCK";
-	private static final int FONT_SIZE = 300;
+	private static final int FONT_SIZE = 120;
 	private static final long INTERVAL = 500; /* ミリ秒単位 */
 	private final int frameTop;
 	private final int frameBottom;
@@ -109,6 +111,10 @@ public final class DigitalClock extends Frame {
 				LocalTime localTime = LocalTime.now();
 				buffer = createImage(canvasWidth, canvasHeight);
 				Graphics bufferGraphics = buffer.getGraphics();
+				if (bufferGraphics instanceof Graphics2D) {
+					Graphics2D g2d = (Graphics2D) bufferGraphics;
+					g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_LCD_HRGB);
+				}
 				bufferGraphics.setColor(fontColor);
 				bufferGraphics.drawString(String.format("%02d:%02d:%02d", localTime.getHour(), localTime.getMinute(), localTime.getSecond()), 0, stringHeight);
 				graphics.drawImage(buffer, 0, 0, canvas);
