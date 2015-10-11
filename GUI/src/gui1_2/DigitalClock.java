@@ -1,6 +1,7 @@
 package gui1_2;
 
 import java.awt.Canvas;
+import java.awt.Color;
 import java.awt.Dialog;
 import java.awt.EventQueue;
 import java.awt.Font;
@@ -31,7 +32,7 @@ import java.util.TimerTask;
 public final class DigitalClock extends Frame {
 
 	private static final String TITLE = "DIGITAL CLOCK";
-	private static final int FONT_SIZE = 256;
+	private static final int FONT_SIZE = 300;
 	private static final long INTERVAL = 500; /* ミリ秒単位 */
 	private final int frameTop;
 	private final int frameBottom;
@@ -40,10 +41,13 @@ public final class DigitalClock extends Frame {
 	private final Canvas canvas;
 	private final Timer timer;
 	private int canvasWidth;
+	private int stringHeight;
+	private int margin;
 	private int canvasHeight;
 	private Font font;
 	private FontMetrics fontMetrics;
 	private Image buffer;
+	private Color fontColor;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(() -> {
@@ -62,19 +66,14 @@ public final class DigitalClock extends Frame {
 		
 		MenuBar menuBar = new MenuBar();
 		Menu menu = new Menu("menu");
-		MenuItem menuItem = new MenuItem("menuItem");
-		Dialog d = new Dialog(this, "property", true);
-		d.addWindowListener(new WindowAdapter() {
-			@Override
-			public void windowClosing(WindowEvent e) {
-				d.dispose();
-			}
-		});
+		MenuItem menuItem = new MenuItem(PropertyDialog.TITLE);
+		Dialog propertyDialog = new PropertyDialog(this);
 		menuItem.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				d.setVisible(true);
+				propertyDialog.setLocation(getLocation());
+				propertyDialog.setVisible(true);
 			}
 		});
 		menu.add(menuItem);
@@ -93,11 +92,12 @@ public final class DigitalClock extends Frame {
 		graphics.dispose();
 		canvasWidth = fontMetrics.stringWidth("00:00:00");
 		int frameWidth = frameLeft + canvasWidth + frameRight;
-		int stringHeight = fontMetrics.getAscent(); /* 数字のみの表示で、ベースラインから上端までで十分なのでgetAscent */
-		int margin = stringHeight / 3; /* 数字の下側のマージン。値は見た目を調整しながら適当に */
+		stringHeight = fontMetrics.getAscent(); /* 数字のみの表示で、ベースラインから上端までで十分なのでgetAscent */
+		margin = stringHeight / 3; /* 数字の下側のマージン。値は見た目を調整しながら適当に */
 		canvasHeight = stringHeight + margin;
 		int frameHeight = frameTop + canvasHeight + frameBottom;
 		setSize(frameWidth, frameHeight);
+		fontColor = Color.BLACK;
 		
 		canvas = new Canvas() {
 			
@@ -109,6 +109,7 @@ public final class DigitalClock extends Frame {
 				LocalTime localTime = LocalTime.now();
 				buffer = createImage(canvasWidth, canvasHeight);
 				Graphics bufferGraphics = buffer.getGraphics();
+				bufferGraphics.setColor(fontColor);
 				bufferGraphics.drawString(String.format("%02d:%02d:%02d", localTime.getHour(), localTime.getMinute(), localTime.getSecond()), 0, stringHeight);
 				graphics.drawImage(buffer, 0, 0, canvas);
 				bufferGraphics.dispose();
@@ -137,5 +138,45 @@ public final class DigitalClock extends Frame {
 				System.exit(0);
 			}
 		});
+	}
+	
+	int getMargin() {
+		return margin;
+	}
+
+	void setMargin(int margin) {
+		this.margin = margin;
+	}
+
+	int getCanvasWidth() {
+		return canvasWidth;
+	}
+
+	void setCanvasWidth(int canvasWidth) {
+		this.canvasWidth = canvasWidth;
+	}
+
+	int getStringHeight() {
+		return stringHeight;
+	}
+
+	void setStringHeight(int stringHeight) {
+		this.stringHeight = stringHeight;
+	}
+
+	int getCanvasHeight() {
+		return canvasHeight;
+	}
+
+	void setCanvasHeight(int canvasHeight) {
+		this.canvasHeight = canvasHeight;
+	}
+	
+	Color getFontColor() {
+		return fontColor;
+	}
+
+	void setFontColor(Color fontColor) {
+		this.fontColor = fontColor;
 	}
 }
