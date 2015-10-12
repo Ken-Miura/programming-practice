@@ -1,7 +1,6 @@
 package gui1_2;
 
 import java.awt.Button;
-import java.awt.Canvas;
 import java.awt.Choice;
 import java.awt.Color;
 import java.awt.Component;
@@ -25,8 +24,8 @@ import java.awt.event.WindowEvent;
 import java.util.HashMap;
 import java.util.Map;
 
-public final class PropertyDialog extends Dialog {
-
+final class PropertyDialog extends Dialog {
+	
 	/**
 	 * version 1.0
 	 */
@@ -96,83 +95,77 @@ public final class PropertyDialog extends Dialog {
 				
 		propertyArea.applyComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
 		propertyArea.setLayout(new GridBagLayout());
-		GridBagConstraints gbc = new GridBagConstraints();
-		gbc.insets = new Insets(MARGIN, MARGIN, MARGIN, MARGIN);
+		GridBagConstraints componetConstraints = new GridBagConstraints();
+		componetConstraints.insets = new Insets(MARGIN, MARGIN, MARGIN, MARGIN);
 		
-		gbc.gridx = 0;
-		gbc.gridy = 0;
-		gbc.anchor = GridBagConstraints.EAST;
-		gbc.fill = GridBagConstraints.NONE;
-		propertyArea.add(fontLabel, gbc);
-		gbc.gridx = 1;
-		gbc.gridy = 0;
-		gbc.anchor = GridBagConstraints.WEST;
-		gbc.fill = GridBagConstraints.HORIZONTAL;
-		propertyArea.add(fontChoice, gbc);
+		componetConstraints.gridx = 0;
+		componetConstraints.gridy = 0;
+		componetConstraints.anchor = GridBagConstraints.EAST;
+		componetConstraints.fill = GridBagConstraints.NONE;
+		propertyArea.add(fontLabel, componetConstraints);
+		componetConstraints.gridx = 1;
+		componetConstraints.gridy = 0;
+		componetConstraints.anchor = GridBagConstraints.WEST;
+		componetConstraints.fill = GridBagConstraints.HORIZONTAL;
+		propertyArea.add(fontChoice, componetConstraints);
 		
-		gbc.gridx = 0;
-		gbc.gridy = 1;
-		gbc.anchor = GridBagConstraints.EAST;
-		gbc.fill = GridBagConstraints.NONE;
-		propertyArea.add(fontSizeLabel, gbc);
-		gbc.gridx = 1;
-		gbc.gridy = 1;
-		gbc.anchor = GridBagConstraints.WEST;
-		gbc.fill = GridBagConstraints.HORIZONTAL;
-		propertyArea.add(fontSizeChoice, gbc);
+		componetConstraints.gridx = 0;
+		componetConstraints.gridy = 1;
+		componetConstraints.anchor = GridBagConstraints.EAST;
+		componetConstraints.fill = GridBagConstraints.NONE;
+		propertyArea.add(fontSizeLabel, componetConstraints);
+		componetConstraints.gridx = 1;
+		componetConstraints.gridy = 1;
+		componetConstraints.anchor = GridBagConstraints.WEST;
+		componetConstraints.fill = GridBagConstraints.HORIZONTAL;
+		propertyArea.add(fontSizeChoice, componetConstraints);
 		
-		gbc.gridx = 0;
-		gbc.gridy = 2;
-		gbc.anchor = GridBagConstraints.EAST;
-		gbc.fill = GridBagConstraints.NONE;
-		propertyArea.add(fontColorLabel, gbc);
-		gbc.gridx = 1;
-		gbc.gridy = 2;
-		gbc.anchor = GridBagConstraints.WEST;
-		gbc.fill = GridBagConstraints.HORIZONTAL;
-		propertyArea.add(fontColorChoice, gbc);
+		componetConstraints.gridx = 0;
+		componetConstraints.gridy = 2;
+		componetConstraints.anchor = GridBagConstraints.EAST;
+		componetConstraints.fill = GridBagConstraints.NONE;
+		propertyArea.add(fontColorLabel, componetConstraints);
+		componetConstraints.gridx = 1;
+		componetConstraints.gridy = 2;
+		componetConstraints.anchor = GridBagConstraints.WEST;
+		componetConstraints.fill = GridBagConstraints.HORIZONTAL;
+		propertyArea.add(fontColorChoice, componetConstraints);
 
-		gbc.gridx = 0;
-		gbc.gridy = 3;
-		gbc.anchor = GridBagConstraints.EAST;
-		gbc.fill = GridBagConstraints.NONE;
-		propertyArea.add(backgroungColorLabel, gbc);
-		gbc.gridx = 1;
-		gbc.gridy = 3;
-		gbc.anchor = GridBagConstraints.WEST;
-		gbc.fill = GridBagConstraints.HORIZONTAL;
-		propertyArea.add(backgroungColorChoice, gbc);
+		componetConstraints.gridx = 0;
+		componetConstraints.gridy = 3;
+		componetConstraints.anchor = GridBagConstraints.EAST;
+		componetConstraints.fill = GridBagConstraints.NONE;
+		propertyArea.add(backgroungColorLabel, componetConstraints);
+		componetConstraints.gridx = 1;
+		componetConstraints.gridy = 3;
+		componetConstraints.anchor = GridBagConstraints.WEST;
+		componetConstraints.fill = GridBagConstraints.HORIZONTAL;
+		propertyArea.add(backgroungColorChoice, componetConstraints);
 		
 		okButton.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Graphics g = owner.getGraphics();
+				Graphics graphics = owner.getGraphics();
 				int selectedFontSize =  fontSizeSet[fontSizeChoice.getSelectedIndex()];
 				Font selectedFont = new Font(fontChoice.getSelectedItem(), Font.PLAIN, selectedFontSize);
-				FontMetrics fm = g.getFontMetrics(selectedFont);
-				
+				FontMetrics fontMetrics = graphics.getFontMetrics(selectedFont);
+				int stringHeight = fontMetrics.getAscent();
+				int stringWidth = fontMetrics.stringWidth("00:00:00");
 				Insets insets = owner.getInsets();
-				int stringHeight = fm.getAscent();
-				int margin = stringHeight/3;
-				int canvasHeight = stringHeight + margin;
-				int canvaswidth = fm.stringWidth("00:00:00");
-				owner.setSize(insets.left + canvaswidth + insets.right, insets.top + canvasHeight + insets.bottom);
-				if (owner instanceof DigitalClock) {
-					((DigitalClock)owner).setCanvasWidth(canvaswidth);
-					((DigitalClock)owner).setCanvasHeight(canvasHeight);;
-					((DigitalClock)owner).setStringHeight(stringHeight);
-					((DigitalClock)owner).setMargin(margin);
-					((DigitalClock)owner).setFontColor(colorSet.get(fontColorChoice.getSelectedItem()));
-				}
 				Component[] allComponents = owner.getComponents();
 				for (Component c: allComponents) {
-					if (c instanceof Canvas) {
+					if (c instanceof DigitalClockCanvas) {
 						c.setBackground(colorSet.get(backgroungColorChoice.getSelectedItem()));
 						c.setFont(selectedFont);
+						DigitalClockCanvas digitalClockCanvas = ((DigitalClockCanvas) c);
+						digitalClockCanvas.setStringWidth(stringWidth);
+						digitalClockCanvas.setStringHeight(stringHeight);
+						digitalClockCanvas.setFontColor(colorSet.get(fontColorChoice.getSelectedItem()));
+						owner.setSize(insets.left + digitalClockCanvas.getCanvasWidth() + insets.right, insets.top + digitalClockCanvas.getCanvasHeight() + insets.bottom);
 					}
 				}
-				g.dispose();
+				graphics.dispose();
 				dispose();
 			}
 		});
@@ -197,6 +190,5 @@ public final class PropertyDialog extends Dialog {
 				dispose();
 			}
 		});
-	}
-
+	}	
 }
