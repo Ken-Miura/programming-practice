@@ -16,6 +16,8 @@ import java.awt.Label;
 import java.awt.Panel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.HashMap;
@@ -52,8 +54,11 @@ final class DigitalClockPropertyDialog extends Dialog {
 	private final int[] fontSizeSet = new int[NUM_OF_FONT_SIZE_SET];
 	private final Map<String, Color> colorSet = new HashMap<>();
 	
+	private final Frame owner;
+	
 	DigitalClockPropertyDialog(Frame owner) {
 		super(owner, TITLE, true);
+		this.owner = owner;
 		setResizable(false);
 		setSize(WIDTH, HEIGHT);
 
@@ -143,22 +148,27 @@ final class DigitalClockPropertyDialog extends Dialog {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				int selectedFontSize = fontSizeSet[fontSizeChoice.getSelectedIndex()];
-				Font selectedFont = new Font(fontChoice.getSelectedItem(), Font.PLAIN, selectedFontSize);
-				Color selectedFontColor = colorSet.get(fontColorChoice.getSelectedItem());
-				Color selectedBackgroundColor = colorSet.get(backgroungColorChoice.getSelectedItem());
-				
-				DigitalClockProperty property = new DigitalClockProperty();
-				property.setFont(selectedFont);
-				property.setFontColor(selectedFontColor);
-				property.setBackgroungColor(selectedBackgroundColor);
-				
-				if (owner instanceof DigitalClockPropertyObserver) {
-					DigitalClockPropertyObserver observer = (DigitalClockPropertyObserver) owner;
-					observer.notifyPropertyChanged(property);	
-				}
-
-				dispose();
+				okSeleceted ();
+			}
+		});
+		okButton.addKeyListener(new KeyListener() {
+			
+			@Override
+			public void keyTyped(KeyEvent e) {
+				// Do nothing				
+			}
+			
+			@Override
+			public void keyReleased(KeyEvent e) {
+				// Do nothing
+			}
+			
+			@Override
+			public void keyPressed(KeyEvent e) {
+				int key = e.getKeyCode();
+		        if (key == KeyEvent.VK_ENTER) {
+		        	okSeleceted ();   
+		        }
 			}
 		});
 		cancelButton.addActionListener(new ActionListener() {
@@ -168,6 +178,27 @@ final class DigitalClockPropertyDialog extends Dialog {
 				dispose();
 			}
 		});
+		cancelButton.addKeyListener(new KeyListener() {
+			
+			@Override
+			public void keyTyped(KeyEvent e) {
+				// Do nothing
+			}
+			
+			@Override
+			public void keyReleased(KeyEvent e) {
+				// Do nothing
+			}
+			
+			@Override
+			public void keyPressed(KeyEvent e) {
+				int key = e.getKeyCode();
+		        if (key == KeyEvent.VK_ENTER) {
+		        	dispose();   
+		        }
+			}
+		});
+		
 		okCancelArea.applyComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
 		okCancelArea.setLayout(new FlowLayout(FlowLayout.RIGHT));
 		okCancelArea.add(okButton);
@@ -182,5 +213,24 @@ final class DigitalClockPropertyDialog extends Dialog {
 				dispose();
 			}
 		});
+	}
+	
+	private void okSeleceted () {
+		int selectedFontSize = fontSizeSet[fontSizeChoice.getSelectedIndex()];
+		Font selectedFont = new Font(fontChoice.getSelectedItem(), Font.PLAIN, selectedFontSize);
+		Color selectedFontColor = colorSet.get(fontColorChoice.getSelectedItem());
+		Color selectedBackgroundColor = colorSet.get(backgroungColorChoice.getSelectedItem());
+		
+		DigitalClockProperty property = new DigitalClockProperty();
+		property.setFont(selectedFont);
+		property.setFontColor(selectedFontColor);
+		property.setBackgroungColor(selectedBackgroundColor);
+		
+		if (owner instanceof DigitalClockPropertyObserver) {
+			DigitalClockPropertyObserver observer = (DigitalClockPropertyObserver) owner;
+			observer.notifyPropertyChanged(property);	
+		}
+
+		dispose();
 	}
 }
