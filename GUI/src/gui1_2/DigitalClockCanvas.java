@@ -57,36 +57,20 @@ final class DigitalClockCanvas extends Canvas {
 	public void update(Graphics g) {
 		paint(g);
 	}
-	
-	int getStringWidth() {
-		return stringWidth;
-	}
-
-	void setStringWidth(int stringWidth) {
-		this.stringWidth = stringWidth;
-	}
-
-	int getStringHeight() {
-		return stringHeight;
-	}
-
-	void setStringHeight(int stringHeight) {
-		this.stringHeight = stringHeight;
-	}
-
-	Color getFontColor() {
-		return fontColor;
-	}
-
-	void setFontColor(Color fontColor) {
-		this.fontColor = fontColor;
-	}
 
 	int getCanvasWidth () {
 		return stringWidth;
 	}
 	
 	int getCanvasHeight () {
-		return (stringHeight + stringHeight/3);
+		return (stringHeight + stringHeight/3); // 表示する数字の下のマージンを追加。値は見た目を調整しながら適当に。
+	}
+	
+	void changeProperty (Font font, Color fontColor, Color backgroundColor, FontMetrics fontMetrics) {
+		setFont(font);
+		this.fontColor = fontColor;
+		setBackground(backgroundColor);
+		stringHeight = fontMetrics.getAscent();
+		stringWidth = fontMetrics.stringWidth("00:00:00");
 	}
 }
