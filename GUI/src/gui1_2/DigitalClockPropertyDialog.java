@@ -168,11 +168,10 @@ final class DigitalClockPropertyDialog extends Dialog {
 				dispose();
 			}
 		});
-		okCancelArea
-				.applyComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
+		okCancelArea.applyComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
 		okCancelArea.setLayout(new FlowLayout(FlowLayout.RIGHT));
-		okCancelArea.add(cancelButton);
 		okCancelArea.add(okButton);
+		okCancelArea.add(cancelButton);
 
 		add(propertyArea, "Center");
 		add(okCancelArea, "South");
