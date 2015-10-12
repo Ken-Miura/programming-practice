@@ -3,7 +3,6 @@ package gui1_2;
 import java.awt.Button;
 import java.awt.Choice;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.ComponentOrientation;
 import java.awt.Dialog;
 import java.awt.FlowLayout;
@@ -54,14 +53,14 @@ final class PropertyDialog extends Dialog {
 	private final static int NUM_OF_FONT_SIZE_SET = 30;
 	private final int[] fontSizeSet = new int[NUM_OF_FONT_SIZE_SET];
 	private final Map<String, Color> colorSet = new HashMap<>();
-
+	
 	PropertyDialog(Frame owner) {
 		super(owner, TITLE, true);
+		DigitalClockFrame digitalClockFrame = (DigitalClockFrame) owner;
 		setResizable(false);
 		setSize(WIDTH, HEIGHT);
 
-		GraphicsEnvironment ge = GraphicsEnvironment
-				.getLocalGraphicsEnvironment();
+		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		fontSet = ge.getAllFonts();
 		for (Font f : fontSet) {
 			fontChoice.add(f.getName());
@@ -94,8 +93,7 @@ final class PropertyDialog extends Dialog {
 			backgroungColorChoice.add(s);
 		}
 
-		propertyArea
-				.applyComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
+		propertyArea.applyComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
 		propertyArea.setLayout(new GridBagLayout());
 		GridBagConstraints componetConstraints = new GridBagConstraints();
 		componetConstraints.insets = new Insets(MARGIN, MARGIN, MARGIN, MARGIN);
@@ -152,18 +150,14 @@ final class PropertyDialog extends Dialog {
 				Font selectedFont = new Font(fontChoice.getSelectedItem(), Font.PLAIN, selectedFontSize);
 				Color selectedFontColor = colorSet.get(fontColorChoice.getSelectedItem());
 				Color selectedBackgroundColor = colorSet.get(backgroungColorChoice.getSelectedItem());
-				Graphics graphics = owner.getGraphics();
+				Graphics graphics = digitalClockFrame.getGraphics();
 				FontMetrics fontMetrics = graphics.getFontMetrics(selectedFont);
-				Component[] allComponents = owner.getComponents();
-				for (Component c : allComponents) {
-					if (c instanceof DigitalClockCanvas) {
-						DigitalClockCanvas digitalClockCanvas = ((DigitalClockCanvas) c);
-						digitalClockCanvas.changeProperty(selectedFont, selectedFontColor, selectedBackgroundColor, fontMetrics);
-						Insets insets = owner.getInsets();
-						owner.setSize(insets.left + digitalClockCanvas.getCanvasWidth() + insets.right, 
-										insets.top + digitalClockCanvas.getCanvasHeight() + insets.bottom);
-					}
-				}
+				
+				DigitalClockCanvas digitalClockCanvas = digitalClockFrame.getDigitalClockCanvas();
+				digitalClockCanvas.changeProperty(selectedFont, selectedFontColor, selectedBackgroundColor, fontMetrics);
+				Insets insets = digitalClockFrame.getInsets();
+				digitalClockFrame.setSize(insets.left + digitalClockCanvas.getCanvasWidth() + insets.right, 
+								insets.top + digitalClockCanvas.getCanvasHeight() + insets.bottom);
 				graphics.dispose();
 				dispose();
 			}

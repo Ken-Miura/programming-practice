@@ -73,6 +73,9 @@ class DigitalClockFrame extends Frame {
 				System.exit(0);
 			}
 		});
-
+	}
+	
+	DigitalClockCanvas getDigitalClockCanvas() {
+		return digitalClockCanvasCanvas;
 	}
 }
