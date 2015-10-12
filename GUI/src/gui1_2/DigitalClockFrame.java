@@ -16,7 +16,7 @@ import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
-class DigitalClockFrame extends Frame implements DigitalClockPropertyChangeObserver {
+class DigitalClockFrame extends Frame implements DigitalClockPropertyObserver {
 
 	/**
 	 * version 1.0

@@ -153,8 +153,8 @@ final class DigitalClockPropertyDialog extends Dialog {
 				property.setFontColor(selectedFontColor);
 				property.setBackgroungColor(selectedBackgroundColor);
 				
-				if (owner instanceof DigitalClockPropertyChangeObserver) {
-					DigitalClockPropertyChangeObserver observer = (DigitalClockPropertyChangeObserver) owner;
+				if (owner instanceof DigitalClockPropertyObserver) {
+					DigitalClockPropertyObserver observer = (DigitalClockPropertyObserver) owner;
 					observer.notifyPropertyChanged(property);	
 				}
 
