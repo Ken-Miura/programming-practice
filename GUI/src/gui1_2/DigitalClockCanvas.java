@@ -63,7 +63,8 @@ final class DigitalClockCanvas extends Canvas {
 	}
 	
 	int getCanvasHeight () {
-		return (stringHeight + stringHeight/3); // 表示する数字の下のマージンを追加。値は見た目を調整しながら適当に。
+		// 表示する数字の下のマージンを追加。値は見た目を調整しながら適当に。Fontの種類によってはマージンをfontMetrics.getDescent()に設定しないと足りないかも。
+		return (stringHeight + stringHeight/3); 
 	}
 	
 	void changeProperty (Font font, Color fontColor, Color backgroundColor, FontMetrics fontMetrics) {
