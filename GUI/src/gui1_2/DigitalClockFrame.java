@@ -1,7 +1,9 @@
 package gui1_2;
 
 import java.awt.Dialog;
+import java.awt.FontMetrics;
 import java.awt.Frame;
+import java.awt.Graphics;
 import java.awt.Insets;
 import java.awt.Menu;
 import java.awt.MenuBar;
@@ -14,7 +16,7 @@ import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
-class DigitalClockFrame extends Frame {
+class DigitalClockFrame extends Frame implements DigitalClockPropertyChangeObserver {
 
 	/**
 	 * version 1.0
@@ -22,7 +24,7 @@ class DigitalClockFrame extends Frame {
 	private static final long serialVersionUID = -3945485273578642505L;
 	private static final String TITLE = "DIGITAL CLOCK";
 	private static final long INTERVAL = 500; /* ミリ秒単位 */
-	private final DigitalClockCanvas digitalClockCanvasCanvas;
+	private final DigitalClockCanvas digitalClockCanvas;
 	private final Timer timer;
 	private final Dialog propertyDialog;
 	
@@ -35,8 +37,8 @@ class DigitalClockFrame extends Frame {
 		setResizable(false);
 		menuBar = new MenuBar();
 		menu = new Menu("menu");
-		menuItem = new MenuItem(PropertyDialog.TITLE);
-		propertyDialog = new PropertyDialog(this);
+		menuItem = new MenuItem(DigitalClockPropertyDialog.TITLE);
+		propertyDialog = new DigitalClockPropertyDialog(this);
 		menuItem.addActionListener(new ActionListener() {
 			
 			@Override
@@ -50,18 +52,18 @@ class DigitalClockFrame extends Frame {
 		setMenuBar(menuBar);
 		setVisible(true);
 		
-		digitalClockCanvasCanvas = new DigitalClockCanvas(this);
-		add(digitalClockCanvasCanvas);
+		digitalClockCanvas = new DigitalClockCanvas(this);
+		add(digitalClockCanvas);
 		
 		Insets insets = getInsets();
-		setSize(insets.right + digitalClockCanvasCanvas.getCanvasWidth() + insets.right, 
-				insets.top + digitalClockCanvasCanvas.getCanvasHeight() + insets.bottom);
+		setSize(insets.right + digitalClockCanvas.getCanvasWidth() + insets.right, 
+				insets.top + digitalClockCanvas.getCanvasHeight() + insets.bottom);
 		
 		timer = new Timer(true);
 		timer.scheduleAtFixedRate(new TimerTask() {
 			@Override
 			public void run() {
-				digitalClockCanvasCanvas.repaint();
+				digitalClockCanvas.repaint();
 			}
 		}, new Date(), INTERVAL);
 		
@@ -74,8 +76,15 @@ class DigitalClockFrame extends Frame {
 			}
 		});
 	}
-	
-	DigitalClockCanvas getDigitalClockCanvas() {
-		return digitalClockCanvasCanvas;
+
+	@Override
+	public void notifyPropertyChanged(DigitalClockProperty property) {
+		Graphics graphics = getGraphics();
+		FontMetrics fontMetrics = graphics.getFontMetrics(property.getFont());
+		digitalClockCanvas.changeProperty(property.getFont(), property.getFontColor(), property.getBackgroungColor(), fontMetrics);
+		Insets insets = getInsets();
+		setSize(insets.left + digitalClockCanvas.getCanvasWidth() + insets.right, 
+						insets.top + digitalClockCanvas.getCanvasHeight() + insets.bottom);
+		graphics.dispose();
 	}
 }

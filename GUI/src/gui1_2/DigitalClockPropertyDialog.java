@@ -7,9 +7,7 @@ import java.awt.ComponentOrientation;
 import java.awt.Dialog;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.FontMetrics;
 import java.awt.Frame;
-import java.awt.Graphics;
 import java.awt.GraphicsEnvironment;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -23,7 +21,7 @@ import java.awt.event.WindowEvent;
 import java.util.HashMap;
 import java.util.Map;
 
-final class PropertyDialog extends Dialog {
+final class DigitalClockPropertyDialog extends Dialog {
 
 	/**
 	 * version 1.0
@@ -54,9 +52,8 @@ final class PropertyDialog extends Dialog {
 	private final int[] fontSizeSet = new int[NUM_OF_FONT_SIZE_SET];
 	private final Map<String, Color> colorSet = new HashMap<>();
 	
-	PropertyDialog(Frame owner) {
+	DigitalClockPropertyDialog(Frame owner) {
 		super(owner, TITLE, true);
-		DigitalClockFrame digitalClockFrame = (DigitalClockFrame) owner;
 		setResizable(false);
 		setSize(WIDTH, HEIGHT);
 
@@ -150,15 +147,17 @@ final class PropertyDialog extends Dialog {
 				Font selectedFont = new Font(fontChoice.getSelectedItem(), Font.PLAIN, selectedFontSize);
 				Color selectedFontColor = colorSet.get(fontColorChoice.getSelectedItem());
 				Color selectedBackgroundColor = colorSet.get(backgroungColorChoice.getSelectedItem());
-				Graphics graphics = digitalClockFrame.getGraphics();
-				FontMetrics fontMetrics = graphics.getFontMetrics(selectedFont);
 				
-				DigitalClockCanvas digitalClockCanvas = digitalClockFrame.getDigitalClockCanvas();
-				digitalClockCanvas.changeProperty(selectedFont, selectedFontColor, selectedBackgroundColor, fontMetrics);
-				Insets insets = digitalClockFrame.getInsets();
-				digitalClockFrame.setSize(insets.left + digitalClockCanvas.getCanvasWidth() + insets.right, 
-								insets.top + digitalClockCanvas.getCanvasHeight() + insets.bottom);
-				graphics.dispose();
+				DigitalClockProperty property = new DigitalClockProperty();
+				property.setFont(selectedFont);
+				property.setFontColor(selectedFontColor);
+				property.setBackgroungColor(selectedBackgroundColor);
+				
+				if (owner instanceof DigitalClockPropertyChangeObserver) {
+					DigitalClockPropertyChangeObserver observer = (DigitalClockPropertyChangeObserver) owner;
+					observer.notifyPropertyChanged(property);	
+				}
+
 				dispose();
 			}
 		});
