@@ -35,7 +35,7 @@ final class DigitalClockPropertyDialog extends Dialog {
 	private static final int WIDTH = 500;
 	private static final int MARGIN = 5;
 	private static final int FONT_SIZE = 15;
-	private static final String[] EXCLUDED_FONTS = new String [] { "Wide Latin", "Viner Hand ITC", "Vladimir Script", "Webdings", "Wingdings", "Wingdings 2", "Wingdings 3" };
+	private static final String[] EXCLUDED_FONTS = new String [] { "MT Extra", "Wide Latin", "Viner Hand ITC", "Vladimir Script", "Webdings", "Wingdings", "Wingdings 2", "Wingdings 3" };
 
 	private final Panel propertyArea = new Panel();
 	private final Label fontLabel = new Label("font");
