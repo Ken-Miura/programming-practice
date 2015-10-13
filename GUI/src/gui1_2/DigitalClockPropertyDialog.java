@@ -33,7 +33,9 @@ final class DigitalClockPropertyDialog extends Dialog {
 	public static final String TITLE = "property";
 	private static final int HEIGHT = 300;
 	private static final int WIDTH = 500;
-	private static final int MARGIN = 3;
+	private static final int MARGIN = 5;
+	private static final int FONT_SIZE = 15;
+	private static final String[] EXCLUDED_FONTS = new String [] { "Wingdings", "Wingdings 2", "Wingdings 3" };
 
 	private final Panel propertyArea = new Panel();
 	private final Label fontLabel = new Label("font");
@@ -60,12 +62,19 @@ final class DigitalClockPropertyDialog extends Dialog {
 		super(owner, TITLE, true);
 		this.owner = owner;
 		setResizable(false);
+		Font font = new Font("Monospace", Font.PLAIN, FONT_SIZE);
+		setFont(font);
 		setSize(WIDTH, HEIGHT);
 
 		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		fontSet = ge.getAllFonts();
 		for (Font f : fontSet) {
 			fontChoice.add(f.getName());
+		}
+		
+		int num = EXCLUDED_FONTS.length;
+		for (int i=0; i<num; i++) {
+			fontChoice.remove(EXCLUDED_FONTS[i]);
 		}
 
 		for (int i = 0; i < NUM_OF_FONT_SIZE_SET; i++) {
