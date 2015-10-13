@@ -1,19 +1,25 @@
 package gui1_2;
 
 import java.awt.Color;
-import java.awt.Font;
 
 public class DigitalClockProperty {
 
-	private Font font = null;
+	private String fontName = null;
+	private int fontSize = 0;
 	private Color fontColor = null;
 	private Color backgroungColor = null;
 	
-	Font getFont() {
-		return font;
+	public String getFontName() {
+		return fontName;
 	}
-	void setFont(Font font) {
-		this.font = font;
+	public void setFontName(String fontName) {
+		this.fontName = fontName;
+	}
+	int getFontSize() {
+		return fontSize;
+	}
+	void setFontSize(int fontSize) {
+		this.fontSize = fontSize;
 	}
 	Color getFontColor() {
 		return fontColor;

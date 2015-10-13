@@ -1,6 +1,7 @@
 package gui1_2;
 
 import java.awt.Dialog;
+import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Frame;
 import java.awt.Graphics;
@@ -80,8 +81,9 @@ class DigitalClockFrame extends Frame implements DigitalClockPropertyObserver {
 	@Override
 	public void notifyPropertyChanged(DigitalClockProperty property) {
 		Graphics graphics = getGraphics();
-		FontMetrics fontMetrics = graphics.getFontMetrics(property.getFont());
-		digitalClockCanvas.changeProperty(property.getFont(), property.getFontColor(), property.getBackgroungColor(), fontMetrics);
+		Font font = Font.decode(property.getFontName() + " " + property.getFontSize());
+		FontMetrics fontMetrics = graphics.getFontMetrics(font);
+		digitalClockCanvas.changeProperty(font, property.getFontColor(), property.getBackgroungColor(), fontMetrics);
 		Insets insets = getInsets();
 		setSize(insets.left + digitalClockCanvas.getCanvasWidth() + insets.right, 
 						insets.top + digitalClockCanvas.getCanvasHeight() + insets.bottom);

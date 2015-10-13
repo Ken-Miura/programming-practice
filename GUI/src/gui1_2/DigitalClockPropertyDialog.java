@@ -35,7 +35,7 @@ final class DigitalClockPropertyDialog extends Dialog {
 	private static final int WIDTH = 500;
 	private static final int MARGIN = 5;
 	private static final int FONT_SIZE = 15;
-	private static final String[] EXCLUDED_FONTS = new String [] { "Wingdings", "Wingdings 2", "Wingdings 3" };
+	private static final String[] EXCLUDED_FONTS = new String [] { "Wide Latin", "Viner Hand ITC", "Vladimir Script", "Webdings", "Wingdings", "Wingdings 2", "Wingdings 3" };
 
 	private final Panel propertyArea = new Panel();
 	private final Label fontLabel = new Label("font");
@@ -226,12 +226,13 @@ final class DigitalClockPropertyDialog extends Dialog {
 	
 	private void okSeleceted () {
 		int selectedFontSize = fontSizeSet[fontSizeChoice.getSelectedIndex()];
-		Font selectedFont = new Font(fontChoice.getSelectedItem(), Font.PLAIN, selectedFontSize);
+		String selectedFontName = fontChoice.getSelectedItem();
 		Color selectedFontColor = colorSet.get(fontColorChoice.getSelectedItem());
 		Color selectedBackgroundColor = colorSet.get(backgroungColorChoice.getSelectedItem());
 		
 		DigitalClockProperty property = new DigitalClockProperty();
-		property.setFont(selectedFont);
+		property.setFontName(selectedFontName);
+		property.setFontSize(selectedFontSize);
 		property.setFontColor(selectedFontColor);
 		property.setBackgroungColor(selectedBackgroundColor);
 		

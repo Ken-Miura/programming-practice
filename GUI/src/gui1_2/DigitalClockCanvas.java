@@ -22,6 +22,9 @@ final class DigitalClockCanvas extends Canvas {
 	private int stringWidth;
 	private int stringHeight;
 	private Color fontColor;
+	private static final String STRING_WIDTH_MESUREMENT = "00:00:00";
+	private static final String STRING_ITALIC_WIDTH_MESUREMENT = "00:00:00 ";
+	private int exportMaigin = 0;
 	
 	DigitalClockCanvas (Frame digitalClockFrame) {
 		Font font = new Font("Monospace", Font.PLAIN, DEFAULT_FONT_SIZE);
@@ -33,7 +36,7 @@ final class DigitalClockCanvas extends Canvas {
 			digitalClockFrame.setVisible(false);
 		}
 		FontMetrics fontMetrics = graphics.getFontMetrics(font);
-		stringWidth = fontMetrics.stringWidth("00:00:00");
+		stringWidth = fontMetrics.stringWidth(STRING_WIDTH_MESUREMENT);
 		stringHeight = fontMetrics.getAscent();
 		fontColor = Color.BLACK;
 	}
@@ -48,7 +51,7 @@ final class DigitalClockCanvas extends Canvas {
 			g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_LCD_HRGB);
 		}
 		bufferGraphics.setColor(fontColor);
-		bufferGraphics.drawString(String.format("%02d:%02d:%02d", localTime.getHour(), localTime.getMinute(), localTime.getSecond()), 0, stringHeight);
+		bufferGraphics.drawString(String.format("%02d:%02d:%02d", localTime.getHour(), localTime.getMinute(), localTime.getSecond()), exportMaigin, stringHeight);
 		graphics.drawImage(buffer, 0, 0, this);
 		bufferGraphics.dispose();
 	}
@@ -72,6 +75,12 @@ final class DigitalClockCanvas extends Canvas {
 		this.fontColor = fontColor;
 		setBackground(backgroundColor);
 		stringHeight = fontMetrics.getAscent();
-		stringWidth = fontMetrics.stringWidth("00:00:00");
+		if (font.isItalic()) {
+			stringWidth = fontMetrics.stringWidth(STRING_ITALIC_WIDTH_MESUREMENT);
+			exportMaigin = stringWidth/30;// 書き出し始めの左からのマージンを追加
+		} else {
+			stringWidth = fontMetrics.stringWidth(STRING_WIDTH_MESUREMENT);
+			exportMaigin = 0;
+		}
 	}
 }
