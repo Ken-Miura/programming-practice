@@ -21,6 +21,8 @@ import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 final class DigitalClockPropertyDialog extends Dialog {
@@ -35,6 +37,7 @@ final class DigitalClockPropertyDialog extends Dialog {
 	private static final int WIDTH = 500;
 	private static final int MARGIN = 5;
 	private static final int FONT_SIZE = 15;
+	/* プラットフォーム固有等のフォントを除外対象に */
 	private static final String[] EXCLUDED_FONTS = new String [] { "MT Extra", "Wide Latin", "Viner Hand ITC", "Vladimir Script", "Webdings", "Wingdings", "Wingdings 2", "Wingdings 3" };
 
 	private final Panel propertyArea = new Panel();
@@ -68,15 +71,18 @@ final class DigitalClockPropertyDialog extends Dialog {
 
 		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		fontSet = ge.getAllFonts();
+		List<String> list = new LinkedList<>();
 		for (Font f : fontSet) {
-			fontChoice.add(f.getName());
+				list.add(f.getName());
 		}
-		
 		int num = EXCLUDED_FONTS.length;
 		for (int i=0; i<num; i++) {
-			fontChoice.remove(EXCLUDED_FONTS[i]);
+			list.remove(EXCLUDED_FONTS[i]);
 		}
-
+		for (String s : list) {
+			fontChoice.add(s);
+		}
+		
 		for (int i = 0; i < NUM_OF_FONT_SIZE_SET; i++) {
 			fontSizeSet[i] = (i + 1) * 10;
 			fontSizeChoice.add(Integer.toString(fontSizeSet[i]));
