@@ -17,7 +17,9 @@ public class BaseNum {
 		BaseNum baseNum = new BaseNum();
 		
 		// byteにbyte型以外のリテラルを代入しようとしたとき
+		System.out.println("byte型の出力の確認");
 		baseNum.b = 0; // byteの範囲に収まるint
+		System.out.println(baseNum.b);
 		//baseNum.b = 128; // byteの範囲に収まらないint compile error
 		//baseNum.b = -129; // byteの範囲に収まらないint compile error
 		//baseNum.b = 0L; // long compile error
@@ -25,7 +27,9 @@ public class BaseNum {
 		//baseNum.b = 0.0 // double compile error
 		
 		// shortにshort型以外のリテラルを代入しようとしたとき
+		System.out.println("short型の出力確認");
 		baseNum.s = 0; // byteの範囲に収まるint
+		System.out.println(baseNum.s);
 		//baseNum.s = 32768; // shortの範囲に収まらないint compile error
 		//baseNum.s = -32769; // shortの範囲に収まらないint compile error
 		//baseNum.s = 0L; // long compile error
@@ -38,7 +42,9 @@ public class BaseNum {
 		//baseNum.i = 0.0; // double compile error
 		
 		// longにlong型以外のリテラルを代入しようとしたとき
+		System.out.println("long型の出力確認");
 		baseNum.l = 0; // int
+		System.out.println(baseNum.l);
 		//baseNum.l = 0.0f; // float compile error
 		//baseNum.l = 0.0; // double compile error
 		
