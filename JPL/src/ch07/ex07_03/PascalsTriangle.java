@@ -3,9 +3,9 @@ package ch07.ex07_03;
 public class PascalsTriangle {
 
 	public static void main(String[] args) {
-		//VM引数に-eaを追加して実行
+		// 禁止された値を入れたときのテスト。VM引数に-eaを追加して実行
 		try {
-			createPascalsTriangle(0);	
+			createPascalsTriangle(0);
 		} catch (AssertionError e) {
 			System.out.println("0のときAssertionErrorのキャッチ確認");
 		}
@@ -14,6 +14,7 @@ public class PascalsTriangle {
 		} catch (AssertionError e) {
 			System.out.println("負の値のときAssertionErrorのキャッチ確認");
 		}
+		// 出力の確認テスト
 		System.out.println("深さ１");
 		createPascalsTriangle(1);
 		System.out.println("深さ４");
