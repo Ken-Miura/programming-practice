@@ -1,0 +1,25 @@
+ << 2L - 1　⇒　int型の6
+
+(3L << 2) - 1　⇒　long型の11
+
+10 < 12 == 6 > 17　⇒　boolean型のfalse
+
+10 << 12 == 6 >> 17　⇒　boolean型のfalse
+
+13.5e-1 % Float.POSITIVE_INIFINITY　⇒　double型の1.35
+
+Float.POSITIVE_INFINITY + Double.NEGATIVE_INIFINITY　⇒　Double型のNaN
+
+Double.POSITIVE_INFINITY - Float.NEGATIVE_INIFINITY　⇒　Double型のPOSITIVE_INFINITY
+
+0.0 / - 0.0 == -0.0 / 0.0　⇒　boolean型のfalse
+
+Integer.MAX_VALUE + Integer.MIN_VALUE　⇒　int型の-1
+
+Long.MAX_VALUE + 5　⇒　long型のLong.MIN_VALUE + 4
+
+(short) 5 * (byte) 10　⇒　int型の50
+
+(i < 15 ? 1.72e3f : 0)　⇒　float型の1.72e3または0.0△0はintの0？
+
+i++ + i++ + --i (iは最初に3)　⇒　iと同じ型で11
