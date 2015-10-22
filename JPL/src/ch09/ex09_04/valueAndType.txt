@@ -20,6 +20,6 @@ Long.MAX_VALUE + 5　⇒　long型のLong.MIN_VALUE + 4
 
 (short) 5 * (byte) 10　⇒　int型の50
 
-(i < 15 ? 1.72e3f : 0)　⇒　float型の1.72e3または0.0△0はintの0？
+(i < 15 ? 1.72e3f : 0)　⇒　float型の1.72e3または0.0
 
 i++ + i++ + --i (iは最初に3)　⇒　iと同じ型で11
