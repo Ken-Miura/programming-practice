@@ -1,38 +1,41 @@
 package ch10.ex10_01;
 
+import java.util.Objects;
+
 public class EscapeSequenceReplacement {
-	private static final String BS = "\\";
 	
-	public static void main(String[] args) {  
-		String test = "test\ntest";  
-		System.out.println(test);  
-		System.out.println(replaceEscapeSequences(test));
-	}
-	
-	
-	private static String replaceEscapeSequences(String source) {  
-		int length = source.length();  
-		for (int i = 0; i < length; i++) {   
-			if (source.substring(i, i + 1).equals("\b")) {    
-				source = source.replace("\b", BS + "b");   
-			} else if (source.substring(i, i + 1).equals("\t")) {
-				source = source.replace("\t", BS + "t");   
-			} else if (source.substring(i, i + 1).equals("\n")) {    
-				source = source.replace("\n", BS + "n");
-			} else if (source.substring(i, i + 1).equals("\f")) {
-				source = source.replace("\f", BS + "f");
-			} else if (source.substring(i, i + 1).equals("\r")) {    
-				source = source.replace("\r", BS + "r");
-			} else if (source.substring(i, i + 1).equals("\"")) {
-				source = source.replace("\"", BS + "\"");
-			} else if (source.substring(i, i + 1).equals("\'")) {
-				source = source.replace("\'", BS + "'");   
-			} else if (source.substring(i, i + 1).equals("\\")) {    
-				source = source.replace("\\", BS + BS);    i++;
-			} else {    
-				// do nothing
+	/**
+	 * 
+	 * @param source 特殊文字を含む可能性のある文字列
+	 * @return 特殊文字をJava言語の表現で置き換えた文字列　例.sourceが"であれば\"がリターンされる
+	 * @throws NullPointerException sourceがnullのときスローされる
+	 */
+	public static String replaceEscapeSequences(String source) {
+		Objects.requireNonNull(source, "source must not be null");
+		int length = source.length();
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < length; i++) {
+			String target = source.substring(i, i + 1);
+			if (target.equals("\b")) {
+				sb.append("\\b");
+			} else if (target.equals("\t")) {
+				sb.append("\\t");
+			} else if (target.equals("\n")) {
+				sb.append("\\n");
+			} else if (target.equals("\f")) {
+				sb.append("\\f");
+			} else if (target.equals("\r")) {
+				sb.append("\\r");
+			} else if (target.equals("\"")) {
+				sb.append("\\\"");
+			} else if (target.equals("\'")) {
+				sb.append("\\'");
+			} else if (target.equals("\\")) {
+				sb.append("\\\\");
+			} else {
+				sb.append(target);
 			}
 		}
-		return source;
+		return sb.toString();
 	}
 }
