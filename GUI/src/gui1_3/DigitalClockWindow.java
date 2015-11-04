@@ -17,6 +17,9 @@ public final class DigitalClockWindow extends Window {
 	 */
 	private static final long serialVersionUID = -1330034521147739183L;
 	
+	private int x = 0;
+	private int y = 0;
+	
 	public DigitalClockWindow() throws HeadlessException {
 		super(new Frame());
 		
@@ -57,6 +60,35 @@ public final class DigitalClockWindow extends Window {
 			}
 		});
 		
+		addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// Do nothing
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				x = e.getX();
+				y = e.getY();
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// Do nothing
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// Do nothing
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// Do nothing
+			}
+		});
+		
 		addMouseMotionListener(new MouseMotionListener() {
 			
 			@Override
@@ -66,13 +98,13 @@ public final class DigitalClockWindow extends Window {
 			
 			@Override
 			public void mouseDragged(MouseEvent e) {
-				setLocation(e.getXOnScreen(), e.getYOnScreen());
+				setLocation(e.getXOnScreen() - x, e.getYOnScreen() - y);
 			}
 		});
 		
 		setBackground(Color.BLACK);
 		setSize(100, 100);
 		setVisible(true);
-		toFront();
+		//toFront();
 	}
 }
