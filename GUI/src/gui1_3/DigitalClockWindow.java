@@ -8,12 +8,9 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.HeadlessException;
 import java.awt.Image;
-import java.awt.MenuItem;
 import java.awt.PopupMenu;
 import java.awt.RenderingHints;
 import java.awt.Window;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -22,42 +19,40 @@ import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public final class DigitalClockWindow extends Window {
+final class DigitalClockWindow extends Window implements DigitalClockPropertyObserver {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -1330034521147739183L;
 	
-	private int x = 0;
-	private int y = 0;
+	private final PopupMenu digitalClockPopupMenu;
+	
+	private int xOnClicked = 0;
+	private int yOnClicked = 0;
 	
 	private Image buffer;
-	private Color fontColor;
-
 	private int stringWidth;
-
 	private int stringHeight;
+	private Color fontColor;
 	private static final String STRING_WIDTH_MESUREMENT = "00:00:00";
-	
-	public DigitalClockWindow() throws HeadlessException {
+
+	private static final long INTERVAL = 500;
+
+	DigitalClockWindow() throws HeadlessException {
 		super(new Frame());
+		setVisible(true);
 		
-		PopupMenu pm = new PopupMenu("test");
+		Font font = new Font(DigitalClockProperty.PROPERTY.getFontName(), Font.PLAIN, DigitalClockProperty.PROPERTY.getFontSize());
+		setFont(font);
+		FontMetrics fontMetrics = getFontMetrics(font);
+		stringWidth = fontMetrics.stringWidth(STRING_WIDTH_MESUREMENT);
+		stringHeight = fontMetrics.getAscent();
+		fontColor = DigitalClockProperty.PROPERTY.getFontColor();		
+
+		digitalClockPopupMenu = new DigitalClockPopupMenu(this);
+		add(digitalClockPopupMenu);
 		
-		pm.add(new MenuItem("menu item test"));
-		pm.addSeparator();
-		MenuItem exit = new MenuItem("exit");
-		exit.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				System.exit(0);
-			}
-		});
-		pm.add(exit);
-		add(pm);
-	
 		addMouseListener(new MouseListener() {
 			
 			@Override
@@ -67,7 +62,8 @@ public final class DigitalClockWindow extends Window {
 			
 			@Override
 			public void mousePressed(MouseEvent e) {
-				// Do nothing
+				xOnClicked = e.getX();
+				yOnClicked = e.getY();
 			}
 			
 			@Override
@@ -83,41 +79,12 @@ public final class DigitalClockWindow extends Window {
 			
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if (e.getButton()==MouseEvent.BUTTON3) {
-					pm.show(DigitalClockWindow.this, e.getPoint().x, e.getPoint().y);	
+				if (e.getButton() == MouseEvent.BUTTON3) {
+					digitalClockPopupMenu.show(DigitalClockWindow.this, e.getX(), e.getY());	
 				}
 			}
 		});
-		
-		addMouseListener(new MouseListener() {
-			
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				// Do nothing
-			}
-			
-			@Override
-			public void mousePressed(MouseEvent e) {
-				x = e.getX();
-				y = e.getY();
-			}
-			
-			@Override
-			public void mouseExited(MouseEvent e) {
-				// Do nothing
-			}
-			
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				// Do nothing
-			}
-			
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				// Do nothing
-			}
-		});
-		
+				
 		addMouseMotionListener(new MouseMotionListener() {
 			
 			@Override
@@ -127,19 +94,9 @@ public final class DigitalClockWindow extends Window {
 			
 			@Override
 			public void mouseDragged(MouseEvent e) {
-				setLocation(e.getXOnScreen() - x, e.getYOnScreen() - y);
+				setLocation(e.getXOnScreen() - xOnClicked, e.getYOnScreen() - yOnClicked);
 			}
 		});
-		
-		setVisible(true);
-		int DEFAULT_FONT_SIZE = 60;
-		Font font = new Font("Monospace", Font.PLAIN, DEFAULT_FONT_SIZE );
-		setFont(font);
-		Graphics graphics = getGraphics();
-		FontMetrics fontMetrics = graphics.getFontMetrics(font);
-		stringWidth = fontMetrics.stringWidth(STRING_WIDTH_MESUREMENT);
-		stringHeight = fontMetrics.getAscent();
-		fontColor = Color.BLACK;
 		
 		Timer timer = new Timer(true);
 		timer.scheduleAtFixedRate(new TimerTask() {
@@ -147,11 +104,11 @@ public final class DigitalClockWindow extends Window {
 			public void run() {
 				repaint();
 			}
-		}, new Date(), 1000);
+		}, new Date(), INTERVAL);
 		
 		setSize(getWindowWidth(), getWindowHeight());
-
 	}
+	
 	
 	@Override
 	public void paint(Graphics graphics) {
@@ -166,19 +123,35 @@ public final class DigitalClockWindow extends Window {
 		bufferGraphics.drawString(String.format("%02d:%02d:%02d", localTime.getHour(), localTime.getMinute(), localTime.getSecond()), 0, stringHeight);
 		graphics.drawImage(buffer, 0, 0, this);
 		bufferGraphics.dispose();
-
 	}
 	
-	private int getWindowWidth() {
-		return stringWidth;
-	}
-
-	private int getWindowHeight() {
-		return (stringHeight + stringHeight/3); 
-	}
-
 	@Override
 	public void update(Graphics g) {
 		paint(g);
 	}
+
+	int getWindowWidth () {
+		return stringWidth;
+	}
+	
+	int getWindowHeight () {
+		// 表示する数字の下のマージンを追加。値は見た目を調整しながら適当に。Fontの種類によってはマージンをfontMetrics.getDescent()に設定しないと足りないかも。
+		return (stringHeight + stringHeight/3); 
+	}
+
+	@Override
+	public void notifyPropertyChanged(DigitalClockProperty property) {
+		Graphics graphics = getGraphics();
+		Font font = Font.decode(property.getFontName() + " " + property.getFontSize());
+		setFont(font);
+		fontColor = property.getFontColor();
+		setBackground(property.getBackgroungColor());
+		FontMetrics fontMetrics = graphics.getFontMetrics(font);
+		stringHeight = fontMetrics.getAscent();
+		stringWidth = fontMetrics.stringWidth(STRING_WIDTH_MESUREMENT);	
+		graphics.dispose();
+		setSize(getWindowWidth(), getWindowHeight());
+		toFront();
+	}
+
 }
