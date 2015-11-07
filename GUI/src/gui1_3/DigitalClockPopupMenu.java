@@ -2,7 +2,6 @@ package gui1_3;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.Frame;
 import java.awt.GraphicsEnvironment;
 import java.awt.Menu;
 import java.awt.MenuItem;
@@ -120,11 +119,7 @@ final class DigitalClockPopupMenu extends PopupMenu {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					if(colorEntry.getValue().equals(DigitalClockProperty.PROPERTY.getBackgroungColor())){
-						Frame f = new Frame();
-						ErrorMessageDialog emd = new ErrorMessageDialog(f, colorEntry.getKey() + " is same color of background. Select different color for font.");
-						emd.setLocationRelativeTo(null);;
-						emd.setVisible(true);
-						f.dispose();
+						ErrorMessageDialog.showErrorMessage(colorEntry.getKey() + " is same color of background. Select different color for font.");
 						return;
 					}
 					DigitalClockProperty.PROPERTY.setFontColor(colorEntry.getValue());
@@ -146,11 +141,7 @@ final class DigitalClockPopupMenu extends PopupMenu {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					if(colorEntry.getValue().equals(DigitalClockProperty.PROPERTY.getFontColor())){
-						Frame f = new Frame();
-						ErrorMessageDialog emd = new ErrorMessageDialog(f, colorEntry.getKey() + " is same color of font. Select different color for background.");
-						emd.setLocationRelativeTo(null);;
-						emd.setVisible(true);
-						f.dispose();
+						ErrorMessageDialog.showErrorMessage(colorEntry.getKey() + " is same color of font. Select different color for background.");
 						return;
 					}
 					DigitalClockProperty.PROPERTY.setBackgroungColor(colorEntry.getValue());

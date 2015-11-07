@@ -32,9 +32,7 @@ final class ErrorMessageDialog extends Dialog {
 	private final Panel messageArea = new Panel();
 	private final Panel okArea = new Panel();
 	
-	private final Button okButton = new Button("OK");
-	
-	ErrorMessageDialog(Frame owner, String message) {
+	private ErrorMessageDialog(Frame owner, String message) {
 		super(owner, TITLE, true);
 		setResizable(false);
 		Font font = new Font("Monospace", Font.PLAIN, FONT_SIZE);
@@ -44,13 +42,13 @@ final class ErrorMessageDialog extends Dialog {
 		messageArea.applyComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
 		messageArea.setLayout(new GridBagLayout());
 		GridBagConstraints componetConstraints = new GridBagConstraints();
-
 		componetConstraints.gridx = 0;
 		componetConstraints.gridy = 0;
 		componetConstraints.anchor = GridBagConstraints.CENTER;
 		componetConstraints.fill = GridBagConstraints.NONE;
 		messageArea.add(new Label(message), componetConstraints);
 
+		Button okButton = new Button("OK");
 		okButton.addActionListener(new ActionListener() {
 
 			@Override
@@ -78,7 +76,6 @@ final class ErrorMessageDialog extends Dialog {
 		        }
 			}
 		});
-		
 		okArea.applyComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
 		okArea.setLayout(new FlowLayout(FlowLayout.CENTER));
 		okArea.add(okButton);
@@ -92,5 +89,13 @@ final class ErrorMessageDialog extends Dialog {
 				dispose();
 			}
 		});
+	}
+	
+	static void showErrorMessage (String message) {
+		Frame f = new Frame();
+		ErrorMessageDialog emd = new ErrorMessageDialog(f, message);
+		emd.setLocationRelativeTo(null);;
+		emd.setVisible(true);
+		f.dispose();
 	}
 }
