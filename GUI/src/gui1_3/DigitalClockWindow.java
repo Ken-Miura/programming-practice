@@ -140,12 +140,12 @@ final class DigitalClockWindow extends Window implements DigitalClockPropertyObs
 	}
 
 	@Override
-	public void notifyPropertyChanged(DigitalClockProperty property) {
+	public void notifyPropertyChanged(DigitalClockProperty newProperty) {
 		Graphics graphics = getGraphics();
-		Font font = Font.decode(property.getFontName() + " " + property.getFontSize());
+		Font font = Font.decode(newProperty.getFontName() + " " + newProperty.getFontSize());
 		setFont(font);
-		fontColor = property.getFontColor();
-		setBackground(property.getBackgroungColor());
+		fontColor = newProperty.getFontColor();
+		setBackground(newProperty.getBackgroungColor());
 		FontMetrics fontMetrics = graphics.getFontMetrics(font);
 		stringHeight = fontMetrics.getAscent();
 		stringWidth = fontMetrics.stringWidth(STRING_WIDTH_MESUREMENT);	
