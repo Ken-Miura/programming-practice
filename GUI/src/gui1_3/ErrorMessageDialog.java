@@ -26,7 +26,7 @@ final class ErrorMessageDialog extends Dialog {
 	
 	static final String TITLE = "error";
 	private static final int HEIGHT = 150;
-	private static final int WIDTH = 500;
+	private static final int WIDTH = 700;
 	private static final int FONT_SIZE = 15;
 
 	private final Panel messageArea = new Panel();

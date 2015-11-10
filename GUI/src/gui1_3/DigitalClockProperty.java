@@ -7,7 +7,7 @@ enum DigitalClockProperty {
 	PROPERTY;
 	
 	// DEFAULT PROPERTY
-	private String fontName = "Monospace";
+	private String fontName = "Arial";
 	private int fontSize = 60;
 	private Color fontColor = Color.BLACK;
 	private Color backgroungColor = Color.WHITE;

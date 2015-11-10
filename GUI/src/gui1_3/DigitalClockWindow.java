@@ -107,6 +107,8 @@ final class DigitalClockWindow extends Window implements DigitalClockPropertyObs
 		}, new Date(), INTERVAL);
 		
 		setSize(getWindowWidth(), getWindowHeight());
+		
+		DigitalClockTrayIcon.createTrayIcon(this);
 	}
 	
 	
