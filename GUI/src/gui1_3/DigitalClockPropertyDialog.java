@@ -38,8 +38,6 @@ final class DigitalClockPropertyDialog extends Dialog {
 	private static final int WIDTH = 500;
 	private static final int MARGIN = 5;
 	private static final int FONT_SIZE = 15;
-	/* プラットフォーム固有等のフォントを除外対象に */
-	private static final String[] EXCLUDED_FONTS = new String [] { "MT Extra", "Wide Latin", "Viner Hand ITC", "Vladimir Script", "Webdings", "Wingdings", "Wingdings 2", "Wingdings 3" };
 
 	private final Panel propertyArea = new Panel();
 	private final Label fontLabel = new Label("font");
@@ -77,9 +75,9 @@ final class DigitalClockPropertyDialog extends Dialog {
 		for (Font f : fontSet) {
 				list.add(f.getName());
 		}
-		int num = EXCLUDED_FONTS.length;
+		int num = DigitalClockWindow.EXCLUDED_FONTS.length;
 		for (int i=0; i<num; i++) {
-			list.remove(EXCLUDED_FONTS[i]);
+			list.remove(DigitalClockWindow.EXCLUDED_FONTS[i]);
 		}
 		for (String s : list) {
 			fontChoice.add(s);

@@ -39,6 +39,9 @@ final class DigitalClockWindow extends Window implements DigitalClockPropertyObs
 
 	private static final long INTERVAL = 500;
 
+	/* 絵文字やプラットフォーム固有等のフォントを除外対象に */
+	public static final String[] EXCLUDED_FONTS = { "MT Extra", "Wide Latin", "Viner Hand ITC", "Vladimir Script", "Webdings", "Wingdings", "Wingdings 2", "Wingdings 3" };
+	
 	DigitalClockWindow() throws HeadlessException {
 		super(new Frame());
 		setVisible(true);

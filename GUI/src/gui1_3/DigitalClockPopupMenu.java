@@ -23,8 +23,6 @@ final class DigitalClockPopupMenu extends PopupMenu {
 	private final DigitalClockPropertyObserver digitalClockPropertyObserver;
 	private final Font POPUP_MENU_FONT = new Font("Monospace", Font.PLAIN, 12);
 	private final Map<String, Color> colorSet = new HashMap<>();
-	/* 絵文字やプラットフォーム固有等のフォントを除外対象に */
-	private static final String[] EXCLUDED_FONTS = { "MT Extra", "Wide Latin", "Viner Hand ITC", "Vladimir Script", "Webdings", "Wingdings", "Wingdings 2", "Wingdings 3" };
 	
 	DigitalClockPopupMenu(DigitalClockPropertyObserver digitalClockPropertyObserver) {
 		this.digitalClockPropertyObserver = digitalClockPropertyObserver;
@@ -69,9 +67,9 @@ final class DigitalClockPopupMenu extends PopupMenu {
 		for (Font f : fontSet) {
 				list.add(f.getName());
 		}
-		int num = EXCLUDED_FONTS.length;
+		int num = DigitalClockWindow.EXCLUDED_FONTS.length;
 		for (int i=0; i<num; i++) {
-			list.remove(EXCLUDED_FONTS[i]);
+			list.remove(DigitalClockWindow.EXCLUDED_FONTS[i]);
 		}
 		for (final String fontName: list) {
 			MenuItem mi = new MenuItem(fontName);
