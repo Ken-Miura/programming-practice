@@ -15,7 +15,6 @@ import java.net.URL;
 final class DigitalClockTrayIcon {
 
 	private static final String ICON_PATH = "image/DukeAsKeith-daylightSmall.jpg";
-	//private static final String ICON_PATH = "DukeAsKeith-daylightSmall.jpg";
 	private static final String TOOLTIP_DESCRIPTION = "DIGITAL CLOCK";
 	private final Dialog propertyDialog;
 	
