@@ -229,8 +229,15 @@ final class DigitalClockPropertyDialog extends Dialog {
 			}
 		});
 		
-		setPropertyValues();
 	}
+	
+	@Override
+	public void setVisible(boolean b) {
+		if (b) {
+			setPropertyValues();			
+		}
+		super.setVisible(b);
+	};
 	
 	private void setPropertyValues() {
 		if (DigitalClockProperty.PROPERTY.getFontName().equals(Font.DIALOG)) { // 物理フォントがなかった場合、論理フォント”DIALOG”になっている
