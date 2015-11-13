@@ -1,3 +1,4 @@
+/* Copyright 2015 Ken Miura */
 package gui1_3;
 
 public interface DigitalClockPropertyObserver {
