@@ -1,5 +1,7 @@
 /* Copyright 2015 Ken Miura */
-package ch11.ex11_01;
+package ch12.ex12_01;
+
+import java.util.Objects;
 
 /**
  * リスト構造の一つの要素を示すクラス。次の要素への参照がnullのときリスト構造の終端。
@@ -60,5 +62,27 @@ public class LinkedList<E> {
 			next = next.next();
 		}
 		return size;
+	}
+	
+	/**
+	 * 自身をヘッドとしたときのリスト内に特定のオブジェクトが存在するか検索する。
+	 * @param seachTarget リスト内から検索したいオブジェクト
+	 * @return seachTargetを含有するLinkedList
+	 * @throws NullPointerException 
+	 * 		seachTargetがnullのときスローされる。
+	 * @throws ObjectNotFoundException
+	 * 		seachTargetがリスト内に存在しないときスローされる。
+	 */
+	public LinkedList<E> find (E seachTarget) throws ObjectNotFoundException {
+		Objects.requireNonNull(seachTarget, "seachTarget must not be null.");
+		LinkedList<E> next = this;
+		while (next != null) {
+			if (seachTarget.equals(next.getElement())) {
+				return next;
+			}
+			next = next.next();
+		}
+		/* オブジェクトが見つからなかったときは、nullではなく例外をスローする（nullを返して使う側に例外的状況を伝えると、使う側に例外的状況の対処を強制できないので） */
+		throw new ObjectNotFoundException("No such a object[" + seachTarget + "] found in " + this +".", seachTarget);
 	}
 }
