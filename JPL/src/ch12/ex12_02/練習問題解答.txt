@@ -1,0 +1,7 @@
+1. java.lang.IllegalArgumentExceptionをスローして不正な値をオブジェクトに渡そうとしていることを知らせるべき
+2. java.text.ParseExceptionをスローするか、設定ファイルの文法が間違っている独自例外を定義し、スローして知らせるべき
+3. 単語が見つからないことを意味する独自例外を定義し、スローして知らせるべき
+4. java.io.FileNotFoundExceptionをスローして知らせるべき
+5. セキュリティの意味に応じて、java.security.GeneralSecurityExceptionのサブクラスをスローして知らせるべき
+6. java.net.SocketExceptionをスローして知らせるべき
+7. java.net.SocketExceptionをスローして知らせるべき
