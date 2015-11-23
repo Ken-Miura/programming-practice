@@ -1,5 +1,5 @@
 /* Copyright (C) 2015 Ken Miura */
-package ch13.ex13_04;
+package ch13.ex13_06;
 
 import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
@@ -148,9 +148,35 @@ public class StringUtility {
 		}
 	}
 	
-	/* displayValuesの表示テスト */
+	/**
+	 * addDelimiterToNumber (number, ',', 3)と同じ
+	 */
+	public static String addDelimiterToNumber (String number) {
+		return addDelimiterToNumber (number, ',', 3);
+	}
+	
+	/**
+	 * 10進数を示す文字列を指定した桁数毎に指定した区切り文字を加えた文字列を返す。(1543729は、区切り文字に','で区切り間隔に3としたとき、1,543,729となる)
+	 * @param number　10進数を示す文字列
+	 * @param delimiter 区切り文字
+	 * @param betweenDelimiter 区切り文字を入れる間隔
+	 * @return 区切り文字を追加された10進数を示す文字列
+	 * @throws NullPointerException numberがnullのときスローされる。
+	 * @throws IllegalArgumentException betweenDelimiterが0以下のときスローされる。
+	 * @throws NumberFormatException numberが10進数を示す文字列でないとき、numberがLong型に収まらない数を示す文字列のときスローされる。
+	 */
+	public static String addDelimiterToNumber (String number, char delimiter, int betweenDelimiter) {
+		Objects.requireNonNull(number, "number must not be null.");
+		if (betweenDelimiter <= 0) {
+			throw new IllegalArgumentException("betweenDelimiter must be positive.");
+		}
+		long num = Long.parseLong(number);
+		String format = "%" + delimiter + betweenDelimiter +"d";
+		return String.format(format, num);
+	}
+	
+	/* addDelimiterToNumberの表示テスト */
 	public static void main (String args[]) throws ParseException, UnsupportedEncodingException {
-		String test = "Boolean true\nCharacter a\nByte 127\nShort 1252\nInteger 14636\nLong 11125\nFloat 1.2f\nDouble 1.0";
-		displayValues(test);
+		System.out.println(addDelimiterToNumber("1543729"));
 	}
 }
