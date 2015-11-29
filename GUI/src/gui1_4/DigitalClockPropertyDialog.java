@@ -17,6 +17,8 @@ import java.awt.Label;
 import java.awt.Panel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
@@ -38,7 +40,7 @@ final class DigitalClockPropertyDialog extends Dialog {
 	private static final int HEIGHT = 300;
 	private static final int WIDTH = 500;
 	private static final int MARGIN = 5;
-	private static final int FONT_SIZE = 15;
+	private static final int FONT_SIZE = 17;
 
 	private final Panel propertyArea = new Panel();
 	private final Label fontLabel = new Label("font");
@@ -58,6 +60,12 @@ final class DigitalClockPropertyDialog extends Dialog {
 	private final static int NUM_OF_FONT_SIZE_SET = 30;
 	private final int[] fontSizeSet = new int[NUM_OF_FONT_SIZE_SET];
 	private final Map<String, Color> colorSet = new HashMap<>();
+	
+	/* キャンセル押したとき用にダイアログ開いた時点のプロパティ保存用 */
+	private String fontNameOnOpening;
+	private int fontSizeOnOpening;
+	private Color fontColorOnOpening;
+	private Color backgroundColorOnOpening;
 	
 	private final Font DIALOG_FONT = new Font("Monospace", Font.PLAIN, FONT_SIZE);
 	private static final Frame frame = new Frame();
@@ -86,11 +94,25 @@ final class DigitalClockPropertyDialog extends Dialog {
 		for (String s : list) {
 			fontChoice.add(s);
 		}
+		fontChoice.addItemListener(new ItemListener() {
+			
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				onPropertyChanged();
+			}
+		});
 		
 		for (int i = 0; i < NUM_OF_FONT_SIZE_SET; i++) {
 			fontSizeSet[i] = (i + 1) * 10;
 			fontSizeChoice.add(Integer.toString(fontSizeSet[i]));
 		}
+		fontSizeChoice.addItemListener(new ItemListener() {
+			
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				onPropertyChanged();
+			}
+		});
 
 		colorSet.put("BLACK", Color.BLACK);
 		colorSet.put("BLUE", Color.BLUE);
@@ -109,10 +131,36 @@ final class DigitalClockPropertyDialog extends Dialog {
 		for (String s : colorSet.keySet()) {
 			fontColorChoice.add(s);
 		}
+		fontColorChoice.addItemListener(new ItemListener() {
+			
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				if (fontColorChoice.getSelectedItem().equals(backgroungColorChoice.getSelectedItem())) {
+					String colorName = fontColorChoice.getSelectedItem();
+					fontColorChoice.select(getColorName(DigitalClockProperty.PROPERTY.getFontColor()));
+					ErrorMessageDialog.showErrorMessage(colorName + " is same color of font. Select different color for background.");
+					return;
+				}
+				onPropertyChanged();
+			}
+		});
 
 		for (String s : colorSet.keySet()) {
 			backgroungColorChoice.add(s);
 		}
+		backgroungColorChoice.addItemListener(new ItemListener() {
+			
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				if (fontColorChoice.getSelectedItem().equals(backgroungColorChoice.getSelectedItem())) {
+					String colorName = backgroungColorChoice.getSelectedItem();
+					backgroungColorChoice.select(getColorName(DigitalClockProperty.PROPERTY.getBackgroungColor()));
+					ErrorMessageDialog.showErrorMessage(colorName + " is same color of font. Select different color for background.");
+					return;
+				}
+				onPropertyChanged();
+			}
+		});
 
 		propertyArea.applyComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
 		propertyArea.setLayout(new GridBagLayout());
@@ -167,7 +215,7 @@ final class DigitalClockPropertyDialog extends Dialog {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				okSeleceted ();
+				dispose();
 			}
 		});
 		okButton.addKeyListener(new KeyListener() {
@@ -186,7 +234,7 @@ final class DigitalClockPropertyDialog extends Dialog {
 			public void keyPressed(KeyEvent e) {
 				int key = e.getKeyCode();
 		        if (key == KeyEvent.VK_ENTER) {
-		        	okSeleceted ();   
+		        	dispose();
 		        }
 			}
 		});
@@ -194,7 +242,7 @@ final class DigitalClockPropertyDialog extends Dialog {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				dispose();
+				cancelSelected();
 			}
 		});
 		cancelButton.addKeyListener(new KeyListener() {
@@ -213,7 +261,7 @@ final class DigitalClockPropertyDialog extends Dialog {
 			public void keyPressed(KeyEvent e) {
 				int key = e.getKeyCode();
 		        if (key == KeyEvent.VK_ENTER) {
-		        	dispose();   
+		        	cancelSelected();   
 		        }
 			}
 		});
@@ -238,42 +286,36 @@ final class DigitalClockPropertyDialog extends Dialog {
 	@Override
 	public void setVisible(boolean b) {
 		if (b) {
-			setPropertyValues();			
+			setAndSavePropertyValues();			
 		}
 		super.setVisible(b);
 	};
 	
-	private void setPropertyValues() {
+	private void setAndSavePropertyValues() {
 		if (DigitalClockProperty.PROPERTY.getFontName().equals(Font.DIALOG)) { // 物理フォントがなかった場合、論理フォント”DIALOG”になっている
 			System.err.println("Selected font is incorrect.");
 		}
 		fontChoice.select(DigitalClockProperty.PROPERTY.getFontName());
-		
 		fontSizeChoice.select(Integer.valueOf(DigitalClockProperty.PROPERTY.getFontSize()).toString());
+		fontColorChoice.select(getColorName(DigitalClockProperty.PROPERTY.getFontColor()));
+		backgroungColorChoice.select(getColorName(DigitalClockProperty.PROPERTY.getBackgroungColor()));
 		
-		Set<Map.Entry<String, Color>> entrySet = colorSet.entrySet();
-		String colorName = null;
-		for (final Map.Entry<String, Color> entry: entrySet) {
-			if (DigitalClockProperty.PROPERTY.getFontColor().equals(entry.getValue())) {
-				colorName = entry.getKey();
-			}
-		}
-		fontColorChoice.select(colorName);
-		
-		for (final Map.Entry<String, Color> entry: entrySet) {
-			if (DigitalClockProperty.PROPERTY.getBackgroungColor().equals(entry.getValue())) {
-				colorName = entry.getKey();
-			}
-		}
-		backgroungColorChoice.select(colorName);
+		fontNameOnOpening = DigitalClockProperty.PROPERTY.getFontName();
+		fontSizeOnOpening = DigitalClockProperty.PROPERTY.getFontSize();
+		fontColorOnOpening = DigitalClockProperty.PROPERTY.getFontColor();
+		backgroundColorOnOpening = DigitalClockProperty.PROPERTY.getBackgroungColor();
+	}
+	
+	private void cancelSelected() {
+		DigitalClockProperty.PROPERTY.setFontName(fontNameOnOpening);
+		DigitalClockProperty.PROPERTY.setFontSize(fontSizeOnOpening);
+		DigitalClockProperty.PROPERTY.setFontColor(fontColorOnOpening);
+		DigitalClockProperty.PROPERTY.setBackgroungColor(backgroundColorOnOpening);
+		observer.notifyPropertyChanged(DigitalClockProperty.PROPERTY);	
+		dispose();
 	}
 
-	private void okSeleceted () {
-		
-		if (fontColorChoice.getSelectedItem().equals(backgroungColorChoice.getSelectedItem())) {
-			ErrorMessageDialog.showErrorMessage("Font color and background color are same. Select different color for font or background.");
-			return;
-		}
+	private void onPropertyChanged() {
 		
 		int selectedFontSize = fontSizeSet[fontSizeChoice.getSelectedIndex()];
 		String selectedFontName = fontChoice.getSelectedItem();
@@ -285,8 +327,16 @@ final class DigitalClockPropertyDialog extends Dialog {
 		DigitalClockProperty.PROPERTY.setFontColor(selectedFontColor);
 		DigitalClockProperty.PROPERTY.setBackgroungColor(selectedBackgroundColor);
 		
-		observer.notifyPropertyChanged(DigitalClockProperty.PROPERTY);	
-
-		dispose();
+		observer.notifyPropertyChanged(DigitalClockProperty.PROPERTY);			
+	}
+	
+	private String getColorName (Color color) {
+		Set<Map.Entry<String, Color>> entrySet = colorSet.entrySet();
+		for (final Map.Entry<String, Color> entry: entrySet) {
+			if (color.equals(entry.getValue())) {
+				return entry.getKey();
+			}
+		}		
+		throw new AssertionError("not to be passed.");
 	}
 }
