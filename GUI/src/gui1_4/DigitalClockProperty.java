@@ -22,8 +22,8 @@ enum DigitalClockProperty {
 	private int fontSize = Integer.parseInt(preferences.get(FONT_SIZE_KEY, "60"));
 	private Color fontColor = ColorNameConverter.convertNameToColor(preferences.get(FONT_COLOR_KEY, "BLACK"));
 	private Color backgroungColor = ColorNameConverter.convertNameToColor(preferences.get(BACKGROUND_COLOR_KEY, "WHITE"));
-	private final int xCoodinate = Integer.parseInt(preferences.get(X_COORDINATE_KEY, "0"));;
-	private final int yCoodinate = Integer.parseInt(preferences.get(Y_COORDINATE_KEY, "0"));;
+	private int xCoodinate = Integer.parseInt(preferences.get(X_COORDINATE_KEY, "0"));;
+	private int yCoodinate = Integer.parseInt(preferences.get(Y_COORDINATE_KEY, "0"));;
 	
 	String getFontName() {
 		return fontName;
@@ -52,8 +52,14 @@ enum DigitalClockProperty {
 	int getXCoodinate() {
 		return xCoodinate;
 	}
+	void setXCoodinate(int xCoodinate) {
+		this.xCoodinate = xCoodinate;
+	}
 	int getYCoodinate() {
 		return yCoodinate;
+	}
+	void setYCoodinate(int yCoodinate) {
+		this.yCoodinate = yCoodinate;
 	}
 	
 	void save () {

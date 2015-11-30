@@ -73,6 +73,8 @@ class DigitalClockFrame extends Frame implements DigitalClockPropertyObserver {
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
+				DigitalClockProperty.PROPERTY.setXCoodinate(getX());
+				DigitalClockProperty.PROPERTY.setYCoodinate(getY());
 				DigitalClockProperty.PROPERTY.save();
 				timer.cancel();
 				dispose();
