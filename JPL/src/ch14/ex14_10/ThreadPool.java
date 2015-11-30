@@ -1,5 +1,7 @@
 package ch14.ex14_10;
 
+import java.util.Objects;
+
 /*
  * Copyright (C) 2012, 2013 RICOH Co., Ltd. All rights reserved.
  */
@@ -20,7 +22,8 @@ package ch14.ex14_10;
  */
 public class ThreadPool {
 
-
+	private final Object lock = new Object();
+	private boolean hasStarted = false;
 	
     /**
      * Constructs ThreadPool.
@@ -32,7 +35,12 @@ public class ThreadPool {
      *         is less than 1
      */
     public ThreadPool(int queueSize, int numberOfThreads) {
-    	throw new AssertionError("Not Implemented Yet");
+    	if (queueSize < 1) {
+    		throw new IllegalArgumentException("queueSize must be 1 or more.");
+    	}
+    	if (numberOfThreads < 1) {
+    		throw new IllegalArgumentException("numberOfThreads must be 1 or more.");
+    	}
     }
 
     /**
@@ -41,7 +49,16 @@ public class ThreadPool {
      * @throws IllegalStateException if threads has been already started.
      */
     public void start() {
-       	throw new AssertionError("Not Implemented Yet");
+       	synchronized (lock) {
+       		if (hasStarted) {
+       			throw new IllegalStateException("start has been already invoked.");
+       		}
+       		
+       		// Do something
+       		
+       		//　あとでfinallyに入れる。
+       		hasStarted = true;
+       	}
     }   
 
     /**
@@ -50,7 +67,11 @@ public class ThreadPool {
      * @throws IllegalStateException if threads has not been started.
      */
     public void stop() {
-       	throw new AssertionError("Not Implemented Yet");
+    	//synchronized (lock) {
+    		if (!hasStarted) {
+   				throw new IllegalStateException("start has not been invoked yet.");
+   			}
+    	//}
     }
 
     /**
@@ -64,6 +85,9 @@ public class ThreadPool {
      * @throws IllegalStateException if this pool has not been started yet.
      */
     public synchronized void dispatch(Runnable runnable) {
-       	throw new AssertionError("Not Implemented Yet");
+       	Objects.requireNonNull(runnable, "runnable must not be null.");
+       	if (!hasStarted) {
+       		throw new IllegalStateException("start has not been invoked yet.");
+       	}
     }
 }
