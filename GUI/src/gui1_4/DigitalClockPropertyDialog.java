@@ -23,11 +23,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 final class DigitalClockPropertyDialog extends Dialog {
 
@@ -59,7 +56,6 @@ final class DigitalClockPropertyDialog extends Dialog {
 	private final Font[] fontSet;
 	private final static int NUM_OF_FONT_SIZE_SET = 30;
 	private final int[] fontSizeSet = new int[NUM_OF_FONT_SIZE_SET];
-	private final Map<String, Color> colorSet = new HashMap<>();
 	
 	/* キャンセル押したとき用にダイアログ開いた時点のプロパティ保存用 */
 	private String fontNameOnOpening;
@@ -114,21 +110,7 @@ final class DigitalClockPropertyDialog extends Dialog {
 			}
 		});
 
-		colorSet.put("BLACK", Color.BLACK);
-		colorSet.put("BLUE", Color.BLUE);
-		colorSet.put("CYAN", Color.CYAN);
-		colorSet.put("DARK GRAY", Color.DARK_GRAY);
-		colorSet.put("GRAY", Color.GRAY);
-		colorSet.put("GREEN", Color.GREEN);
-		colorSet.put("LIGTHT GRAY", Color.LIGHT_GRAY);
-		colorSet.put("MAGENTA", Color.MAGENTA);
-		colorSet.put("ORANGE", Color.ORANGE);
-		colorSet.put("PINK", Color.PINK);
-		colorSet.put("RED", Color.RED);
-		colorSet.put("WHITE", Color.WHITE);
-		colorSet.put("YELLOW", Color.YELLOW);
-
-		for (String s : colorSet.keySet()) {
+		for (String s : ColorNameConverter.getColorNameSet()) {
 			fontColorChoice.add(s);
 		}
 		fontColorChoice.addItemListener(new ItemListener() {
@@ -137,7 +119,7 @@ final class DigitalClockPropertyDialog extends Dialog {
 			public void itemStateChanged(ItemEvent e) {
 				if (fontColorChoice.getSelectedItem().equals(backgroungColorChoice.getSelectedItem())) {
 					String colorName = fontColorChoice.getSelectedItem();
-					fontColorChoice.select(getColorName(DigitalClockProperty.PROPERTY.getFontColor()));
+					fontColorChoice.select(ColorNameConverter.convertColorToName(DigitalClockProperty.PROPERTY.getFontColor()));
 					ErrorMessageDialog.showErrorMessage(colorName + " is same color of font. Select different color for background.");
 					return;
 				}
@@ -145,7 +127,7 @@ final class DigitalClockPropertyDialog extends Dialog {
 			}
 		});
 
-		for (String s : colorSet.keySet()) {
+		for (String s : ColorNameConverter.getColorNameSet()) {
 			backgroungColorChoice.add(s);
 		}
 		backgroungColorChoice.addItemListener(new ItemListener() {
@@ -154,7 +136,7 @@ final class DigitalClockPropertyDialog extends Dialog {
 			public void itemStateChanged(ItemEvent e) {
 				if (fontColorChoice.getSelectedItem().equals(backgroungColorChoice.getSelectedItem())) {
 					String colorName = backgroungColorChoice.getSelectedItem();
-					backgroungColorChoice.select(getColorName(DigitalClockProperty.PROPERTY.getBackgroungColor()));
+					backgroungColorChoice.select(ColorNameConverter.convertColorToName(DigitalClockProperty.PROPERTY.getBackgroungColor()));
 					ErrorMessageDialog.showErrorMessage(colorName + " is same color of font. Select different color for background.");
 					return;
 				}
@@ -297,8 +279,8 @@ final class DigitalClockPropertyDialog extends Dialog {
 		}
 		fontChoice.select(DigitalClockProperty.PROPERTY.getFontName());
 		fontSizeChoice.select(Integer.valueOf(DigitalClockProperty.PROPERTY.getFontSize()).toString());
-		fontColorChoice.select(getColorName(DigitalClockProperty.PROPERTY.getFontColor()));
-		backgroungColorChoice.select(getColorName(DigitalClockProperty.PROPERTY.getBackgroungColor()));
+		fontColorChoice.select(ColorNameConverter.convertColorToName(DigitalClockProperty.PROPERTY.getFontColor()));
+		backgroungColorChoice.select(ColorNameConverter.convertColorToName(DigitalClockProperty.PROPERTY.getBackgroungColor()));
 		
 		fontNameOnOpening = DigitalClockProperty.PROPERTY.getFontName();
 		fontSizeOnOpening = DigitalClockProperty.PROPERTY.getFontSize();
@@ -319,8 +301,8 @@ final class DigitalClockPropertyDialog extends Dialog {
 		
 		int selectedFontSize = fontSizeSet[fontSizeChoice.getSelectedIndex()];
 		String selectedFontName = fontChoice.getSelectedItem();
-		Color selectedFontColor = colorSet.get(fontColorChoice.getSelectedItem());
-		Color selectedBackgroundColor = colorSet.get(backgroungColorChoice.getSelectedItem());
+		Color selectedFontColor = ColorNameConverter.convertNameToColor(fontColorChoice.getSelectedItem());
+		Color selectedBackgroundColor = ColorNameConverter.convertNameToColor(backgroungColorChoice.getSelectedItem());
 		
 		DigitalClockProperty.PROPERTY.setFontName(selectedFontName);
 		DigitalClockProperty.PROPERTY.setFontSize(selectedFontSize);
@@ -328,15 +310,5 @@ final class DigitalClockPropertyDialog extends Dialog {
 		DigitalClockProperty.PROPERTY.setBackgroungColor(selectedBackgroundColor);
 		
 		observer.notifyPropertyChanged(DigitalClockProperty.PROPERTY);			
-	}
-	
-	private String getColorName (Color color) {
-		Set<Map.Entry<String, Color>> entrySet = colorSet.entrySet();
-		for (final Map.Entry<String, Color> entry: entrySet) {
-			if (color.equals(entry.getValue())) {
-				return entry.getKey();
-			}
-		}		
-		throw new AssertionError("not to be passed.");
 	}
 }

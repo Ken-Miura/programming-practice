@@ -1,3 +1,4 @@
+/* Copyright (C) 2015 Ken Miura */
 package gui1_4;
 
 import java.awt.Canvas;

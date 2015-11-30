@@ -1,3 +1,4 @@
+/* Copyright (C) 2015 Ken Miura */
 package gui1_4;
 
 import java.awt.Dialog;
@@ -51,6 +52,7 @@ class DigitalClockFrame extends Frame implements DigitalClockPropertyObserver {
 		menu.add(menuItem);
 		menuBar.add(menu);
 		setMenuBar(menuBar);
+		setLocation(DigitalClockProperty.PROPERTY.getXCoodinate(), DigitalClockProperty.PROPERTY.getYCoodinate());
 		setVisible(true);
 		
 		digitalClockCanvas = new DigitalClockCanvas(this);
@@ -71,6 +73,7 @@ class DigitalClockFrame extends Frame implements DigitalClockPropertyObserver {
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
+				DigitalClockProperty.PROPERTY.save();
 				timer.cancel();
 				dispose();
 				System.exit(0);
