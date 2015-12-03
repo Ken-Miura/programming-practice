@@ -68,7 +68,7 @@ final class DigitalClockPropertyDialog extends Dialog {
 	private final DigitalClockPropertyObserver observer;
 	
 	/* 絵文字やプラットフォーム固有等のフォントを除外対象に */
-	public static final String[] EXCLUDED_FONTS = { "Marlett", "Symbol", "Bookshelf Symbol 7", "MT Extra", "Wide Latin", "Viner Hand ITC", "Vladimir Script", "Webdings", "Wingdings", "Wingdings 2", "Wingdings 3" };
+	public static final String[] EXCLUDED_FONTS = { "MS Reference Specialty", "Marlett", "Symbol", "Bookshelf Symbol 7", "MT Extra", "Wide Latin", "Viner Hand ITC", "Vladimir Script", "Webdings", "Wingdings", "Wingdings 2", "Wingdings 3" };
 	
 	DigitalClockPropertyDialog(DigitalClockPropertyObserver observer) {
 		super(frame, TITLE, true);
