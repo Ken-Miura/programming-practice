@@ -24,6 +24,7 @@ final class MessageDisplay {
 		notifyAll();
 	}
 	
+	/* 表示して確認 */
 	public static void main (String... args) {
 
 		MessageDisplay messageDisplay = new MessageDisplay();
