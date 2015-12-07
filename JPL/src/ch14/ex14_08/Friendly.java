@@ -37,7 +37,7 @@ class Friendly {
 		
 		jareth.becomeFriend(cory);
 		cory.becomeFriend(jareth);
-		
+		あ
 		new Thread(new Runnable() {
 			
 			@Override
