@@ -23,6 +23,11 @@ class Babble extends Thread {
 		}
 	}
 	
+	/*
+	 * Windows 8.1 64bit, Java version 8u40
+	 * 引数trueのとき、10回中10回Did, DidNot, DidNot, Didの順
+	 * 引数falseのとき、10回中8回Did, Did, DidNot, DidNotの順, 2回DidNot, DidNot, Did, Didの順
+	 */
 	public static void main(String[] args) {
 		doYield = new Boolean(args[0]).booleanValue();
 		howOften = Integer.parseInt(args[1]);

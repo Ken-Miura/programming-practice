@@ -28,7 +28,10 @@ class Friendly {
 	}
 	
 	/**
-	 * @param args
+	 * Windows 8.1 64bit, Java version 8u40
+	 * Thread.yield()なしで100回中2回発生	
+	 * Thread.yield()ありで100回中5回発生
+	 * Thread.yield()片方ありで100回中2回発生
 	 */
 	public static void main(String[] args) {
 
@@ -42,7 +45,7 @@ class Friendly {
 			
 			@Override
 			public void run() {
-				for (;;)
+				//Thread.yield();
 				jareth.hug();
 			}
 		}, "Thread1").start();
@@ -51,8 +54,8 @@ class Friendly {
 			
 			@Override
 			public void run() {
-				for (;;)
-				cory.hug();
+				//Thread.yield();
+				cory.hug();	
 			}
 		}, "Thread2").start();
 	}
