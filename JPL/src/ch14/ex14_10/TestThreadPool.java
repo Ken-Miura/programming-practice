@@ -1,5 +1,4 @@
 package ch14.ex14_10;
-
 /*
  * Copyright (C) 2012, 2013 RICOH Co., Ltd. All rights reserved.
  */
