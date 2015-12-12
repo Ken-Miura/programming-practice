@@ -31,9 +31,6 @@ class FriendlyAvoidingDeadlock {
 		this.partner = partner;
 	}
 	
-	/**
-	 * @param args
-	 */
 	public static void main(String[] args) {
 
 		final FriendlyAvoidingDeadlock jareth = new FriendlyAvoidingDeadlock("jareth");
