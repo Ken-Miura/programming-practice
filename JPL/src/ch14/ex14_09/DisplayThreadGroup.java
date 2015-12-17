@@ -2,6 +2,7 @@
 package ch14.ex14_09;
 
 import java.util.Objects;
+import java.util.Random;
 
 /**
  * @author Ken Miura
@@ -9,10 +10,25 @@ import java.util.Objects;
  */
 public class DisplayThreadGroup {
 
+	private static final Runnable shortTask = new Runnable() {
+		@Override
+		public void run () {
+			for (int i=0; i<3; i++) {
+				try {
+					Thread.sleep(new Random().nextInt(1000));
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+					return;
+				}
+			}
+		}
+	};
+	
 	/**
 	 * @param args
+	 * @throws InterruptedException 
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) throws InterruptedException {
 
 		ThreadGroup tg1 = new ThreadGroup("tg1");
 		ThreadGroup tg2 = new ThreadGroup(tg1, "tg2");
@@ -21,6 +37,16 @@ public class DisplayThreadGroup {
 		ThreadGroup tg5 = new ThreadGroup(tg1, "tg5");
 		ThreadGroup tg6 = new ThreadGroup(tg5, "tg6");
 		displayThreadGroup(tg1);
+		
+		for (;;) {
+			new Thread (tg1, shortTask, "thread 1").start();
+			new Thread (tg2, shortTask, "thread 2").start();
+			new Thread (tg3, shortTask, "thread 3").start();
+			new Thread (tg4, shortTask, "thread 4").start();
+			new Thread (tg5, shortTask, "thread 5").start();
+			new Thread (tg6, shortTask, "thread 6").start();
+			Thread.sleep(5000);
+		}
 	}
 
 	public static void displayThreadGroup(final ThreadGroup threadGroup) {
