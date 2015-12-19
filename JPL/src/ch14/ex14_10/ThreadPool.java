@@ -32,7 +32,7 @@ public class ThreadPool {
 		
 		@Override
 		public void run () {
-			while (!taskQueue.cenceled() || taskQueue.getCount() > 0) {
+			while (!taskQueue.cenceled() || taskQueue.numOfTasks() > 0) {
 				Runnable task = null;
 				try {
 					task = taskQueue.take();
@@ -51,7 +51,7 @@ public class ThreadPool {
 		private final Runnable[] tasks;
 		private int head = 0;
 		private int tail = 0;
-		private int count = 0;
+		private int numOfTasks = 0;
 		private volatile boolean canceled = false;
 		
 		public TaskQueue (int queueSize) {
@@ -61,34 +61,34 @@ public class ThreadPool {
 		
 		public synchronized void put (Runnable task) throws InterruptedException {
 			assert task != null;
-			while (count >= tasks.length && !canceled) {
+			while (numOfTasks >= tasks.length && !canceled) {
 				wait();
 			}
-			if (count >= tasks.length) {
+			if (numOfTasks >= tasks.length) {
 				return;
 			}
 			tasks[tail] = task;
 			tail = (tail+1) % tasks.length;
-			count++;
+			numOfTasks++;
 			notifyAll();
 		}
 		
 		public synchronized Runnable take () throws InterruptedException {
-			while (count <= 0 && !canceled) {
+			while (numOfTasks <= 0 && !canceled) {
 				wait();
 			}
-			if (count <= 0) {
+			if (numOfTasks <= 0) {
 				return null;
 			}
 			Runnable task = tasks[head];
 			head = (head+1) % tasks.length;
-			count--;
+			numOfTasks--;
 			notifyAll();
 			return task;
 		}
 		
-		public int getCount () {
-			return count;
+		public int numOfTasks () {
+			return numOfTasks;
 		}
 		
 		public synchronized void cancel () {
