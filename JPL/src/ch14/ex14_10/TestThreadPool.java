@@ -197,6 +197,11 @@ public class TestThreadPool {
 		tp.start();
 		
 		// How do I implement this test method ?
+		CounterTask t = new CounterTask();
+		for (int i=0; i<sizeOfQueue; i++) {
+			tp.dispatch(t);
+		}
+		t.waitForRunCount(sizeOfQueue);
 		
 		tp.stop();
 	}

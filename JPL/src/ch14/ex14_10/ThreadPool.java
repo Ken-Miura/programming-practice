@@ -103,7 +103,7 @@ public class ThreadPool {
 	
 	private boolean hasStarted = false;
 	private final TaskQueue taskQueue;
-	private final ThreadInPool[] threads;
+	private final Thread[] threads;
 	
     /**
      * Constructs ThreadPool.
@@ -125,7 +125,7 @@ public class ThreadPool {
     	threads = new ThreadInPool[numberOfThreads];
     	for (int i=0; i<numberOfThreads; i++) {
     		threads[i] = new ThreadInPool(taskQueue);
-    		threads[i].setName("thread " + i);
+    		threads[i].setName("pooled thread No." + i);
     	}
     }
 
@@ -154,7 +154,7 @@ public class ThreadPool {
    			throw new IllegalStateException("start has not been invoked yet.");
    		}
     	taskQueue.cancel();
-       	for (final ThreadInPool t: threads) {
+       	for (final Thread t: threads) {
        		try {
 				t.join();
 			} catch (InterruptedException e) {

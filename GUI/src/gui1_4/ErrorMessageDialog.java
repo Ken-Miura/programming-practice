@@ -95,7 +95,7 @@ final class ErrorMessageDialog extends Dialog {
 	static void showErrorMessage (String message) {
 		Frame f = new Frame();
 		ErrorMessageDialog emd = new ErrorMessageDialog(f, message);
-		emd.setLocationRelativeTo(null);;
+		emd.setLocationRelativeTo(null);
 		emd.setVisible(true);
 		f.dispose();
 	}
