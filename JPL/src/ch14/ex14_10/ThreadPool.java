@@ -88,7 +88,7 @@ public class ThreadPool {
 			return task;
 		}
 		
-		public int numOfTasks () {
+		public synchronized int numOfTasks () {
 			return numOfTasks;
 		}
 		
