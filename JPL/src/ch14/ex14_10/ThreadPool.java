@@ -32,7 +32,7 @@ public class ThreadPool {
 		
 		@Override
 		public void run () {
-			while (!taskQueue.cenceled() || taskQueue.numOfTasks() > 0) {
+			while (!taskQueue.closed() || taskQueue.numOfTasks() > 0) {
 				Runnable task = null;
 				try {
 					task = taskQueue.take();
@@ -52,7 +52,7 @@ public class ThreadPool {
 		private int head = 0;
 		private int tail = 0;
 		private int numOfTasks = 0;
-		private volatile boolean canceled = false;
+		private volatile boolean closed = false;
 		
 		public TaskQueue (int queueSize) {
 			assert queueSize >= 1;
@@ -61,10 +61,10 @@ public class ThreadPool {
 		
 		public synchronized boolean put (Runnable task) throws InterruptedException {
 			assert task != null;
-			while (numOfTasks >= tasks.length && !canceled) {
+			while (numOfTasks >= tasks.length && !closed) {
 				wait();
 			}
-			if (canceled) {
+			if (closed) {
 				return false;
 			}
 			tasks[tail] = task;
@@ -75,7 +75,7 @@ public class ThreadPool {
 		}
 		
 		public synchronized Runnable take () throws InterruptedException {
-			while (numOfTasks <= 0 && !canceled) {
+			while (numOfTasks <= 0 && !closed) {
 				wait();
 			}
 			if (numOfTasks <= 0) {
@@ -93,13 +93,13 @@ public class ThreadPool {
 			return numOfTasks;
 		}
 		
-		public synchronized void cancel () {
-			canceled = true;
+		public synchronized void close () {
+			closed = true;
 			notifyAll();
 		}
 		
-		public boolean cenceled (){
-			return canceled;
+		public boolean closed (){
+			return closed;
 		}
 	}
 	
@@ -155,7 +155,7 @@ public class ThreadPool {
     	if (!hasStarted) {
    			throw new IllegalStateException("start has not been invoked yet.");
    		}
-    	taskQueue.cancel();
+    	taskQueue.close();
        	for (final Thread t: threads) {
        		try {
 				t.join();
