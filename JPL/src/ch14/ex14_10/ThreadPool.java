@@ -59,18 +59,19 @@ public class ThreadPool {
 			tasks = new Runnable[queueSize];
 		}
 		
-		public synchronized void put (Runnable task) throws InterruptedException {
+		public synchronized boolean put (Runnable task) throws InterruptedException {
 			assert task != null;
 			while (numOfTasks >= tasks.length && !canceled) {
 				wait();
 			}
-			if (numOfTasks >= tasks.length) {
-				return;
+			if (canceled) {
+				return false;
 			}
 			tasks[tail] = task;
 			tail = (tail+1) % tasks.length;
 			numOfTasks++;
 			notifyAll();
+			return true;
 		}
 		
 		public synchronized Runnable take () throws InterruptedException {
@@ -181,7 +182,10 @@ public class ThreadPool {
        		throw new IllegalStateException("start has not been invoked yet.");
        	}
        	try {
-			taskQueue.put(runnable);
+			boolean succeedDispatching = taskQueue.put(runnable);
+			if (!succeedDispatching) {
+				System.err.println("failed in dispatching task.");
+			}
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 			return;
