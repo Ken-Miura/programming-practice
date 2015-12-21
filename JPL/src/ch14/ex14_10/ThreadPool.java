@@ -84,6 +84,7 @@ public class ThreadPool {
 			head = (head+1) % tasks.length;
 			numOfTasks--;
 			notifyAll();
+			assert task != null;
 			return task;
 		}
 		
