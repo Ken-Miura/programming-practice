@@ -38,7 +38,7 @@ public class ThreadPool {
 					task = taskQueue.take();
 				} catch (InterruptedException e) {
 					e.printStackTrace();
-					return;
+					System.err.println("worker thread interrupted in taking a task.");
 				}
 				if (task != null) {
 					task.run();	
