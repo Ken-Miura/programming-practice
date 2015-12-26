@@ -24,7 +24,7 @@ final class MessageDisplay {
 		notifyAll();
 	}
 	
-	/* 表示して確認 */
+	/* 指定した間隔毎に表示されることを確認 */
 	public static void main (String... args) {
 
 		MessageDisplay messageDisplay = new MessageDisplay();

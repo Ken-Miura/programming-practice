@@ -21,6 +21,7 @@ public final class ValueHolder {
 		}
 	}
 	
+	/* maxの値 × スレッド数の値が最後に表示されることの確認 */
 	public static void main(String[] args) {
 		final ValueHolder vh = new ValueHolder();
 		final int max = 5000;

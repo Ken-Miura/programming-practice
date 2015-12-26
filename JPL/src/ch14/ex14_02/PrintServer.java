@@ -6,6 +6,13 @@ package ch14.ex14_02;
  *
  */
 class PrintServer implements Runnable {
+	
+	/* 外部のスレッドからアクセスできないことのテスト */
+	public static void main (String... args) {
+		PrintServer printServer = new PrintServer();
+		printServer.run();
+	}	
+	
 	private final PrintQueue requests = new PrintQueue();
 	private final long threadId ;
 	public PrintServer() {
@@ -31,11 +38,5 @@ class PrintServer implements Runnable {
 	}
 	private void realPrint (PrintJob job) {
 		// do Print.
-	}
-	
-	/* 外部のスレッドからアクセスできないことのテスト */
-	public static void main (String... args) {
-		PrintServer printServer = new PrintServer();
-		printServer.run();
 	}
 }

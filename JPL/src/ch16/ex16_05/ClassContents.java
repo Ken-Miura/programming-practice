@@ -1,6 +1,8 @@
 /* Copyright (C) 2015 Ken Miura */
-package ch16.ex16_03;
+package ch16.ex16_05;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Member;
@@ -67,6 +69,17 @@ public class ClassContents {
 			String decl = m.toString();
 			System.out.print(" ");
 			System.out.println(strip(decl, "java.lang."));
+			printAnnotationsIfLabaled(m);
+		}
+	}
+
+	private static void printAnnotationsIfLabaled(Member m) {
+		if (m instanceof AnnotatedElement) {
+			Annotation[] annotations = ((AnnotatedElement) m).getAnnotations();
+			for (Annotation annotation : annotations) {
+				System.out.print("  ");
+				System.out.println(annotation.toString());
+			}
 		}
 	}
 

@@ -17,6 +17,7 @@ public final class ValueHolder {
 		System.out.println("value: " + value);			
 	}
 	
+	/* maxの値 × スレッド数の値が最後に表示されることの確認 */
 	public static void main(String[] args) {
 		final int max = 5000;
 		Runnable r = new Runnable() {
