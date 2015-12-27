@@ -78,7 +78,7 @@ public class ClassContents {
 			Annotation[] annotations = ((AnnotatedElement) m).getAnnotations();
 			for (Annotation annotation : annotations) {
 				System.out.print("  ");
-				System.out.println(annotation.toString());
+				System.out.println(strip(annotation.toString(), "java.lang."));
 			}
 		}
 	}
