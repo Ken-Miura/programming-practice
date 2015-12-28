@@ -14,7 +14,7 @@ import java.util.Vector;
  * @author Ken Miura
  *
  */
-public class PlayerLoader extends ClassLoader {
+public final class PlayerLoader extends ClassLoader {
 
 	// Webで見つけたクラスパス取得方法。動くけどなんか信用できないのでとりあえず固定値で。
 	//private static final String CLASS_PATH;
