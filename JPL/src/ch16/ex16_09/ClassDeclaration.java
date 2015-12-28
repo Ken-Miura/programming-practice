@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
  * @author Ken Miura
  *
  */
-public class ClassDeclaration {
+public final class ClassDeclaration {
 
 	private static String declaratedPackage = null;
 	private static Class<?> declaratedClass = null;

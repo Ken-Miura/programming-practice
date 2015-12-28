@@ -10,3 +10,4 @@ JPL, 285, 5, 35, useTransparentBoundsは具体的にどんなときに使えば�
 JPL, 299, 1, 8, runメソッド内でInterruptedExceptionがcatchされていないようですが、これはテキストの間違いでしょうか。
 JPL, 311, 5, 29, なぜ「偽の目覚め」を仮想マシンに実装することが許されているのですか。
 JPL, 321, 4, 26, デーモンスレッドが制限されている処理とは具体的にはどのようなものがありますか。
+JPL, 380, 1, 6, InvocationHandler.invokeの第一引数のproxyの使い道がわかりません。invokeの中でのproxyの有用な使い方があれば聞きたいです。
