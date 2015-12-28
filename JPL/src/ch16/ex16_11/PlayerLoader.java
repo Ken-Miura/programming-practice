@@ -1,7 +1,6 @@
 /* Copyright (C) 2015 Ken Miura */
 package ch16.ex16_11;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 
@@ -11,8 +10,23 @@ import java.io.IOException;
  */
 public class PlayerLoader extends ClassLoader {
 
-	//最後のセパレータはなしで
-	private static final String playersDirectory = "/C:/workspace_programming_practice/JPL/ch16_ex16_11_players";
+	// Webで見つけたクラスパス取得方法。動くけどなんか信用できないのでとりあえず固定値で。
+	//private static final String CLASS_PATH;
+	//static {
+	//	CLASS_PATH = ClassLoader.getSystemClassLoader().getResource("").getPath();
+	//}
+	private static final String CLASS_PATH = "/C:/workspace_programming_practice/JPL/bin/";
+	
+	//最後のセパレータはなしで + クラスパス以外を指定してみる
+	private static final String playersDirectory;
+	static {
+		String parentDirectoryOfClassPath = CLASS_PATH;
+		for (int i=0; i<2; i++) {
+			int index = parentDirectoryOfClassPath.lastIndexOf('/');
+			parentDirectoryOfClassPath = parentDirectoryOfClassPath.substring(0, index);
+		}
+		playersDirectory = parentDirectoryOfClassPath + "/ch16_ex16_11_players";
+	}
 	
 	@Override
 	protected Class<?> findClass(String name) throws ClassNotFoundException {
@@ -35,7 +49,7 @@ public class PlayerLoader extends ClassLoader {
 		} else {
 			simpleClassName = name.substring(found + 1);	
 		}
-		try (FileInputStream in = new FileInputStream(playersDirectory + File.separator + simpleClassName + ".class")) {
+		try (FileInputStream in = new FileInputStream(playersDirectory + "/" + simpleClassName + ".class")) {
 			int length = in.available();
 			if (length == 0) {
 				throw new ClassNotFoundException(name);
