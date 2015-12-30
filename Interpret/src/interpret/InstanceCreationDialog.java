@@ -185,7 +185,7 @@ public final class InstanceCreationDialog extends JDialog {
 						
 						componetConstraintsForBoolean.gridx = 0;
 						componetConstraintsForBoolean.gridy = i+1;
-						componetConstraintsForBoolean.anchor = GridBagConstraints.CENTER;
+						componetConstraintsForBoolean.anchor = GridBagConstraints.EAST;
 						componetConstraintsForBoolean.fill = GridBagConstraints.HORIZONTAL;
 						parameterArea.add(new JLabel("boolean : "), componetConstraintsForBoolean);
 						
@@ -195,7 +195,7 @@ public final class InstanceCreationDialog extends JDialog {
 							
 						componetConstraintsForBoolean.gridx = 1;
 						componetConstraintsForBoolean.gridy = i+1;
-						componetConstraintsForBoolean.anchor = GridBagConstraints.CENTER;
+						componetConstraintsForBoolean.anchor = GridBagConstraints.WEST;
 						componetConstraintsForBoolean.fill = GridBagConstraints.HORIZONTAL;
 						parameterArea.add(booleanComboBox, componetConstraintsForBoolean);
 						
@@ -203,7 +203,7 @@ public final class InstanceCreationDialog extends JDialog {
 						
 						componetConstraintsForBoolean.gridx = 0;
 						componetConstraintsForBoolean.gridy = i+1;
-						componetConstraintsForBoolean.anchor = GridBagConstraints.CENTER;
+						componetConstraintsForBoolean.anchor = GridBagConstraints.EAST;
 						componetConstraintsForBoolean.fill = GridBagConstraints.HORIZONTAL;
 						parameterArea.add(new JLabel("char : "), componetConstraintsForBoolean);
 												
@@ -213,7 +213,7 @@ public final class InstanceCreationDialog extends JDialog {
 						
 						componetConstraintsForBoolean.gridx = 1;
 						componetConstraintsForBoolean.gridy = i+1;
-						componetConstraintsForBoolean.anchor = GridBagConstraints.CENTER;
+						componetConstraintsForBoolean.anchor = GridBagConstraints.WEST;
 						componetConstraintsForBoolean.fill = GridBagConstraints.HORIZONTAL;
 						parameterArea.add(charSpinner, componetConstraintsForBoolean);	
 						
@@ -221,7 +221,7 @@ public final class InstanceCreationDialog extends JDialog {
 						
 						componetConstraintsForBoolean.gridx = 0;
 						componetConstraintsForBoolean.gridy = i+1;
-						componetConstraintsForBoolean.anchor = GridBagConstraints.CENTER;
+						componetConstraintsForBoolean.anchor = GridBagConstraints.EAST;
 						componetConstraintsForBoolean.fill = GridBagConstraints.HORIZONTAL;
 						parameterArea.add(new JLabel("byte : "), componetConstraintsForBoolean);
 												
@@ -231,7 +231,7 @@ public final class InstanceCreationDialog extends JDialog {
 							
 						componetConstraintsForBoolean.gridx = 1;
 						componetConstraintsForBoolean.gridy = i+1;
-						componetConstraintsForBoolean.anchor = GridBagConstraints.CENTER;
+						componetConstraintsForBoolean.anchor = GridBagConstraints.WEST;
 						componetConstraintsForBoolean.fill = GridBagConstraints.HORIZONTAL;
 						parameterArea.add(byteSpinner, componetConstraintsForBoolean);							
 						
@@ -239,7 +239,7 @@ public final class InstanceCreationDialog extends JDialog {
 						
 						componetConstraintsForBoolean.gridx = 0;
 						componetConstraintsForBoolean.gridy = i+1;
-						componetConstraintsForBoolean.anchor = GridBagConstraints.CENTER;
+						componetConstraintsForBoolean.anchor = GridBagConstraints.EAST;
 						componetConstraintsForBoolean.fill = GridBagConstraints.HORIZONTAL;
 						parameterArea.add(new JLabel("short : "), componetConstraintsForBoolean);
 												
@@ -249,7 +249,7 @@ public final class InstanceCreationDialog extends JDialog {
 							
 						componetConstraintsForBoolean.gridx = 1;
 						componetConstraintsForBoolean.gridy = i+1;
-						componetConstraintsForBoolean.anchor = GridBagConstraints.CENTER;
+						componetConstraintsForBoolean.anchor = GridBagConstraints.WEST;
 						componetConstraintsForBoolean.fill = GridBagConstraints.HORIZONTAL;
 						parameterArea.add(shortSpinner, componetConstraintsForBoolean);													
 						
@@ -257,7 +257,7 @@ public final class InstanceCreationDialog extends JDialog {
 						
 						componetConstraintsForBoolean.gridx = 0;
 						componetConstraintsForBoolean.gridy = i+1;
-						componetConstraintsForBoolean.anchor = GridBagConstraints.CENTER;
+						componetConstraintsForBoolean.anchor = GridBagConstraints.EAST;
 						componetConstraintsForBoolean.fill = GridBagConstraints.HORIZONTAL;
 						parameterArea.add(new JLabel("int : "), componetConstraintsForBoolean);
 												
@@ -267,7 +267,7 @@ public final class InstanceCreationDialog extends JDialog {
 							
 						componetConstraintsForBoolean.gridx = 1;
 						componetConstraintsForBoolean.gridy = i+1;
-						componetConstraintsForBoolean.anchor = GridBagConstraints.CENTER;
+						componetConstraintsForBoolean.anchor = GridBagConstraints.WEST;
 						componetConstraintsForBoolean.fill = GridBagConstraints.HORIZONTAL;
 						parameterArea.add(intSpinner, componetConstraintsForBoolean);																			
 						
@@ -275,7 +275,7 @@ public final class InstanceCreationDialog extends JDialog {
 						
 						componetConstraintsForBoolean.gridx = 0;
 						componetConstraintsForBoolean.gridy = i+1;
-						componetConstraintsForBoolean.anchor = GridBagConstraints.CENTER;
+						componetConstraintsForBoolean.anchor = GridBagConstraints.EAST;
 						componetConstraintsForBoolean.fill = GridBagConstraints.HORIZONTAL;
 						parameterArea.add(new JLabel("long : "), componetConstraintsForBoolean);
 												
@@ -285,14 +285,14 @@ public final class InstanceCreationDialog extends JDialog {
 							
 						componetConstraintsForBoolean.gridx = 1;
 						componetConstraintsForBoolean.gridy = i+1;
-						componetConstraintsForBoolean.anchor = GridBagConstraints.CENTER;
+						componetConstraintsForBoolean.anchor = GridBagConstraints.WEST;
 						componetConstraintsForBoolean.fill = GridBagConstraints.HORIZONTAL;
 						parameterArea.add(longSpinner, componetConstraintsForBoolean);																									
 						
 					} else if (types[i] == float.class) {
 						componetConstraintsForBoolean.gridx = 0;
 						componetConstraintsForBoolean.gridy = i+1;
-						componetConstraintsForBoolean.anchor = GridBagConstraints.CENTER;
+						componetConstraintsForBoolean.anchor = GridBagConstraints.EAST;
 						componetConstraintsForBoolean.fill = GridBagConstraints.HORIZONTAL;
 						parameterArea.add(new JLabel("float : "), componetConstraintsForBoolean);
 												
@@ -314,13 +314,13 @@ public final class InstanceCreationDialog extends JDialog {
 						
 						componetConstraintsForBoolean.gridx = 1;
 						componetConstraintsForBoolean.gridy = i+1;
-						componetConstraintsForBoolean.anchor = GridBagConstraints.CENTER;
+						componetConstraintsForBoolean.anchor = GridBagConstraints.WEST;
 						componetConstraintsForBoolean.fill = GridBagConstraints.HORIZONTAL;
 						parameterArea.add(floatTextField, componetConstraintsForBoolean);																									
 					} else if (types[i] == double.class) {
 						componetConstraintsForBoolean.gridx = 0;
 						componetConstraintsForBoolean.gridy = i+1;
-						componetConstraintsForBoolean.anchor = GridBagConstraints.CENTER;
+						componetConstraintsForBoolean.anchor = GridBagConstraints.EAST;
 						componetConstraintsForBoolean.fill = GridBagConstraints.HORIZONTAL;
 						parameterArea.add(new JLabel("double : "), componetConstraintsForBoolean);
 												
@@ -342,14 +342,14 @@ public final class InstanceCreationDialog extends JDialog {
 						
 						componetConstraintsForBoolean.gridx = 1;
 						componetConstraintsForBoolean.gridy = i+1;
-						componetConstraintsForBoolean.anchor = GridBagConstraints.CENTER;
+						componetConstraintsForBoolean.anchor = GridBagConstraints.WEST;
 						componetConstraintsForBoolean.fill = GridBagConstraints.HORIZONTAL;
 						parameterArea.add(doubleTextField, componetConstraintsForBoolean);																									
 						
 					} else if (types[i] == java.lang.String.class) {
 						componetConstraintsForBoolean.gridx = 0;
 						componetConstraintsForBoolean.gridy = i+1;
-						componetConstraintsForBoolean.anchor = GridBagConstraints.CENTER;
+						componetConstraintsForBoolean.anchor = GridBagConstraints.EAST;
 						componetConstraintsForBoolean.fill = GridBagConstraints.HORIZONTAL;
 						parameterArea.add(new JLabel("String : "), componetConstraintsForBoolean);
 												
@@ -358,7 +358,7 @@ public final class InstanceCreationDialog extends JDialog {
 						
 						componetConstraintsForBoolean.gridx = 1;
 						componetConstraintsForBoolean.gridy = i+1;
-						componetConstraintsForBoolean.anchor = GridBagConstraints.EAST;
+						componetConstraintsForBoolean.anchor = GridBagConstraints.WEST;
 						componetConstraintsForBoolean.fill = GridBagConstraints.HORIZONTAL;
 						parameterArea.add(stringTextField, componetConstraintsForBoolean);																									
 					} else {
@@ -376,7 +376,7 @@ public final class InstanceCreationDialog extends JDialog {
 						} else {
 							componetConstraintsForBoolean.gridx = 0;
 							componetConstraintsForBoolean.gridy = i+1;
-							componetConstraintsForBoolean.anchor = GridBagConstraints.CENTER;
+							componetConstraintsForBoolean.anchor = GridBagConstraints.EAST;
 							componetConstraintsForBoolean.fill = GridBagConstraints.HORIZONTAL;
 							parameterArea.add(new JLabel(cls.getName() + " : "), componetConstraintsForBoolean);
 													
@@ -395,7 +395,7 @@ public final class InstanceCreationDialog extends JDialog {
 							
 							componetConstraintsForBoolean.gridx = 1;
 							componetConstraintsForBoolean.gridy = i+1;
-							componetConstraintsForBoolean.anchor = GridBagConstraints.CENTER;
+							componetConstraintsForBoolean.anchor = GridBagConstraints.WEST;
 							componetConstraintsForBoolean.fill = GridBagConstraints.HORIZONTAL;
 							parameterArea.add(instanceCreationButton, componetConstraintsForBoolean);																									
 						}
