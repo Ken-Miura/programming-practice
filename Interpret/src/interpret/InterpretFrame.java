@@ -30,7 +30,7 @@ public final class InterpretFrame extends JFrame {
 	private final JButton instanceCreationButton = new JButton ("インスタンスの生成に関する操作");
 	private final JButton arrayCreationButton = new JButton ("配列の生成に関する操作");
 	
-	private final InstanceCreationDialog instanceCreationDialog = new InstanceCreationDialog(null);
+	private final InstanceCreationDialog instanceCreationDialog = new InstanceCreationDialog((null));
 
 	public InterpretFrame() {
 		setTitle(TITLE);
