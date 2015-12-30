@@ -6,7 +6,10 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.ParameterizedType;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -47,6 +50,14 @@ public final class InstanceCreationDialog extends JDialog {
 	private final JLabel constructorCaption = new JLabel("コンストラクタ一覧");
 	private Constructor<?>[] constructors = null;
 	private final JComboBox<Constructor<?>> constructorsComboBox = new JComboBox<>();
+	
+	private final JLabel parameterCaptionLabel = new JLabel("引数一覧");
+	private final JLabel booleanLabel = new JLabel("boolean: ");
+	private final JComboBox<Boolean> booleanComboBox = new JComboBox<>();
+	{
+		booleanComboBox.addItem(Boolean.FALSE);
+		booleanComboBox.addItem(Boolean.TRUE);
+	}
 	
 	public InstanceCreationDialog (Class<?> clazz) {
 		parent = clazz;
@@ -145,7 +156,81 @@ public final class InstanceCreationDialog extends JDialog {
 			constructorArea.revalidate();
 		}
 		
-		
+		constructorsComboBox.addItemListener(new ItemListener() {
+			
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				parameterArea.removeAll();
+				Constructor<?> selectedConstructor = (Constructor<?>) constructorsComboBox.getSelectedItem();
+				if (selectedConstructor == null) { // removeAllのとき
+					return;
+				}
+				java.lang.reflect.Type[] types = selectedConstructor.getGenericParameterTypes();
+				
+				GridBagConstraints componetConstraintsForBoolean = new GridBagConstraints();
+				componetConstraintsForBoolean.gridx = 0;
+				componetConstraintsForBoolean.gridy = 0;
+				componetConstraintsForBoolean.anchor = GridBagConstraints.CENTER;
+				componetConstraintsForBoolean.fill = GridBagConstraints.HORIZONTAL;
+				parameterArea.add(parameterCaptionLabel, componetConstraintsForBoolean);
+				
+				for (int i=0; i<types.length; i++) {
+					
+					if (types[i] == null) {
+						throw new AssertionError("types[i] cannot be null.");
+					}
+					
+					if (types[i] == boolean.class) {
+						
+						componetConstraintsForBoolean.gridx = 0;
+						componetConstraintsForBoolean.gridy = i+1;
+						componetConstraintsForBoolean.anchor = GridBagConstraints.CENTER;
+						componetConstraintsForBoolean.fill = GridBagConstraints.HORIZONTAL;
+						parameterArea.add(booleanLabel, componetConstraintsForBoolean);
+						
+						componetConstraintsForBoolean.gridx = 1;
+						componetConstraintsForBoolean.gridy = i+1;
+						componetConstraintsForBoolean.anchor = GridBagConstraints.CENTER;
+						componetConstraintsForBoolean.fill = GridBagConstraints.HORIZONTAL;
+						parameterArea.add(booleanComboBox, componetConstraintsForBoolean);
+						
+					} else if (types[i] == char.class) {
+						
+					} else if (types[i] == byte.class) {
+						
+					} else if (types[i] == short.class) {
+						
+					} else if (types[i] == int.class) {
+						
+					} else if (types[i] == long.class) {
+						
+					} else if (types[i] == float.class) {
+						
+					} else if (types[i] == double.class) {
+						
+					} else if (types[i] == java.lang.String.class) {
+						
+					} else {
+						Class<?> cls = null;
+						if (types[i] instanceof Class<?>) {
+							cls = (Class<?>) types[i];
+						} else if (types[i] instanceof ParameterizedType) {
+							cls = (Class<?>) ((ParameterizedType) types[i]).getRawType();
+						} else {
+							throw new Error("Unexpected non-class types[i]");	
+						}
+						
+						if (cls.isArray()) {
+							
+						} else {
+							
+						}
+					}
+					
+				}
+				parameterArea.revalidate();
+			}
+		});
 	}
 
 }
