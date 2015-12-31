@@ -1,13 +1,12 @@
 /* Copyright (C) 2015 Ken Miura */
 package interpret;
 
+import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.ParameterizedType;
@@ -58,7 +57,7 @@ public final class InstanceCreationDialog extends JDialog {
 	
 	private final JLabel parameterCaptionLabel = new JLabel("引数一覧");
 	
-	private final List<Object> tempArgList = new ArrayList<>();
+	private final List<? super JDialog> dialogList = new ArrayList<>();
 	
 	public InstanceCreationDialog (Class<?> clazz) {
 		parent = clazz;
@@ -117,6 +116,9 @@ public final class InstanceCreationDialog extends JDialog {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				if (parent != null) {
+					return;
+				}
 				String binaryName = searchClass.getText();
 				try {
 					searchResult = Class.forName(binaryName);
@@ -157,10 +159,10 @@ public final class InstanceCreationDialog extends JDialog {
 			constructorArea.revalidate();
 		}
 		
-		constructorsComboBox.addItemListener(new ItemListener() {
+		constructorsComboBox.addActionListener(new ActionListener() {
 			
 			@Override
-			public void itemStateChanged(ItemEvent e) {
+			public void actionPerformed(ActionEvent e) {
 				parameterArea.removeAll();
 				Constructor<?> selectedConstructor = (Constructor<?>) constructorsComboBox.getSelectedItem();
 				if (selectedConstructor == null) { // removeAllのとき
@@ -168,12 +170,12 @@ public final class InstanceCreationDialog extends JDialog {
 				}
 				java.lang.reflect.Type[] types = selectedConstructor.getGenericParameterTypes();
 				
-				GridBagConstraints componetConstraintsForBoolean = new GridBagConstraints();
-				componetConstraintsForBoolean.gridx = 0;
-				componetConstraintsForBoolean.gridy = 0;
-				componetConstraintsForBoolean.anchor = GridBagConstraints.CENTER;
-				componetConstraintsForBoolean.fill = GridBagConstraints.HORIZONTAL;
-				parameterArea.add(parameterCaptionLabel, componetConstraintsForBoolean);
+				GridBagConstraints componetConstraintsEachItem = new GridBagConstraints();
+				componetConstraintsEachItem.gridx = 0;
+				componetConstraintsEachItem.gridy = 0;
+				componetConstraintsEachItem.anchor = GridBagConstraints.CENTER;
+				componetConstraintsEachItem.fill = GridBagConstraints.HORIZONTAL;
+				parameterArea.add(parameterCaptionLabel, componetConstraintsEachItem);
 				
 				for (int i=0; i<types.length; i++) {
 					
@@ -183,118 +185,118 @@ public final class InstanceCreationDialog extends JDialog {
 					
 					if (types[i] == boolean.class) {
 						
-						componetConstraintsForBoolean.gridx = 0;
-						componetConstraintsForBoolean.gridy = i+1;
-						componetConstraintsForBoolean.anchor = GridBagConstraints.EAST;
-						componetConstraintsForBoolean.fill = GridBagConstraints.HORIZONTAL;
-						parameterArea.add(new JLabel("boolean : "), componetConstraintsForBoolean);
+						componetConstraintsEachItem.gridx = 0;
+						componetConstraintsEachItem.gridy = i+1;
+						componetConstraintsEachItem.anchor = GridBagConstraints.EAST;
+						componetConstraintsEachItem.fill = GridBagConstraints.HORIZONTAL;
+						parameterArea.add(new JLabel("boolean : "), componetConstraintsEachItem);
 						
 						JComboBox<Boolean> booleanComboBox = new JComboBox<>();
 						booleanComboBox.addItem(Boolean.FALSE);
 						booleanComboBox.addItem(Boolean.TRUE);
 							
-						componetConstraintsForBoolean.gridx = 1;
-						componetConstraintsForBoolean.gridy = i+1;
-						componetConstraintsForBoolean.anchor = GridBagConstraints.WEST;
-						componetConstraintsForBoolean.fill = GridBagConstraints.HORIZONTAL;
-						parameterArea.add(booleanComboBox, componetConstraintsForBoolean);
+						componetConstraintsEachItem.gridx = 1;
+						componetConstraintsEachItem.gridy = i+1;
+						componetConstraintsEachItem.anchor = GridBagConstraints.WEST;
+						componetConstraintsEachItem.fill = GridBagConstraints.HORIZONTAL;
+						parameterArea.add(booleanComboBox, componetConstraintsEachItem);
 						
 					} else if (types[i] == char.class) {
 						
-						componetConstraintsForBoolean.gridx = 0;
-						componetConstraintsForBoolean.gridy = i+1;
-						componetConstraintsForBoolean.anchor = GridBagConstraints.EAST;
-						componetConstraintsForBoolean.fill = GridBagConstraints.HORIZONTAL;
-						parameterArea.add(new JLabel("char : "), componetConstraintsForBoolean);
+						componetConstraintsEachItem.gridx = 0;
+						componetConstraintsEachItem.gridy = i+1;
+						componetConstraintsEachItem.anchor = GridBagConstraints.EAST;
+						componetConstraintsEachItem.fill = GridBagConstraints.HORIZONTAL;
+						parameterArea.add(new JLabel("char : "), componetConstraintsEachItem);
 												
-						SpinnerNumberModel charModel = new SpinnerNumberModel(0.0, 0.0, Character.MAX_VALUE, 1.0);  
+						SpinnerNumberModel charModel = new SpinnerNumberModel(0, 0, Character.MAX_VALUE, 1);  
 						JSpinner charSpinner = new JSpinner(charModel);
 						charSpinner.setName("charSpinner");	
 						
-						componetConstraintsForBoolean.gridx = 1;
-						componetConstraintsForBoolean.gridy = i+1;
-						componetConstraintsForBoolean.anchor = GridBagConstraints.WEST;
-						componetConstraintsForBoolean.fill = GridBagConstraints.HORIZONTAL;
-						parameterArea.add(charSpinner, componetConstraintsForBoolean);	
+						componetConstraintsEachItem.gridx = 1;
+						componetConstraintsEachItem.gridy = i+1;
+						componetConstraintsEachItem.anchor = GridBagConstraints.WEST;
+						componetConstraintsEachItem.fill = GridBagConstraints.HORIZONTAL;
+						parameterArea.add(charSpinner, componetConstraintsEachItem);	
 						
 					} else if (types[i] == byte.class) {
 						
-						componetConstraintsForBoolean.gridx = 0;
-						componetConstraintsForBoolean.gridy = i+1;
-						componetConstraintsForBoolean.anchor = GridBagConstraints.EAST;
-						componetConstraintsForBoolean.fill = GridBagConstraints.HORIZONTAL;
-						parameterArea.add(new JLabel("byte : "), componetConstraintsForBoolean);
+						componetConstraintsEachItem.gridx = 0;
+						componetConstraintsEachItem.gridy = i+1;
+						componetConstraintsEachItem.anchor = GridBagConstraints.EAST;
+						componetConstraintsEachItem.fill = GridBagConstraints.HORIZONTAL;
+						parameterArea.add(new JLabel("byte : "), componetConstraintsEachItem);
 												
-						SpinnerNumberModel byteModel = new SpinnerNumberModel(0.0, Byte.MIN_VALUE, Byte.MAX_VALUE, 1.0);  
+						SpinnerNumberModel byteModel = new SpinnerNumberModel(0, Byte.MIN_VALUE, Byte.MAX_VALUE, 1);  
 						JSpinner byteSpinner = new JSpinner(byteModel);
 						byteSpinner.setName("byteSpinner");
 							
-						componetConstraintsForBoolean.gridx = 1;
-						componetConstraintsForBoolean.gridy = i+1;
-						componetConstraintsForBoolean.anchor = GridBagConstraints.WEST;
-						componetConstraintsForBoolean.fill = GridBagConstraints.HORIZONTAL;
-						parameterArea.add(byteSpinner, componetConstraintsForBoolean);							
+						componetConstraintsEachItem.gridx = 1;
+						componetConstraintsEachItem.gridy = i+1;
+						componetConstraintsEachItem.anchor = GridBagConstraints.WEST;
+						componetConstraintsEachItem.fill = GridBagConstraints.HORIZONTAL;
+						parameterArea.add(byteSpinner, componetConstraintsEachItem);							
 						
 					} else if (types[i] == short.class) {
 						
-						componetConstraintsForBoolean.gridx = 0;
-						componetConstraintsForBoolean.gridy = i+1;
-						componetConstraintsForBoolean.anchor = GridBagConstraints.EAST;
-						componetConstraintsForBoolean.fill = GridBagConstraints.HORIZONTAL;
-						parameterArea.add(new JLabel("short : "), componetConstraintsForBoolean);
+						componetConstraintsEachItem.gridx = 0;
+						componetConstraintsEachItem.gridy = i+1;
+						componetConstraintsEachItem.anchor = GridBagConstraints.EAST;
+						componetConstraintsEachItem.fill = GridBagConstraints.HORIZONTAL;
+						parameterArea.add(new JLabel("short : "), componetConstraintsEachItem);
 												
-						SpinnerNumberModel shortModel = new SpinnerNumberModel(0.0, Short.MIN_VALUE, Short.MAX_VALUE, 1.0);  
+						SpinnerNumberModel shortModel = new SpinnerNumberModel(0, Short.MIN_VALUE, Short.MAX_VALUE, 1);  
 						JSpinner shortSpinner = new JSpinner(shortModel);
 						shortSpinner.setName("shortSpinner");
 							
-						componetConstraintsForBoolean.gridx = 1;
-						componetConstraintsForBoolean.gridy = i+1;
-						componetConstraintsForBoolean.anchor = GridBagConstraints.WEST;
-						componetConstraintsForBoolean.fill = GridBagConstraints.HORIZONTAL;
-						parameterArea.add(shortSpinner, componetConstraintsForBoolean);													
+						componetConstraintsEachItem.gridx = 1;
+						componetConstraintsEachItem.gridy = i+1;
+						componetConstraintsEachItem.anchor = GridBagConstraints.WEST;
+						componetConstraintsEachItem.fill = GridBagConstraints.HORIZONTAL;
+						parameterArea.add(shortSpinner, componetConstraintsEachItem);													
 						
 					} else if (types[i] == int.class) {
 						
-						componetConstraintsForBoolean.gridx = 0;
-						componetConstraintsForBoolean.gridy = i+1;
-						componetConstraintsForBoolean.anchor = GridBagConstraints.EAST;
-						componetConstraintsForBoolean.fill = GridBagConstraints.HORIZONTAL;
-						parameterArea.add(new JLabel("int : "), componetConstraintsForBoolean);
+						componetConstraintsEachItem.gridx = 0;
+						componetConstraintsEachItem.gridy = i+1;
+						componetConstraintsEachItem.anchor = GridBagConstraints.EAST;
+						componetConstraintsEachItem.fill = GridBagConstraints.HORIZONTAL;
+						parameterArea.add(new JLabel("int : "), componetConstraintsEachItem);
 												
-						SpinnerNumberModel intModel = new SpinnerNumberModel(0.0, Integer.MIN_VALUE, Integer.MAX_VALUE, 1.0);  
+						SpinnerNumberModel intModel = new SpinnerNumberModel(0, Integer.MIN_VALUE, Integer.MAX_VALUE, 1);  
 						JSpinner intSpinner = new JSpinner(intModel);
 						intSpinner.setName("intSpinner");
 							
-						componetConstraintsForBoolean.gridx = 1;
-						componetConstraintsForBoolean.gridy = i+1;
-						componetConstraintsForBoolean.anchor = GridBagConstraints.WEST;
-						componetConstraintsForBoolean.fill = GridBagConstraints.HORIZONTAL;
-						parameterArea.add(intSpinner, componetConstraintsForBoolean);																			
+						componetConstraintsEachItem.gridx = 1;
+						componetConstraintsEachItem.gridy = i+1;
+						componetConstraintsEachItem.anchor = GridBagConstraints.WEST;
+						componetConstraintsEachItem.fill = GridBagConstraints.HORIZONTAL;
+						parameterArea.add(intSpinner, componetConstraintsEachItem);																			
 						
 					} else if (types[i] == long.class) {
 						
-						componetConstraintsForBoolean.gridx = 0;
-						componetConstraintsForBoolean.gridy = i+1;
-						componetConstraintsForBoolean.anchor = GridBagConstraints.EAST;
-						componetConstraintsForBoolean.fill = GridBagConstraints.HORIZONTAL;
-						parameterArea.add(new JLabel("long : "), componetConstraintsForBoolean);
+						componetConstraintsEachItem.gridx = 0;
+						componetConstraintsEachItem.gridy = i+1;
+						componetConstraintsEachItem.anchor = GridBagConstraints.EAST;
+						componetConstraintsEachItem.fill = GridBagConstraints.HORIZONTAL;
+						parameterArea.add(new JLabel("long : "), componetConstraintsEachItem);
 												
-						SpinnerNumberModel longModel = new SpinnerNumberModel(0.0, Long.MIN_VALUE, Long.MAX_VALUE, 1.0);  
+						SpinnerNumberModel longModel = new SpinnerNumberModel(0, Long.MIN_VALUE, Long.MAX_VALUE, 1);  
 						JSpinner longSpinner = new JSpinner(longModel);
 						longSpinner.setName("longSpinner");
 							
-						componetConstraintsForBoolean.gridx = 1;
-						componetConstraintsForBoolean.gridy = i+1;
-						componetConstraintsForBoolean.anchor = GridBagConstraints.WEST;
-						componetConstraintsForBoolean.fill = GridBagConstraints.HORIZONTAL;
-						parameterArea.add(longSpinner, componetConstraintsForBoolean);																									
+						componetConstraintsEachItem.gridx = 1;
+						componetConstraintsEachItem.gridy = i+1;
+						componetConstraintsEachItem.anchor = GridBagConstraints.WEST;
+						componetConstraintsEachItem.fill = GridBagConstraints.HORIZONTAL;
+						parameterArea.add(longSpinner, componetConstraintsEachItem);																									
 						
 					} else if (types[i] == float.class) {
-						componetConstraintsForBoolean.gridx = 0;
-						componetConstraintsForBoolean.gridy = i+1;
-						componetConstraintsForBoolean.anchor = GridBagConstraints.EAST;
-						componetConstraintsForBoolean.fill = GridBagConstraints.HORIZONTAL;
-						parameterArea.add(new JLabel("float : "), componetConstraintsForBoolean);
+						componetConstraintsEachItem.gridx = 0;
+						componetConstraintsEachItem.gridy = i+1;
+						componetConstraintsEachItem.anchor = GridBagConstraints.EAST;
+						componetConstraintsEachItem.fill = GridBagConstraints.HORIZONTAL;
+						parameterArea.add(new JLabel("float : "), componetConstraintsEachItem);
 												
 						JTextField floatTextField = new JTextField(16);
 						floatTextField.setText("0.0");
@@ -312,17 +314,17 @@ public final class InstanceCreationDialog extends JDialog {
 							}
 						});
 						
-						componetConstraintsForBoolean.gridx = 1;
-						componetConstraintsForBoolean.gridy = i+1;
-						componetConstraintsForBoolean.anchor = GridBagConstraints.WEST;
-						componetConstraintsForBoolean.fill = GridBagConstraints.HORIZONTAL;
-						parameterArea.add(floatTextField, componetConstraintsForBoolean);																									
+						componetConstraintsEachItem.gridx = 1;
+						componetConstraintsEachItem.gridy = i+1;
+						componetConstraintsEachItem.anchor = GridBagConstraints.WEST;
+						componetConstraintsEachItem.fill = GridBagConstraints.HORIZONTAL;
+						parameterArea.add(floatTextField, componetConstraintsEachItem);																									
 					} else if (types[i] == double.class) {
-						componetConstraintsForBoolean.gridx = 0;
-						componetConstraintsForBoolean.gridy = i+1;
-						componetConstraintsForBoolean.anchor = GridBagConstraints.EAST;
-						componetConstraintsForBoolean.fill = GridBagConstraints.HORIZONTAL;
-						parameterArea.add(new JLabel("double : "), componetConstraintsForBoolean);
+						componetConstraintsEachItem.gridx = 0;
+						componetConstraintsEachItem.gridy = i+1;
+						componetConstraintsEachItem.anchor = GridBagConstraints.EAST;
+						componetConstraintsEachItem.fill = GridBagConstraints.HORIZONTAL;
+						parameterArea.add(new JLabel("double : "), componetConstraintsEachItem);
 												
 						JTextField doubleTextField = new JTextField(16);
 						doubleTextField.setText("0.0");
@@ -340,29 +342,29 @@ public final class InstanceCreationDialog extends JDialog {
 							}
 						});
 						
-						componetConstraintsForBoolean.gridx = 1;
-						componetConstraintsForBoolean.gridy = i+1;
-						componetConstraintsForBoolean.anchor = GridBagConstraints.WEST;
-						componetConstraintsForBoolean.fill = GridBagConstraints.HORIZONTAL;
-						parameterArea.add(doubleTextField, componetConstraintsForBoolean);																									
+						componetConstraintsEachItem.gridx = 1;
+						componetConstraintsEachItem.gridy = i+1;
+						componetConstraintsEachItem.anchor = GridBagConstraints.WEST;
+						componetConstraintsEachItem.fill = GridBagConstraints.HORIZONTAL;
+						parameterArea.add(doubleTextField, componetConstraintsEachItem);																									
 						
 					} else if (types[i] == java.lang.String.class) {
-						componetConstraintsForBoolean.gridx = 0;
-						componetConstraintsForBoolean.gridy = i+1;
-						componetConstraintsForBoolean.anchor = GridBagConstraints.EAST;
-						componetConstraintsForBoolean.fill = GridBagConstraints.HORIZONTAL;
-						parameterArea.add(new JLabel("String : "), componetConstraintsForBoolean);
+						componetConstraintsEachItem.gridx = 0;
+						componetConstraintsEachItem.gridy = i+1;
+						componetConstraintsEachItem.anchor = GridBagConstraints.EAST;
+						componetConstraintsEachItem.fill = GridBagConstraints.HORIZONTAL;
+						parameterArea.add(new JLabel("String : "), componetConstraintsEachItem);
 												
 						JTextField stringTextField = new JTextField(16);
 						stringTextField.setName("stringTextField");
 						
-						componetConstraintsForBoolean.gridx = 1;
-						componetConstraintsForBoolean.gridy = i+1;
-						componetConstraintsForBoolean.anchor = GridBagConstraints.WEST;
-						componetConstraintsForBoolean.fill = GridBagConstraints.HORIZONTAL;
-						parameterArea.add(stringTextField, componetConstraintsForBoolean);																									
+						componetConstraintsEachItem.gridx = 1;
+						componetConstraintsEachItem.gridy = i+1;
+						componetConstraintsEachItem.anchor = GridBagConstraints.WEST;
+						componetConstraintsEachItem.fill = GridBagConstraints.HORIZONTAL;
+						parameterArea.add(stringTextField, componetConstraintsEachItem);																									
 					} else {
-						Class<?> cls = null;
+						final Class<?> cls;
 						if (types[i] instanceof Class<?>) {
 							cls = (Class<?>) types[i];
 						} else if (types[i] instanceof ParameterizedType) {
@@ -372,32 +374,53 @@ public final class InstanceCreationDialog extends JDialog {
 						}
 						
 						if (cls.isArray()) {
-							// TODO
-						} else {
-							componetConstraintsForBoolean.gridx = 0;
-							componetConstraintsForBoolean.gridy = i+1;
-							componetConstraintsForBoolean.anchor = GridBagConstraints.EAST;
-							componetConstraintsForBoolean.fill = GridBagConstraints.HORIZONTAL;
-							parameterArea.add(new JLabel(cls.getName() + " : "), componetConstraintsForBoolean);
+							componetConstraintsEachItem.gridx = 0;
+							componetConstraintsEachItem.gridy = i+1;
+							componetConstraintsEachItem.anchor = GridBagConstraints.EAST;
+							componetConstraintsEachItem.fill = GridBagConstraints.HORIZONTAL;
+							parameterArea.add(new JLabel(cls.getName() + " : "), componetConstraintsEachItem);
 													
-							JButton instanceCreationButton = new JButton("インスタンスを生成する");
-							instanceCreationButton.setName(cls.getName());
-							InstanceCreationDialog icd = new InstanceCreationDialog(cls);							
+							JButton instanceCreationButton = new JButton("配列を生成する (生成しない場合はnullを利用する)");
+							instanceCreationButton.setName("array");	
+							instanceCreationButton.addActionListener(new ActionListener() {
+								
+								@Override
+								public void actionPerformed(ActionEvent e) {
+									// TODO
+								}
+							});
+							
+							componetConstraintsEachItem.gridx = 1;
+							componetConstraintsEachItem.gridy = i+1;
+							componetConstraintsEachItem.anchor = GridBagConstraints.WEST;
+							componetConstraintsEachItem.fill = GridBagConstraints.HORIZONTAL;
+							parameterArea.add(instanceCreationButton, componetConstraintsEachItem);
+							
+						} else {
+							componetConstraintsEachItem.gridx = 0;
+							componetConstraintsEachItem.gridy = i+1;
+							componetConstraintsEachItem.anchor = GridBagConstraints.EAST;
+							componetConstraintsEachItem.fill = GridBagConstraints.HORIZONTAL;
+							parameterArea.add(new JLabel(cls.getName() + " : "), componetConstraintsEachItem);
+													
+							JButton instanceCreationButton = new JButton("インスタンスを生成する (生成しない場合はnullを利用する)");
+							instanceCreationButton.setName("reference");	
+							InstanceCreationDialog icd = new InstanceCreationDialog(cls);
+							dialogList.add(icd);
 							instanceCreationButton.addActionListener(new ActionListener() {
 								
 								@Override
 								public void actionPerformed(ActionEvent e) {
 									icd.setLocation(getLocation());
 									icd.setVisible(true);
-									tempArgList.add(icd.getCreatedInstance());
 								}
 							});
 							
-							componetConstraintsForBoolean.gridx = 1;
-							componetConstraintsForBoolean.gridy = i+1;
-							componetConstraintsForBoolean.anchor = GridBagConstraints.WEST;
-							componetConstraintsForBoolean.fill = GridBagConstraints.HORIZONTAL;
-							parameterArea.add(instanceCreationButton, componetConstraintsForBoolean);																									
+							componetConstraintsEachItem.gridx = 1;
+							componetConstraintsEachItem.gridy = i+1;
+							componetConstraintsEachItem.anchor = GridBagConstraints.WEST;
+							componetConstraintsEachItem.fill = GridBagConstraints.HORIZONTAL;
+							parameterArea.add(instanceCreationButton, componetConstraintsEachItem);																									
 						}
 					}	
 				}
@@ -406,16 +429,60 @@ public final class InstanceCreationDialog extends JDialog {
 					
 					@Override
 					public void actionPerformed(ActionEvent e) {
+						List<Object> args = new ArrayList<>();
+						
+						Component[] components = parameterArea.getComponents();
+						int referenceArgCount = 0;
+						for (int i=0; i<components.length; i++) {
+							if (components[i] instanceof JComboBox) {
+								args.add(((JComboBox<?>)components[i]).getSelectedItem());
+							} else if (components[i] instanceof JSpinner && components[i].getName().equals("charSpinner")) {
+								int temp = (Integer) ((JSpinner)components[i]).getValue();
+								args.add((char) temp);
+							} else if (components[i] instanceof JSpinner && components[i].getName().equals("byteSpinner")) {
+								int temp = (Integer)((JSpinner)components[i]).getValue();
+								args.add((byte)temp);
+							} else if (components[i] instanceof JSpinner && components[i].getName().equals("shortSpinner")) {
+								int temp = (Integer) ((JSpinner)components[i]).getValue();
+								args.add((short) temp);
+							} else if (components[i] instanceof JSpinner && components[i].getName().equals("intSpinner")) {
+								args.add(((JSpinner)components[i]).getValue());
+							} else if (components[i] instanceof JSpinner && components[i].getName().equals("longSpinner")) {
+								double temp = (Double) ((JSpinner)components[i]).getValue();
+								args.add((long) temp);
+							} else if (components[i] instanceof JTextField && components[i].getName().equals("floatTextField")) {
+								args.add(Float.parseFloat(((JTextField)components[i]).getText()));
+							} else if (components[i] instanceof JTextField && components[i].getName().equals("doubleTextField")) {
+								args.add(Double.parseDouble(((JTextField)components[i]).getText()));
+							} else if (components[i] instanceof JTextField && components[i].getName().equals("stringTextField")) {
+								args.add(((JTextField)components[i]).getText());
+							} else if (components[i] instanceof JButton && (components[i].getName() != null) && ( components[i].getName().equals("reference") || components[i].getName().equals("array"))) {
+								JDialog dialog = (JDialog) dialogList.get(referenceArgCount);
+								if (dialog instanceof InstanceCreationDialog) {
+									args.add(((InstanceCreationDialog)dialog).getCreatedInstance());	
+									referenceArgCount++;
+								} else if (dialog instanceof ArrayCreationDialog) {
+									// TODO
+									referenceArgCount++;
+								} else {
+									throw new AssertionError("not to be passed.");
+								}
+							} else {
+								//System.out.println("for debug");
+							}
+						}
+						
 						Constructor<?> selectedConstructor = (Constructor<?>) constructorsComboBox.getSelectedItem();
 						try {
-							createdInstance = selectedConstructor.newInstance();
+							createdInstance = selectedConstructor.newInstance(args.toArray(new Object[0]));
 							dispose();
 						} catch (InstantiationException
 								| IllegalAccessException
-								| IllegalArgumentException
-								| InvocationTargetException ex) {
+								| IllegalArgumentException ex) {
 							ex.printStackTrace();
-							// エラーメッセージ
+							JOptionPane.showMessageDialog(null, "インスタンス生成中に例外 ("+ ex.getClass().toString() +") が発生しました。", "インスタンス生成失敗", JOptionPane.ERROR_MESSAGE);
+						} catch (InvocationTargetException ie) {
+							JOptionPane.showMessageDialog(null, "インスタンス生成中に例外 ("+ ie.getCause().getClass().toString() +") が発生しました。", "インスタンス生成失敗", JOptionPane.ERROR_MESSAGE);
 						}
 					}
 				});
