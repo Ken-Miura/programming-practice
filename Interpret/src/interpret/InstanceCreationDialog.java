@@ -168,6 +168,7 @@ public final class InstanceCreationDialog extends JDialog {
 				if (selectedConstructor == null) { // removeAllのとき
 					return;
 				}
+				dialogList.clear(); //　コンストラクタが変わるたびに削除
 				java.lang.reflect.Type[] types = selectedConstructor.getGenericParameterTypes();
 				
 				GridBagConstraints componetConstraintsEachItem = new GridBagConstraints();

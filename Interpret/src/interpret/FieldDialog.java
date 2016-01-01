@@ -16,6 +16,10 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTree;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreeSelectionModel;
 
 /**
  * @author Ken Miura
@@ -104,47 +108,57 @@ public final class FieldDialog extends JDialog {
 		panelConstraints.gridx = 0;
 		panelConstraints.gridy = 1;
 		panelConstraints.anchor = GridBagConstraints.NORTH;
-		panelConstraints.fill = GridBagConstraints.BOTH;
+		panelConstraints.fill = GridBagConstraints.HORIZONTAL;
 		add(fieldTreeAndValueArea, panelConstraints);
 		
 		JPanel fieldArea = new JPanel();
 		JScrollPane scrollableFieldArea = new JScrollPane(fieldArea);
 		JPanel valueArea = new JPanel();
+		valueArea.setLayout(new GridBagLayout());
 		
 		fieldTreeAndValueArea.setLeftComponent(scrollableFieldArea);
 		fieldTreeAndValueArea.setRightComponent(valueArea);
 		
-		Hashtable<String, Object> firstHierarchy = new WrappedHashtable<>();
+		Hashtable<String, Field> firstHierarchy = new WrappedHashtable<>();
 		Field[] fields = this.createdObjectType.getDeclaredFields();
-		addNodes(firstHierarchy, fields);
-		
-		fieldArea.add(new JTree(firstHierarchy));
-	}
-
-
-	private void addNodes(Hashtable<String, Object> hierarchy, Field[] fields) {
-		for (Field f : fields) {
+		for (final Field f: fields) {
 			f.setAccessible(true);
-			if (f.getType().isPrimitive()) {
-				try {
-					hierarchy.put(f.toGenericString(), f.get(createdObject));
-				} catch (IllegalArgumentException | IllegalAccessException e) {
-					e.printStackTrace();
-				}
-			} else {
-				//Hashtable<String, Object> nextHierarchy = new Hashtable<>();
-				//addNodes(nextHierarchy, f.getClass().getDeclaredFields());
-				//hierarchy.put(f.toGenericString(), nextHierarchy);
-				try {
-					if (f.get(createdObject) == null) {
-						
-					} else {
-						hierarchy.put(f.toGenericString(), f.get(createdObject));	
-					}
-				} catch (IllegalArgumentException | IllegalAccessException e) {
-					e.printStackTrace();
-				}
+			try {
+				firstHierarchy.put(f.toGenericString(), f);
+			} catch (IllegalArgumentException e1) {
+				e1.printStackTrace();
 			}
 		}
+		JTree fieldTree = new JTree(firstHierarchy);
+		fieldTree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
+		fieldTree.addTreeSelectionListener(new TreeSelectionListener() {
+			
+			@Override
+			public void valueChanged(TreeSelectionEvent e) {
+				DefaultMutableTreeNode node = (DefaultMutableTreeNode) fieldTree.getLastSelectedPathComponent();
+				if (node == null) {
+					return;
+				}
+				valueArea.removeAll();
+				Object nodeInfo = node.getUserObject();
+				Field f = firstHierarchy.get(nodeInfo);
+				if (f.getType().isPrimitive() || f.getType() == java.lang.String.class ) {
+					if (f.getType() == char.class) {
+						valueArea.add(new JButton("char"));
+					} else if (f.getType() == int.class) {
+						JButton test = new JButton("int");
+						valueArea.add(test);
+					} else if (f.getType() == java.lang.String.class) {
+						valueArea.add(new JButton("String"));
+					} 
+				} else {
+					System.out.println("not primitive");
+				}
+				fieldTreeAndValueArea.setResizeWeight(.8d);
+				fieldTreeAndValueArea.revalidate();
+			}
+		});
+		fieldArea.add(fieldTree);
 	}
+
 }
