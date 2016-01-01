@@ -76,7 +76,7 @@ public final class FieldDialog extends JDialog {
 	private final JPanel methodExecutionButtonArea = new JPanel();
 	private final JPanel fieldArea = new JPanel();
 	private final JScrollPane scrollableFieldArea = new JScrollPane(fieldArea);	
-	private final JPanel valueArea = new JPanel();
+	private final JPanel valueArea = new JPanel(new GridBagLayout());
 	
 	
 	public FieldDialog(Object createdObject){
@@ -369,6 +369,7 @@ public final class FieldDialog extends JDialog {
 						});	
 						valueArea.add(button);
 					} else if (f.getType() == java.lang.String.class) {
+						GridBagConstraints gc = new GridBagConstraints();
 						final String str;
 						try {
 							str = (String)f.get(createdObject);
@@ -377,7 +378,10 @@ public final class FieldDialog extends JDialog {
 								| IllegalAccessException e1) {
 							e1.printStackTrace();
 						}
-						valueArea.add(currentValue);
+						gc.gridx = 0;
+						gc.gridy = 0;
+						gc.fill = GridBagConstraints.HORIZONTAL;
+						valueArea.add(currentValue, gc);
 						
 						JTextField text = new JTextField("", 10);
 						valueArea.add(text);
@@ -400,10 +404,123 @@ public final class FieldDialog extends JDialog {
 								valueArea.revalidate();
 							}
 						});	
-						valueArea.add(button);						
+						gc.gridx = 0;
+						gc.gridy = 1;
+						gc.fill = GridBagConstraints.HORIZONTAL;
+						valueArea.add(button, gc);	
+						
+						JButton nullButton = new JButton("nullに変更する");
+						nullButton.addActionListener(new ActionListener() {
+							
+							@Override
+							public void actionPerformed(ActionEvent e) {
+								try {
+									f.setAccessible(true);
+									f.set(createdObject, null);
+									currentValue.setText("型: String, 値: null");
+								} catch (IllegalArgumentException
+										| IllegalAccessException e1) {
+									e1.printStackTrace();
+								}
+								valueArea.revalidate();
+							}
+						});	
+						gc.gridx = 1;
+						gc.gridy = 1;
+						gc.fill = GridBagConstraints.HORIZONTAL;
+						valueArea.add(nullButton, gc);	
 					} 
 				} else {
-					System.out.println("not primitive");
+					if (f.getType().isArray()) {
+						// TODO
+					} else {
+						GridBagConstraints gc = new GridBagConstraints();
+						
+						final Object object;
+						try {
+							object = f.get(createdObject);
+							currentValue.setText("型: "+ f.getType().getName() +", 値: " + (object == null ? "null" : object));
+						} catch (IllegalArgumentException
+								| IllegalAccessException e1) {
+							e1.printStackTrace();
+						}
+						gc.gridx = 0;
+						gc.gridy = 0;
+						gc.fill = GridBagConstraints.HORIZONTAL;
+						valueArea.add(currentValue, gc);
+						
+						JButton fieldButton = new JButton("フィールド一覧を表示する");
+						fieldButton.addActionListener(new ActionListener() {
+							
+							@Override
+							public void actionPerformed(ActionEvent e) {
+								try {
+									final Object o = f.get(createdObject);
+									if (o == null) {
+										JOptionPane.showMessageDialog(null, "参照値がnullです", "入力エラー", JOptionPane.ERROR_MESSAGE);
+									} else {
+										new FieldDialog(o).setVisible(true);	
+									}
+								} catch (IllegalArgumentException
+										| IllegalAccessException e1) {
+									e1.printStackTrace();
+								}
+							}
+						});
+						gc.gridx = 0;
+						gc.gridy = 1;
+						gc.fill = GridBagConstraints.HORIZONTAL;
+						valueArea.add(fieldButton, gc);
+						
+						JButton creationButton = new JButton("新しくインスタンスを生成してフィールドを変更する");
+						creationButton.addActionListener(new ActionListener() {
+							
+							@Override
+							public void actionPerformed(ActionEvent e) {
+								InstanceCreationDialog icd = new InstanceCreationDialog(f.getType());
+								icd.setVisible(true);
+								Object newObject = icd.getCreatedInstance();
+								if (newObject == null) {
+									JOptionPane.showMessageDialog(null, "インスタンスの生成に失敗しました", "インスタンス生成エラー", JOptionPane.ERROR_MESSAGE);
+									return;
+								}
+								f.setAccessible(true);
+								try {
+									f.set(FieldDialog.this.createdObject, newObject);
+									currentValue.setText("型: "+ f.getType().getName() +", 値: " + newObject);
+								} catch (IllegalArgumentException
+										| IllegalAccessException e1) {
+									e1.printStackTrace();
+								}
+								valueArea.revalidate();
+							}
+						});
+						gc.gridx = 1;
+						gc.gridy = 1;
+						gc.fill = GridBagConstraints.HORIZONTAL;
+						valueArea.add(creationButton, gc);
+						
+						JButton nullButton = new JButton("フィールドをnullに変更する");
+						nullButton.addActionListener(new ActionListener() {
+							
+							@Override
+							public void actionPerformed(ActionEvent e) {
+								f.setAccessible(true);
+								try {
+									f.set(FieldDialog.this.createdObject, null);
+									currentValue.setText("型: "+ f.getType().getName() +", 値: null");
+								} catch (IllegalArgumentException
+										| IllegalAccessException e1) {
+									e1.printStackTrace();
+								}
+								valueArea.revalidate();
+							}
+						});
+						gc.gridx = 1;
+						gc.gridy = 2;
+						gc.fill = GridBagConstraints.HORIZONTAL;
+						valueArea.add(nullButton, gc);
+					}
 				}
 				revalidate();
 				repaint();
@@ -422,8 +539,8 @@ public final class FieldDialog extends JDialog {
 		panelConstraints.insets = new Insets(0, 0, 0, 0);
 		panelConstraints.gridx = 0;
 		panelConstraints.gridy = 2;
-		panelConstraints.anchor = GridBagConstraints.NORTH;
-		panelConstraints.fill = GridBagConstraints.HORIZONTAL;
+		panelConstraints.anchor = GridBagConstraints.SOUTH;
+		panelConstraints.fill = GridBagConstraints.BOTH;
 		add(valueArea, panelConstraints);
 	}
 
