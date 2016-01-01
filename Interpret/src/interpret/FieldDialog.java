@@ -14,7 +14,6 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JSplitPane;
 import javax.swing.JTree;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
@@ -69,8 +68,10 @@ public final class FieldDialog extends JDialog {
 	private static final int HEIGHT = 800;
 	private static final int MARGIN = 7;
 
-	private final JPanel methodButtonArea = new JPanel();
-	private final JSplitPane fieldTreeAndValueArea = new JSplitPane(JSplitPane.VERTICAL_SPLIT, true);
+	private final JPanel methodExecutionButtonArea = new JPanel();
+	private final JPanel fieldArea = new JPanel();
+	private final JScrollPane scrollableFieldArea = new JScrollPane(fieldArea);	
+	private final JPanel valueArea = new JPanel();
 	
 	
 	public FieldDialog(Object createdObject){
@@ -92,7 +93,7 @@ public final class FieldDialog extends JDialog {
 		panelConstraints.gridy = 0;
 		panelConstraints.anchor = GridBagConstraints.NORTH;
 		panelConstraints.fill = GridBagConstraints.HORIZONTAL;
-		add(methodButtonArea, panelConstraints);
+		add(methodExecutionButtonArea, panelConstraints);
 
 		JButton medhodDialogButton = new JButton("メソッドを選択して実行する");
 		medhodDialogButton.addActionListener(new ActionListener() {
@@ -102,22 +103,7 @@ public final class FieldDialog extends JDialog {
 				// TODO
 			}
 		});
-		methodButtonArea.add(medhodDialogButton, "CENTER");
-		
-		panelConstraints.insets = new Insets(0, 0, 0, 0);
-		panelConstraints.gridx = 0;
-		panelConstraints.gridy = 1;
-		panelConstraints.anchor = GridBagConstraints.NORTH;
-		panelConstraints.fill = GridBagConstraints.HORIZONTAL;
-		add(fieldTreeAndValueArea, panelConstraints);
-		
-		JPanel fieldArea = new JPanel();
-		JScrollPane scrollableFieldArea = new JScrollPane(fieldArea);
-		JPanel valueArea = new JPanel();
-		valueArea.setLayout(new GridBagLayout());
-		
-		fieldTreeAndValueArea.setLeftComponent(scrollableFieldArea);
-		fieldTreeAndValueArea.setRightComponent(valueArea);
+		methodExecutionButtonArea.add(medhodDialogButton);
 		
 		Hashtable<String, Field> firstHierarchy = new WrappedHashtable<>();
 		Field[] fields = this.createdObjectType.getDeclaredFields();
@@ -125,8 +111,8 @@ public final class FieldDialog extends JDialog {
 			f.setAccessible(true);
 			try {
 				firstHierarchy.put(f.toGenericString(), f);
-			} catch (IllegalArgumentException e1) {
-				e1.printStackTrace();
+			} catch (IllegalArgumentException iae) {
+				iae.printStackTrace();
 			}
 		}
 		JTree fieldTree = new JTree(firstHierarchy);
@@ -154,11 +140,25 @@ public final class FieldDialog extends JDialog {
 				} else {
 					System.out.println("not primitive");
 				}
-				fieldTreeAndValueArea.setResizeWeight(.8d);
-				fieldTreeAndValueArea.revalidate();
+				revalidate();
 			}
 		});
+		
 		fieldArea.add(fieldTree);
+		
+		panelConstraints.insets = new Insets(0, 0, 0, 0);
+		panelConstraints.gridx = 0;
+		panelConstraints.gridy = 1;
+		panelConstraints.anchor = GridBagConstraints.NORTH;
+		panelConstraints.fill = GridBagConstraints.HORIZONTAL;
+		add(scrollableFieldArea, panelConstraints);		
+		
+		panelConstraints.insets = new Insets(0, 0, 0, 0);
+		panelConstraints.gridx = 0;
+		panelConstraints.gridy = 2;
+		panelConstraints.anchor = GridBagConstraints.NORTH;
+		panelConstraints.fill = GridBagConstraints.HORIZONTAL;
+		add(valueArea, panelConstraints);
 	}
 
 }
