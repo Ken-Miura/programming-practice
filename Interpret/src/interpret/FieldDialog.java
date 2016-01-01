@@ -299,7 +299,8 @@ public final class FieldDialog extends JDialog {
 						}
 						valueArea.add(currentValue);
 						
-						JTextField floatText = new JTextField("      0.0");
+						JTextField floatText = new JTextField("0.0", 10);
+						floatText.setHorizontalAlignment(JTextField.RIGHT);
 						valueArea.add(floatText);
 						
 						JButton button = new JButton("値を変更する");
@@ -337,7 +338,8 @@ public final class FieldDialog extends JDialog {
 						}
 						valueArea.add(currentValue);
 						
-						JTextField doubleText = new JTextField("      0.0");
+						JTextField doubleText = new JTextField("0.0", 10);
+						doubleText.setHorizontalAlignment(JTextField.RIGHT);
 						valueArea.add(doubleText);
 						
 						JButton button = new JButton("値を変更する");
@@ -377,7 +379,7 @@ public final class FieldDialog extends JDialog {
 						}
 						valueArea.add(currentValue);
 						
-						JTextField text = new JTextField("		");
+						JTextField text = new JTextField("", 10);
 						valueArea.add(text);
 						
 						JButton button = new JButton("値を変更する");
