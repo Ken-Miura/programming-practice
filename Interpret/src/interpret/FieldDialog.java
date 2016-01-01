@@ -12,9 +12,12 @@ import java.util.Objects;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
 import javax.swing.JTree;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -128,14 +131,43 @@ public final class FieldDialog extends JDialog {
 				valueArea.removeAll();
 				Object nodeInfo = node.getUserObject();
 				Field f = firstHierarchy.get(nodeInfo);
+				JLabel currentValue = new JLabel();
 				if (f.getType().isPrimitive() || f.getType() == java.lang.String.class ) {
 					if (f.getType() == char.class) {
-						valueArea.add(new JButton("char"));
+						
 					} else if (f.getType() == int.class) {
-						JButton test = new JButton("int");
-						valueArea.add(test);
+						try {
+							currentValue.setText("型: int, 値: " + f.getInt(createdObject));
+						} catch (IllegalArgumentException
+								| IllegalAccessException e1) {
+							e1.printStackTrace();
+						}
+						valueArea.add(currentValue);
+						
+						SpinnerNumberModel intModel = new SpinnerNumberModel(0, Integer.MIN_VALUE, Integer.MAX_VALUE, 1);  
+						JSpinner intSpinner = new JSpinner(intModel);
+						valueArea.add(intSpinner);
+						
+						JButton button = new JButton("値を変更する");
+						button.addActionListener(new ActionListener() {
+							
+							@Override
+							public void actionPerformed(ActionEvent e) {
+								Integer i = (Integer) intSpinner.getValue();
+								try {
+									f.setAccessible(true);
+									f.setInt(createdObject, i);
+									currentValue.setText("型: int, 値: " + f.getInt(createdObject));
+								} catch (IllegalArgumentException
+										| IllegalAccessException e1) {
+									e1.printStackTrace();
+								}
+								valueArea.revalidate();
+							}
+						});	
+						valueArea.add(button);
 					} else if (f.getType() == java.lang.String.class) {
-						valueArea.add(new JButton("String"));
+						
 					} 
 				} else {
 					System.out.println("not primitive");
