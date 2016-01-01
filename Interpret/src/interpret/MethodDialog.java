@@ -416,6 +416,7 @@ public final class MethodDialog extends JDialog {
 		add(methodComboBox, gc);
 		
 		gc.gridy = 2;
+		gc.fill = GridBagConstraints.HORIZONTAL;
 		add(parameterArea, gc);
 	}
 	
