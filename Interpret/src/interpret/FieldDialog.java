@@ -13,9 +13,11 @@ import java.util.Objects;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
+import javax.swing.JTextField;
 import javax.swing.JTree;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.event.TreeSelectionEvent;
@@ -134,7 +136,98 @@ public final class FieldDialog extends JDialog {
 				JLabel currentValue = new JLabel();
 				if (f.getType().isPrimitive() || f.getType() == java.lang.String.class ) {
 					if (f.getType() == char.class) {
+						try {
+							currentValue.setText("型: char, 値: " + f.getChar(createdObject));
+						} catch (IllegalArgumentException
+								| IllegalAccessException e1) {
+							e1.printStackTrace();
+						}
+						valueArea.add(currentValue);
 						
+						SpinnerNumberModel charModel = new SpinnerNumberModel(0, 0, Character.MAX_VALUE, 1);  
+						JSpinner charSpinner = new JSpinner(charModel);
+						valueArea.add(charSpinner);
+						
+						JButton button = new JButton("値を変更する");
+						button.addActionListener(new ActionListener() {
+							
+							@Override
+							public void actionPerformed(ActionEvent e) {
+								int i = (Integer) charSpinner.getValue();
+								try {
+									f.setAccessible(true);
+									f.setChar(createdObject, (char)i);
+									currentValue.setText("型: char, 値: " + f.getChar(createdObject));
+								} catch (IllegalArgumentException
+										| IllegalAccessException e1) {
+									e1.printStackTrace();
+								}
+								valueArea.revalidate();
+							}
+						});	
+						valueArea.add(button);						
+					} else if (f.getType() == byte.class) { 
+						try {
+							currentValue.setText("型: byte, 値: " + f.getByte(createdObject));
+						} catch (IllegalArgumentException
+								| IllegalAccessException e1) {
+							e1.printStackTrace();
+						}
+						valueArea.add(currentValue);
+						
+						SpinnerNumberModel byteModel = new SpinnerNumberModel(0, Byte.MIN_VALUE, Byte.MAX_VALUE, 1);  
+						JSpinner byteSpinner = new JSpinner(byteModel);
+						valueArea.add(byteSpinner);
+						
+						JButton button = new JButton("値を変更する");
+						button.addActionListener(new ActionListener() {
+							
+							@Override
+							public void actionPerformed(ActionEvent e) {
+								int i = (Integer) byteSpinner.getValue();
+								try {
+									f.setAccessible(true);
+									f.setByte(createdObject, (byte)i);
+									currentValue.setText("型: byte, 値: " + f.getByte(createdObject));
+								} catch (IllegalArgumentException
+										| IllegalAccessException e1) {
+									e1.printStackTrace();
+								}
+								valueArea.revalidate();
+							}
+						});	
+						valueArea.add(button);						
+					} else if (f.getType() == short.class) { 
+						try {
+							currentValue.setText("型: short, 値: " + f.getShort(createdObject));
+						} catch (IllegalArgumentException
+								| IllegalAccessException e1) {
+							e1.printStackTrace();
+						}
+						valueArea.add(currentValue);
+						
+						SpinnerNumberModel shortModel = new SpinnerNumberModel(0, Short.MIN_VALUE, Short.MAX_VALUE, 1);  
+						JSpinner shortSpinner = new JSpinner(shortModel);
+						valueArea.add(shortSpinner);
+						
+						JButton button = new JButton("値を変更する");
+						button.addActionListener(new ActionListener() {
+							
+							@Override
+							public void actionPerformed(ActionEvent e) {
+								int i = (Integer) shortSpinner.getValue();
+								try {
+									f.setAccessible(true);
+									f.setShort(createdObject, (short)i);
+									currentValue.setText("型: short, 値: " + f.getShort(createdObject));
+								} catch (IllegalArgumentException
+										| IllegalAccessException e1) {
+									e1.printStackTrace();
+								}
+								valueArea.revalidate();
+							}
+						});	
+						valueArea.add(button);						
 					} else if (f.getType() == int.class) {
 						try {
 							currentValue.setText("型: int, 値: " + f.getInt(createdObject));
@@ -153,7 +246,7 @@ public final class FieldDialog extends JDialog {
 							
 							@Override
 							public void actionPerformed(ActionEvent e) {
-								Integer i = (Integer) intSpinner.getValue();
+								int i = (Integer) intSpinner.getValue();
 								try {
 									f.setAccessible(true);
 									f.setInt(createdObject, i);
@@ -166,13 +259,152 @@ public final class FieldDialog extends JDialog {
 							}
 						});	
 						valueArea.add(button);
-					} else if (f.getType() == java.lang.String.class) {
+					} else if (f.getType() == long.class) {
+						try {
+							currentValue.setText("型: long, 値: " + f.getLong(createdObject));
+						} catch (IllegalArgumentException
+								| IllegalAccessException e1) {
+							e1.printStackTrace();
+						}
+						valueArea.add(currentValue);
 						
+						SpinnerNumberModel longModel = new SpinnerNumberModel(0, Long.MIN_VALUE, Long.MAX_VALUE, 1);  
+						JSpinner longSpinner = new JSpinner(longModel);
+						valueArea.add(longSpinner);
+						
+						JButton button = new JButton("値を変更する");
+						button.addActionListener(new ActionListener() {
+							
+							@Override
+							public void actionPerformed(ActionEvent e) {
+								double d = (Double) longSpinner.getValue();
+								try {
+									f.setAccessible(true);
+									f.setLong(createdObject, (long)d);
+									currentValue.setText("型: long, 値: " + f.getLong(createdObject));
+								} catch (IllegalArgumentException
+										| IllegalAccessException e1) {
+									e1.printStackTrace();
+								}
+								valueArea.revalidate();
+							}
+						});	
+						valueArea.add(button);
+					} else if (f.getType() == float.class) {
+						try {
+							currentValue.setText("型: float, 値: " + f.getFloat(createdObject));
+						} catch (IllegalArgumentException
+								| IllegalAccessException e1) {
+							e1.printStackTrace();
+						}
+						valueArea.add(currentValue);
+						
+						JTextField floatText = new JTextField("      0.0");
+						valueArea.add(floatText);
+						
+						JButton button = new JButton("値を変更する");
+						button.addActionListener(new ActionListener() {
+							
+							@Override
+							public void actionPerformed(ActionEvent e) {
+								String floatString = floatText.getText();
+								final float floatValue;
+								try {
+									floatValue = Float.parseFloat(floatString);									
+								} catch (NumberFormatException e1) {
+									JOptionPane.showMessageDialog(null, floatString + "はfloat型として不正な入力です", "入力エラー", JOptionPane.ERROR_MESSAGE);
+									return;
+								}
+
+								try {
+									f.setAccessible(true);
+									f.setFloat(createdObject, floatValue);
+									currentValue.setText("型: float, 値: " + f.getFloat(createdObject));
+								} catch (IllegalArgumentException
+										| IllegalAccessException e1) {
+									e1.printStackTrace();
+								}
+								valueArea.revalidate();
+							}
+						});	
+						valueArea.add(button);						
+					} else if (f.getType() == double.class) {
+						try {
+							currentValue.setText("型: double, 値: " + f.getDouble(createdObject));
+						} catch (IllegalArgumentException
+								| IllegalAccessException e1) {
+							e1.printStackTrace();
+						}
+						valueArea.add(currentValue);
+						
+						JTextField doubleText = new JTextField("      0.0");
+						valueArea.add(doubleText);
+						
+						JButton button = new JButton("値を変更する");
+						button.addActionListener(new ActionListener() {
+							
+							@Override
+							public void actionPerformed(ActionEvent e) {
+								String doubleString = doubleText.getText();
+								final double doubleValue;
+								try {
+									doubleValue = Double.parseDouble(doubleString);									
+								} catch (NumberFormatException e1) {
+									JOptionPane.showMessageDialog(null, doubleString + "はdouble型として不正な入力です", "入力エラー", JOptionPane.ERROR_MESSAGE);
+									return;
+								}
+
+								try {
+									f.setAccessible(true);
+									f.setDouble(createdObject, doubleValue);
+									currentValue.setText("型: double, 値: " + f.getDouble(createdObject));
+								} catch (IllegalArgumentException
+										| IllegalAccessException e1) {
+									e1.printStackTrace();
+								}
+								valueArea.revalidate();
+							}
+						});	
+						valueArea.add(button);
+					} else if (f.getType() == java.lang.String.class) {
+						final String str;
+						try {
+							str = (String)f.get(createdObject);
+							currentValue.setText("型: String, 値: " + (str == null ? "null" : str));
+						} catch (IllegalArgumentException
+								| IllegalAccessException e1) {
+							e1.printStackTrace();
+						}
+						valueArea.add(currentValue);
+						
+						JTextField text = new JTextField("		");
+						valueArea.add(text);
+						
+						JButton button = new JButton("値を変更する");
+						button.addActionListener(new ActionListener() {
+							
+							@Override
+							public void actionPerformed(ActionEvent e) {
+								String strText = text.getText();
+								try {
+									f.setAccessible(true);
+									f.set(createdObject, strText);
+									String str = (String)f.get(createdObject);
+									currentValue.setText("型: String, 値: " + (str == null ? "null" : str));
+								} catch (IllegalArgumentException
+										| IllegalAccessException e1) {
+									e1.printStackTrace();
+								}
+								valueArea.revalidate();
+							}
+						});	
+						valueArea.add(button);						
 					} 
 				} else {
 					System.out.println("not primitive");
 				}
 				revalidate();
+				repaint();
 			}
 		});
 		
