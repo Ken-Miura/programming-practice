@@ -492,6 +492,77 @@ public final class InstanceCreationDialog extends JDialog {
 				componetConstraintsForButton.gridy = types.length+1;
 				componetConstraintsForButton.anchor = GridBagConstraints.SOUTHEAST;
 				parameterArea.add(instanceCreationButton, componetConstraintsForButton);
+
+				JButton instanceCreationAndOpenFieldButton = new JButton("インスタンスを生成してフィールド一覧を開く");
+				instanceCreationAndOpenFieldButton.addActionListener(new ActionListener() {
+					
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						List<Object> args = new ArrayList<>();
+						
+						Component[] components = parameterArea.getComponents();
+						int referenceArgCount = 0;
+						for (int i=0; i<components.length; i++) {
+							if (components[i] instanceof JComboBox) {
+								args.add(((JComboBox<?>)components[i]).getSelectedItem());
+							} else if (components[i] instanceof JSpinner && components[i].getName().equals("charSpinner")) {
+								int temp = (Integer) ((JSpinner)components[i]).getValue();
+								args.add((char) temp);
+							} else if (components[i] instanceof JSpinner && components[i].getName().equals("byteSpinner")) {
+								int temp = (Integer)((JSpinner)components[i]).getValue();
+								args.add((byte)temp);
+							} else if (components[i] instanceof JSpinner && components[i].getName().equals("shortSpinner")) {
+								int temp = (Integer) ((JSpinner)components[i]).getValue();
+								args.add((short) temp);
+							} else if (components[i] instanceof JSpinner && components[i].getName().equals("intSpinner")) {
+								args.add(((JSpinner)components[i]).getValue());
+							} else if (components[i] instanceof JSpinner && components[i].getName().equals("longSpinner")) {
+								double temp = (Double) ((JSpinner)components[i]).getValue();
+								args.add((long) temp);
+							} else if (components[i] instanceof JTextField && components[i].getName().equals("floatTextField")) {
+								args.add(Float.parseFloat(((JTextField)components[i]).getText()));
+							} else if (components[i] instanceof JTextField && components[i].getName().equals("doubleTextField")) {
+								args.add(Double.parseDouble(((JTextField)components[i]).getText()));
+							} else if (components[i] instanceof JTextField && components[i].getName().equals("stringTextField")) {
+								args.add(((JTextField)components[i]).getText());
+							} else if (components[i] instanceof JButton && (components[i].getName() != null) && ( components[i].getName().equals("reference") || components[i].getName().equals("array"))) {
+								JDialog dialog = (JDialog) dialogList.get(referenceArgCount);
+								if (dialog instanceof InstanceCreationDialog) {
+									args.add(((InstanceCreationDialog)dialog).getCreatedInstance());	
+									referenceArgCount++;
+								} else if (dialog instanceof ArrayCreationDialog) {
+									// TODO
+									referenceArgCount++;
+								} else {
+									throw new AssertionError("not to be passed.");
+								}
+							} else {
+								//System.out.println("for debug");
+							}
+						}
+						
+						Constructor<?> selectedConstructor = (Constructor<?>) constructorsComboBox.getSelectedItem();
+						try {
+							createdInstance = selectedConstructor.newInstance(args.toArray(new Object[0]));	
+							// field open
+							new FieldDialog (createdInstance).setVisible(true);
+							dispose();
+						} catch (InstantiationException
+								| IllegalAccessException
+								| IllegalArgumentException ex) {
+							ex.printStackTrace();
+							JOptionPane.showMessageDialog(null, "インスタンス生成中に例外 ("+ ex.getClass().toString() +") が発生しました。", "インスタンス生成失敗", JOptionPane.ERROR_MESSAGE);
+						} catch (InvocationTargetException ie) {
+							JOptionPane.showMessageDialog(null, "インスタンス生成中に例外 ("+ ie.getCause().getClass().toString() +") が発生しました。", "インスタンス生成失敗", JOptionPane.ERROR_MESSAGE);
+						}
+					}
+				});
+				GridBagConstraints componetConstraintsForButtonFieldOpen = new GridBagConstraints();
+				componetConstraintsForButtonFieldOpen.insets = new Insets(MARGIN * 3, MARGIN, MARGIN, MARGIN);
+				componetConstraintsForButtonFieldOpen.gridx = 1;
+				componetConstraintsForButtonFieldOpen.gridy = types.length+1;
+				componetConstraintsForButtonFieldOpen.anchor = GridBagConstraints.SOUTHEAST;
+				parameterArea.add(instanceCreationAndOpenFieldButton, componetConstraintsForButtonFieldOpen);				
 				
 				parameterArea.revalidate();
 			}
