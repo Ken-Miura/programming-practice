@@ -125,6 +125,9 @@ public final class InstanceCreationDialog extends JDialog {
 					constructors = searchResult.getDeclaredConstructors();
 					constructorsComboBox.removeAllItems();
 					for (Constructor<?> c: constructors) {
+						if (c.getDeclaringClass() == Class.class) { // SecurityException回避のため
+							continue;
+						}
 						c.setAccessible(true);
 						constructorsComboBox.addItem(c);
 					}
@@ -153,6 +156,9 @@ public final class InstanceCreationDialog extends JDialog {
 			constructorsComboBox.removeAllItems();
 			Constructor<?>[] constructors = parent.getDeclaredConstructors();
 			for (Constructor<?> c: constructors) {
+				if (c.getDeclaringClass() == Class.class) { // SecurityException回避のため
+					continue;
+				}
 				c.setAccessible(true);
 				constructorsComboBox.addItem(c);
 			}

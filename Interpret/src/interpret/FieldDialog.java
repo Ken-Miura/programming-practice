@@ -105,7 +105,7 @@ public final class FieldDialog extends JDialog {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO
+				new MethodDialog(FieldDialog.this.createdObject).setVisible(true);
 			}
 		});
 		methodExecutionButtonArea.add(medhodDialogButton);
