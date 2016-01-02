@@ -31,6 +31,35 @@ import javax.swing.tree.TreeSelectionModel;
  */
 public final class FieldDialog extends JDialog {
 	
+	private static final class WrappedHashtable<K, V> extends Hashtable<K, V> {
+
+		private static final Object nullObject = new Object(); 
+		
+		/**
+		 * Ver 1.0
+		 */
+		private static final long serialVersionUID = -8373646536497435476L;
+		
+		@SuppressWarnings("unchecked")
+		@Override
+		public synchronized V put(K key, V value) {
+			Objects.requireNonNull(key, "key must not be null.");
+			if (value == null) {
+				return super.put(key, (V)nullObject);
+			}
+			return super.put(key, value);
+		}
+		
+		@Override
+		public synchronized V get(Object key) {
+			Objects.requireNonNull(key, "key must not be null.");
+			if (super.get(key) == nullObject) {
+				return null;
+			}
+			return super.get(key);
+		}
+	}
+	
 	private final Object createdObject;
 	private final Class<?> createdObjectType;
 	
@@ -402,7 +431,93 @@ public final class FieldDialog extends JDialog {
 					} 
 				} else {
 					if (f.getType().isArray()) {
-						// TODO
+						GridBagConstraints gc = new GridBagConstraints();
+						
+						final Object object;
+						try {
+							object = f.get(createdObject);
+							currentValue.setText("型: "+ f.getType().getName() +", 値: " + (object == null ? "null" : object));
+						} catch (IllegalArgumentException
+								| IllegalAccessException e1) {
+							e1.printStackTrace();
+						}
+						gc.gridx = 0;
+						gc.gridy = 0;
+						gc.fill = GridBagConstraints.HORIZONTAL;
+						valueArea.add(currentValue, gc);
+						
+						JButton fieldButton = new JButton("要素一覧を表示する");
+						fieldButton.addActionListener(new ActionListener() {
+							
+							@Override
+							public void actionPerformed(ActionEvent e) {
+								try {
+									final Object o = f.get(createdObject);
+									if (o == null) {
+										JOptionPane.showMessageDialog(null, "参照値がnullです", "入力エラー", JOptionPane.ERROR_MESSAGE);
+									} else {
+										new ArrayElementsDialog(o).setVisible(true);	
+									}
+								} catch (IllegalArgumentException
+										| IllegalAccessException e1) {
+									e1.printStackTrace();
+								}
+							}
+						});
+						gc.gridx = 0;
+						gc.gridy = 1;
+						gc.fill = GridBagConstraints.HORIZONTAL;
+						valueArea.add(fieldButton, gc);
+						
+						JButton creationButton = new JButton("新しく配列を生成してフィールドを変更する");
+						creationButton.addActionListener(new ActionListener() {
+							
+							@Override
+							public void actionPerformed(ActionEvent e) {
+								ArrayCreationDialog acd = new ArrayCreationDialog(f.getType().getComponentType());
+								acd.setVisible(true);
+								Object newObject = acd.getCreatedArray();
+								if (newObject == null) {
+									JOptionPane.showMessageDialog(null, "配列の生成に失敗しました", "配列生成エラー", JOptionPane.ERROR_MESSAGE);
+									return;
+								}
+								f.setAccessible(true);
+								try {
+									f.set(FieldDialog.this.createdObject, newObject);
+									currentValue.setText("型: "+ f.getType().getName() +", 値: " + newObject);
+								} catch (IllegalArgumentException
+										| IllegalAccessException e1) {
+									e1.printStackTrace();
+								}
+								valueArea.revalidate();
+							}
+						});
+						gc.gridx = 1;
+						gc.gridy = 1;
+						gc.fill = GridBagConstraints.HORIZONTAL;
+						valueArea.add(creationButton, gc);
+						
+						JButton nullButton = new JButton("フィールドをnullに変更する");
+						nullButton.addActionListener(new ActionListener() {
+							
+							@Override
+							public void actionPerformed(ActionEvent e) {
+								f.setAccessible(true);
+								try {
+									f.set(FieldDialog.this.createdObject, null);
+									currentValue.setText("型: "+ f.getType().getName() +", 値: null");
+								} catch (IllegalArgumentException
+										| IllegalAccessException e1) {
+									e1.printStackTrace();
+								}
+								valueArea.revalidate();
+							}
+						});
+						gc.gridx = 1;
+						gc.gridy = 2;
+						gc.fill = GridBagConstraints.HORIZONTAL;
+						valueArea.add(nullButton, gc);
+
 					} else {
 						GridBagConstraints gc = new GridBagConstraints();
 						

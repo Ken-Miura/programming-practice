@@ -423,9 +423,19 @@ public final class MethodDialog extends JDialog {
 								returnValueArea.add(new JLabel("型: String, 値: " + returnValue), gc);
 							} else {
 								if (returnValue.getClass().isArray()) {
-									// TODO
+									returnValueArea.add(new JLabel("型: " + createdObjectType.getName() + ", 値:" + returnValue), gc);
+									JButton button = new JButton("要素一覧を開く");
+									button.addActionListener(new ActionListener() {
+										
+										@Override
+										public void actionPerformed(ActionEvent e) {
+											new ArrayElementsDialog(returnValue).setVisible(true);
+										}
+									});
+									gc.gridy = 2;
+									returnValueArea.add(button, gc);
 								} else {
-									returnValueArea.add(new JLabel("String型" + returnValue), gc);
+									returnValueArea.add(new JLabel("型: " + createdObjectType.getName() + ", 値:" + returnValue), gc);
 									JButton button = new JButton("フィールド一覧を開く");
 									button.addActionListener(new ActionListener() {
 										
