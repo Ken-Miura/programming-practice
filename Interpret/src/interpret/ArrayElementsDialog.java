@@ -33,7 +33,7 @@ public final class ArrayElementsDialog extends JDialog {
 	 */
 	private static final long serialVersionUID = -1808111276382615056L;
 	private static final String TITLE = "配列の操作";
-	private static final int WIDTH = 700;
+	private static final int WIDTH = 800;
 	private static final int HEIGHT = 800;
 
 	private final JPanel fieldArea = new JPanel(new GridBagLayout());
@@ -154,6 +154,59 @@ public final class ArrayElementsDialog extends JDialog {
 				gc.gridy = i+1;
 				fieldArea.add(new JLabel("要素番号:" + i + ", 値: " + charCastedArray[i]), gc);
 			}
+			gcForValueArea.gridx = 0;
+			gcForValueArea.gridy = 1;
+			gcForValueArea.fill = GridBagConstraints.HORIZONTAL;
+			valueArea.add(new JLabel("要素番号: "), gcForValueArea);
+			
+			gcForValueArea.gridx = 1;
+			gcForValueArea.gridy = 1;
+			gcForValueArea.fill = GridBagConstraints.HORIZONTAL;
+			SpinnerNumberModel arrayModel = new SpinnerNumberModel(0, 0, charCastedArray.length-1, 1);
+			JSpinner arraySpinner = new JSpinner(arrayModel);
+			valueArea.add(arraySpinner, gcForValueArea);
+			
+			gcForValueArea.gridx = 0;
+			gcForValueArea.gridy = 2;
+			gcForValueArea.fill = GridBagConstraints.HORIZONTAL;
+			valueArea.add(new JLabel("値: "), gcForValueArea);
+			
+			gcForValueArea.gridx = 1;
+			gcForValueArea.gridy = 2;
+			gcForValueArea.fill = GridBagConstraints.HORIZONTAL;
+			SpinnerNumberModel charModel = new SpinnerNumberModel(0, 0, Character.MAX_VALUE, 1);
+			JSpinner charSpinner = new JSpinner(charModel);
+			valueArea.add(charSpinner, gcForValueArea);
+			
+			gcForValueArea.gridx = 1;
+			gcForValueArea.gridy = 0;
+			gcForValueArea.fill = GridBagConstraints.HORIZONTAL;
+			
+			JButton button = new JButton("値を変更する");
+			button.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					int i = (Integer) arraySpinner.getValue();
+					int k = (Integer) charSpinner.getValue();
+					char newValue =  (char) k;
+					charCastedArray[i] = newValue;
+					
+					fieldArea.removeAll();
+					GridBagConstraints gc = new GridBagConstraints();
+					gc.gridx = 0;
+					gc.gridy = 0;
+					gc.fill = GridBagConstraints.HORIZONTAL;
+					fieldArea.add(new JLabel("型: char"), gc);
+					for (int j=0; j<charCastedArray.length; j++) {
+						gc.gridy = j+1;
+						fieldArea.add(new JLabel("要素番号:" + j + ", 値: " + charCastedArray[j]), gc);
+					}
+					fieldArea.revalidate();
+				}
+			});
+			valueArea.add(button, gcForValueArea);
+			
 		} else if (this.createdArrayComponentType == byte.class) {
 			byte[] byteCastedArray = (byte[]) this.createdArray;
 			
@@ -166,6 +219,59 @@ public final class ArrayElementsDialog extends JDialog {
 				gc.gridy = i+1;
 				fieldArea.add(new JLabel("要素番号:" + i + ", 値: " + byteCastedArray[i]), gc);
 			}
+			
+			gcForValueArea.gridx = 0;
+			gcForValueArea.gridy = 1;
+			gcForValueArea.fill = GridBagConstraints.HORIZONTAL;
+			valueArea.add(new JLabel("要素番号: "), gcForValueArea);
+			
+			gcForValueArea.gridx = 1;
+			gcForValueArea.gridy = 1;
+			gcForValueArea.fill = GridBagConstraints.HORIZONTAL;
+			SpinnerNumberModel arrayModel = new SpinnerNumberModel(0, 0, byteCastedArray.length-1, 1);
+			JSpinner arraySpinner = new JSpinner(arrayModel);
+			valueArea.add(arraySpinner, gcForValueArea);
+			
+			gcForValueArea.gridx = 0;
+			gcForValueArea.gridy = 2;
+			gcForValueArea.fill = GridBagConstraints.HORIZONTAL;
+			valueArea.add(new JLabel("値: "), gcForValueArea);
+			
+			gcForValueArea.gridx = 1;
+			gcForValueArea.gridy = 2;
+			gcForValueArea.fill = GridBagConstraints.HORIZONTAL;
+			SpinnerNumberModel byteModel = new SpinnerNumberModel(0, Byte.MIN_VALUE, Byte.MAX_VALUE, 1);
+			JSpinner byteSpinner = new JSpinner(byteModel);
+			valueArea.add(byteSpinner, gcForValueArea);
+			
+			gcForValueArea.gridx = 1;
+			gcForValueArea.gridy = 0;
+			gcForValueArea.fill = GridBagConstraints.HORIZONTAL;
+			
+			JButton button = new JButton("値を変更する");
+			button.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					int i = (Integer) arraySpinner.getValue();
+					int k = (Integer) byteSpinner.getValue();
+					byte newValue = (byte) k;
+					byteCastedArray[i] = newValue;
+					
+					fieldArea.removeAll();
+					GridBagConstraints gc = new GridBagConstraints();
+					gc.gridx = 0;
+					gc.gridy = 0;
+					gc.fill = GridBagConstraints.HORIZONTAL;
+					fieldArea.add(new JLabel("型: byte"), gc);
+					for (int j=0; j<byteCastedArray.length; j++) {
+						gc.gridy = j+1;
+						fieldArea.add(new JLabel("要素番号:" + j + ", 値: " + byteCastedArray[j]), gc);
+					}
+					fieldArea.revalidate();
+				}
+			});
+			valueArea.add(button, gcForValueArea);
 		} else if (this.createdArrayComponentType == short.class) {
 			short[] shortCastedArray = (short[]) this.createdArray;
 			
@@ -178,6 +284,59 @@ public final class ArrayElementsDialog extends JDialog {
 				gc.gridy = i+1;
 				fieldArea.add(new JLabel("要素番号:" + i + ", 値: " + shortCastedArray[i]), gc);
 			}
+			
+			gcForValueArea.gridx = 0;
+			gcForValueArea.gridy = 1;
+			gcForValueArea.fill = GridBagConstraints.HORIZONTAL;
+			valueArea.add(new JLabel("要素番号: "), gcForValueArea);
+			
+			gcForValueArea.gridx = 1;
+			gcForValueArea.gridy = 1;
+			gcForValueArea.fill = GridBagConstraints.HORIZONTAL;
+			SpinnerNumberModel arrayModel = new SpinnerNumberModel(0, 0, shortCastedArray.length-1, 1);
+			JSpinner arraySpinner = new JSpinner(arrayModel);
+			valueArea.add(arraySpinner, gcForValueArea);
+			
+			gcForValueArea.gridx = 0;
+			gcForValueArea.gridy = 2;
+			gcForValueArea.fill = GridBagConstraints.HORIZONTAL;
+			valueArea.add(new JLabel("値: "), gcForValueArea);
+			
+			gcForValueArea.gridx = 1;
+			gcForValueArea.gridy = 2;
+			gcForValueArea.fill = GridBagConstraints.HORIZONTAL;
+			SpinnerNumberModel shortModel = new SpinnerNumberModel(0, Short.MIN_VALUE, Short.MAX_VALUE, 1);
+			JSpinner shortSpinner = new JSpinner(shortModel);
+			valueArea.add(shortSpinner, gcForValueArea);
+			
+			gcForValueArea.gridx = 1;
+			gcForValueArea.gridy = 0;
+			gcForValueArea.fill = GridBagConstraints.HORIZONTAL;
+			
+			JButton button = new JButton("値を変更する");
+			button.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					int i = (Integer) arraySpinner.getValue();
+					int k = (Integer) shortSpinner.getValue();
+					short newValue = (short) k;
+					shortCastedArray[i] = newValue;
+					
+					fieldArea.removeAll();
+					GridBagConstraints gc = new GridBagConstraints();
+					gc.gridx = 0;
+					gc.gridy = 0;
+					gc.fill = GridBagConstraints.HORIZONTAL;
+					fieldArea.add(new JLabel("型: short"), gc);
+					for (int j=0; j<shortCastedArray.length; j++) {
+						gc.gridy = j+1;
+						fieldArea.add(new JLabel("要素番号:" + j + ", 値: " + shortCastedArray[j]), gc);
+					}
+					fieldArea.revalidate();
+				}
+			});
+			valueArea.add(button, gcForValueArea);
 		} else if (this.createdArrayComponentType == int.class) {
 			int[] intCastedArray = (int[]) this.createdArray;
 			
@@ -190,9 +349,60 @@ public final class ArrayElementsDialog extends JDialog {
 				gc.gridy = i+1;
 				fieldArea.add(new JLabel("要素番号:" + i + ", 値: " + intCastedArray[i]), gc);
 			}
+			
+			gcForValueArea.gridx = 0;
+			gcForValueArea.gridy = 1;
+			gcForValueArea.fill = GridBagConstraints.HORIZONTAL;
+			valueArea.add(new JLabel("要素番号: "), gcForValueArea);
+			
+			gcForValueArea.gridx = 1;
+			gcForValueArea.gridy = 1;
+			gcForValueArea.fill = GridBagConstraints.HORIZONTAL;
+			SpinnerNumberModel arrayModel = new SpinnerNumberModel(0, 0, intCastedArray.length-1, 1);
+			JSpinner arraySpinner = new JSpinner(arrayModel);
+			valueArea.add(arraySpinner, gcForValueArea);
+			
+			gcForValueArea.gridx = 0;
+			gcForValueArea.gridy = 2;
+			gcForValueArea.fill = GridBagConstraints.HORIZONTAL;
+			valueArea.add(new JLabel("値: "), gcForValueArea);
+			
+			gcForValueArea.gridx = 1;
+			gcForValueArea.gridy = 2;
+			gcForValueArea.fill = GridBagConstraints.HORIZONTAL;
+			SpinnerNumberModel intModel = new SpinnerNumberModel(0, Integer.MIN_VALUE, Integer.MAX_VALUE, 1);
+			JSpinner intSpinner = new JSpinner(intModel);
+			valueArea.add(intSpinner, gcForValueArea);
+			
+			gcForValueArea.gridx = 1;
+			gcForValueArea.gridy = 0;
+			gcForValueArea.fill = GridBagConstraints.HORIZONTAL;
+			
+			JButton button = new JButton("値を変更する");
+			button.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					int i = (Integer) arraySpinner.getValue();
+					int newValue = (Integer) intSpinner.getValue();
+					intCastedArray[i] = newValue;
+					
+					fieldArea.removeAll();
+					GridBagConstraints gc = new GridBagConstraints();
+					gc.gridx = 0;
+					gc.gridy = 0;
+					gc.fill = GridBagConstraints.HORIZONTAL;
+					fieldArea.add(new JLabel("型: int"), gc);
+					for (int j=0; j<intCastedArray.length; j++) {
+						gc.gridy = j+1;
+						fieldArea.add(new JLabel("要素番号:" + j + ", 値: " + intCastedArray[j]), gc);
+					}
+					fieldArea.revalidate();
+				}
+			});
+			valueArea.add(button, gcForValueArea);
 		} else if (this.createdArrayComponentType == long.class) {
 			long[] longCastedArray = (long[]) this.createdArray;
-			
 			GridBagConstraints gc = new GridBagConstraints();
 			gc.gridx = 0;
 			gc.gridy = 0;
@@ -202,6 +412,58 @@ public final class ArrayElementsDialog extends JDialog {
 				gc.gridy = i+1;
 				fieldArea.add(new JLabel("要素番号:" + i + ", 値: " + longCastedArray[i]), gc);
 			}
+			
+			gcForValueArea.gridx = 0;
+			gcForValueArea.gridy = 1;
+			gcForValueArea.fill = GridBagConstraints.HORIZONTAL;
+			valueArea.add(new JLabel("要素番号: "), gcForValueArea);
+			
+			gcForValueArea.gridx = 1;
+			gcForValueArea.gridy = 1;
+			gcForValueArea.fill = GridBagConstraints.HORIZONTAL;
+			SpinnerNumberModel arrayModel = new SpinnerNumberModel(0, 0, longCastedArray.length-1, 1);
+			JSpinner arraySpinner = new JSpinner(arrayModel);
+			valueArea.add(arraySpinner, gcForValueArea);
+			
+			gcForValueArea.gridx = 0;
+			gcForValueArea.gridy = 2;
+			gcForValueArea.fill = GridBagConstraints.HORIZONTAL;
+			valueArea.add(new JLabel("値: "), gcForValueArea);
+			
+			gcForValueArea.gridx = 1;
+			gcForValueArea.gridy = 2;
+			gcForValueArea.fill = GridBagConstraints.HORIZONTAL;
+			SpinnerNumberModel longModel = new SpinnerNumberModel(0, Long.MIN_VALUE, Long.MAX_VALUE, 1);
+			JSpinner longSpinner = new JSpinner(longModel);
+			valueArea.add(longSpinner, gcForValueArea);
+			
+			gcForValueArea.gridx = 1;
+			gcForValueArea.gridy = 0;
+			gcForValueArea.fill = GridBagConstraints.HORIZONTAL;
+			
+			JButton button = new JButton("値を変更する");
+			button.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					int i = (Integer) arraySpinner.getValue();
+					double newValue = (Double) longSpinner.getValue();
+					longCastedArray[i] = (long) newValue;
+					
+					fieldArea.removeAll();
+					GridBagConstraints gc = new GridBagConstraints();
+					gc.gridx = 0;
+					gc.gridy = 0;
+					gc.fill = GridBagConstraints.HORIZONTAL;
+					fieldArea.add(new JLabel("型: long"), gc);
+					for (int j=0; j<longCastedArray.length; j++) {
+						gc.gridy = j+1;
+						fieldArea.add(new JLabel("要素番号:" + j + ", 値: " + longCastedArray[j]), gc);
+					}
+					fieldArea.revalidate();
+				}
+			});
+			valueArea.add(button, gcForValueArea);
 		} else if (this.createdArrayComponentType == float.class) {
 			float[] floatCastedArray = (float[]) this.createdArray;
 			
@@ -214,6 +476,63 @@ public final class ArrayElementsDialog extends JDialog {
 				gc.gridy = i+1;
 				fieldArea.add(new JLabel("要素番号:" + i + ", 値: " + floatCastedArray[i]), gc);
 			}
+			
+			gcForValueArea.gridx = 0;
+			gcForValueArea.gridy = 1;
+			gcForValueArea.fill = GridBagConstraints.HORIZONTAL;
+			valueArea.add(new JLabel("要素番号: "), gcForValueArea);
+			
+			gcForValueArea.gridx = 1;
+			gcForValueArea.gridy = 1;
+			gcForValueArea.fill = GridBagConstraints.HORIZONTAL;
+			SpinnerNumberModel arrayModel = new SpinnerNumberModel(0, 0, floatCastedArray.length-1, 1);
+			JSpinner arraySpinner = new JSpinner(arrayModel);
+			valueArea.add(arraySpinner, gcForValueArea);
+			
+			gcForValueArea.gridx = 0;
+			gcForValueArea.gridy = 2;
+			gcForValueArea.fill = GridBagConstraints.HORIZONTAL;
+			valueArea.add(new JLabel("値: "), gcForValueArea);
+			
+			gcForValueArea.gridx = 1;
+			gcForValueArea.gridy = 2;
+			gcForValueArea.fill = GridBagConstraints.HORIZONTAL;
+			JTextField t = new JTextField("0.0", 16);
+			valueArea.add(t, gcForValueArea);
+			
+			gcForValueArea.gridx = 1;
+			gcForValueArea.gridy = 0;
+			gcForValueArea.fill = GridBagConstraints.HORIZONTAL;
+			
+			JButton button = new JButton("値を変更する");
+			button.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					int i = (Integer) arraySpinner.getValue();
+					float newValue = 0.0f;
+					try {
+						newValue = Float.parseFloat(t.getText());	
+					} catch (NumberFormatException efe) {
+						JOptionPane.showInputDialog(null, "不正な入力です。", "入力エラー", JOptionPane.ERROR_MESSAGE);
+						return;
+					}
+					floatCastedArray[i] = newValue;
+					
+					fieldArea.removeAll();
+					GridBagConstraints gc = new GridBagConstraints();
+					gc.gridx = 0;
+					gc.gridy = 0;
+					gc.fill = GridBagConstraints.HORIZONTAL;
+					fieldArea.add(new JLabel("型: float"), gc);
+					for (int j=0; j<floatCastedArray.length; j++) {
+						gc.gridy = j+1;
+						fieldArea.add(new JLabel("要素番号:" + j + ", 値: " + floatCastedArray[j]), gc);
+					}
+					fieldArea.revalidate();
+				}
+			});
+			valueArea.add(button, gcForValueArea);
 		} else if (this.createdArrayComponentType == double.class) {
 			double[] doubleCastedArray = (double[]) this.createdArray;
 			
@@ -226,6 +545,63 @@ public final class ArrayElementsDialog extends JDialog {
 				gc.gridy = i+1;
 				fieldArea.add(new JLabel("要素番号:" + i + ", 値: " + doubleCastedArray[i]), gc);
 			}
+			
+			gcForValueArea.gridx = 0;
+			gcForValueArea.gridy = 1;
+			gcForValueArea.fill = GridBagConstraints.HORIZONTAL;
+			valueArea.add(new JLabel("要素番号: "), gcForValueArea);
+			
+			gcForValueArea.gridx = 1;
+			gcForValueArea.gridy = 1;
+			gcForValueArea.fill = GridBagConstraints.HORIZONTAL;
+			SpinnerNumberModel arrayModel = new SpinnerNumberModel(0, 0, doubleCastedArray.length-1, 1);
+			JSpinner arraySpinner = new JSpinner(arrayModel);
+			valueArea.add(arraySpinner, gcForValueArea);
+			
+			gcForValueArea.gridx = 0;
+			gcForValueArea.gridy = 2;
+			gcForValueArea.fill = GridBagConstraints.HORIZONTAL;
+			valueArea.add(new JLabel("値: "), gcForValueArea);
+			
+			gcForValueArea.gridx = 1;
+			gcForValueArea.gridy = 2;
+			gcForValueArea.fill = GridBagConstraints.HORIZONTAL;
+			JTextField t = new JTextField("0.0", 16);
+			valueArea.add(t, gcForValueArea);
+			
+			gcForValueArea.gridx = 1;
+			gcForValueArea.gridy = 0;
+			gcForValueArea.fill = GridBagConstraints.HORIZONTAL;
+			
+			JButton button = new JButton("値を変更する");
+			button.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					int i = (Integer) arraySpinner.getValue();
+					double newValue = 0.0;
+					try {
+						newValue = Double.parseDouble(t.getText());	
+					} catch (NumberFormatException efe) {
+						JOptionPane.showInputDialog(null, "不正な入力です。", "入力エラー", JOptionPane.ERROR_MESSAGE);
+						return;
+					}
+					doubleCastedArray[i] = newValue;
+					
+					fieldArea.removeAll();
+					GridBagConstraints gc = new GridBagConstraints();
+					gc.gridx = 0;
+					gc.gridy = 0;
+					gc.fill = GridBagConstraints.HORIZONTAL;
+					fieldArea.add(new JLabel("型: double"), gc);
+					for (int j=0; j<doubleCastedArray.length; j++) {
+						gc.gridy = j+1;
+						fieldArea.add(new JLabel("要素番号:" + j + ", 値: " + doubleCastedArray[j]), gc);
+					}
+					fieldArea.revalidate();
+				}
+			});
+			valueArea.add(button, gcForValueArea);			
 		} else if (this.createdArrayComponentType == java.lang.String.class) {
 			java.lang.String[] stringCastedArray = (java.lang.String[]) this.createdArray;
 			
