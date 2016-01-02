@@ -296,14 +296,16 @@ public final class MethodDialog extends JDialog {
 													
 							JButton instanceCreationButton = new JButton("配列を生成する (生成しない場合はnullを利用する)");
 							instanceCreationButton.setName("array");	
+							ArrayCreationDialog acd = new ArrayCreationDialog(cls.getComponentType());
+							dialogList.add(acd);
 							instanceCreationButton.addActionListener(new ActionListener() {
 								
 								@Override
 								public void actionPerformed(ActionEvent e) {
-									// TODO
+									acd.setLocation(getLocation());
+									acd.setVisible(true);
 								}
-							});
-							
+							});							
 							componetConstraintsEachItem.gridx = 1;
 							componetConstraintsEachItem.gridy = i+1;
 							componetConstraintsEachItem.anchor = GridBagConstraints.WEST;
@@ -376,7 +378,7 @@ public final class MethodDialog extends JDialog {
 									args.add(((InstanceCreationDialog)dialog).getCreatedInstance());	
 									referenceArgCount++;
 								} else if (dialog instanceof ArrayCreationDialog) {
-									// TODO
+									args.add(((ArrayCreationDialog)dialog).getCreatedArray());
 									referenceArgCount++;
 								} else {
 									throw new AssertionError("not to be passed.");

@@ -31,6 +31,7 @@ public final class InterpretFrame extends JFrame {
 	private final JButton arrayCreationButton = new JButton ("配列の生成に関する操作");
 	
 	private final InstanceCreationDialog instanceCreationDialog = new InstanceCreationDialog((null));
+	private final ArrayCreationDialog arrayCreationDialog = new ArrayCreationDialog(null);
 
 	public InterpretFrame() {
 		setTitle(TITLE);
@@ -44,6 +45,15 @@ public final class InterpretFrame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				instanceCreationDialog.setLocation(getLocation());
 				instanceCreationDialog.setVisible(true);
+			}
+		});
+		
+		arrayCreationButton.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				arrayCreationDialog.setLocation(getLocation());
+				arrayCreationDialog.setVisible(true);
 			}
 		});
 		
