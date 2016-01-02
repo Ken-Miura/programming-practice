@@ -7,6 +7,7 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.Hashtable;
 import java.util.Objects;
 
@@ -279,7 +280,11 @@ public final class FieldDialog extends JDialog {
 								double d = (Double) longSpinner.getValue();
 								try {
 									f.setAccessible(true);
-									f.setLong(createdObject, (long)d);
+									if (Modifier.isStatic(f.getModifiers()) && Modifier.isFinal(f.getModifiers())) {
+										setStaticFinalField(f, (long)d);
+									} else {
+										f.setLong(createdObject, (long)d);	
+									}
 									currentValue.setText("型: long, 値: " + f.getLong(createdObject));
 								} catch (IllegalArgumentException
 										| IllegalAccessException e1) {
@@ -629,4 +634,23 @@ public final class FieldDialog extends JDialog {
 		add(valueArea, panelConstraints);
 	}
 
+   private static void setStaticFinalField(Field field, Object value) throws IllegalAccessException {
+      Field modifiersField;
+
+      try {
+         modifiersField = Field.class.getDeclaredField("modifiers");
+      }
+      catch (NoSuchFieldException e) {
+         throw new RuntimeException(e);
+      }
+
+      modifiersField.setAccessible(true);
+      int nonFinalModifiers = modifiersField.getInt(field) - java.lang.reflect.Modifier.FINAL;
+      modifiersField.setInt(field, nonFinalModifiers);
+
+      //noinspection UnnecessaryFullyQualifiedName,UseOfSunClasses
+      sun.reflect.FieldAccessor accessor =
+         sun.reflect.ReflectionFactory.getReflectionFactory().newFieldAccessor(field, false);
+      accessor.set(null, value);
+   }	
 }
