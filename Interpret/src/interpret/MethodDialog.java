@@ -7,9 +7,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
@@ -47,7 +45,6 @@ public final class MethodDialog extends JDialog {
 	private final JPanel parameterArea = new JPanel(new GridBagLayout());
 	private final List<JDialog> dialogList = new ArrayList<>();
 	private final JPanel returnValueArea = new JPanel(new GridBagLayout());
-	private Object returnValue = null;
 	
 	public MethodDialog (Object createdObject) {
 		Objects.requireNonNull(createdObject, "createdObject must not be null.");
@@ -391,7 +388,54 @@ public final class MethodDialog extends JDialog {
 						
 						Method selectedMethod = (Method) methodComboBox.getSelectedItem();
 						try {
-							returnValue = selectedMethod.invoke(MethodDialog.this.createdObject, args.toArray(new Object[0]));
+							final Object returnValue = selectedMethod.invoke(MethodDialog.this.createdObject, args.toArray(new Object[0]));
+							
+							returnValueArea.removeAll();
+							GridBagConstraints gc = new GridBagConstraints();
+							gc.gridx = 0;
+							gc.gridy = 0;
+							gc.fill = GridBagConstraints.HORIZONTAL;
+							returnValueArea.add(new JLabel("戻り値") ,gc);
+							
+							gc.gridy = 1;
+							
+							if (returnValue == null) {
+								returnValueArea.add(new JLabel("戻り値なし"), gc);
+							} else if (returnValue.getClass() == java.lang.Boolean.class) {
+								returnValueArea.add(new JLabel("値: Boolean, 値: " + returnValue), gc);
+							} else if (returnValue.getClass() == java.lang.Character.class) {
+								returnValueArea.add(new JLabel("型: Character, 値: " + returnValue), gc);							
+							} else if (returnValue.getClass() == java.lang.Byte.class) {
+								returnValueArea.add(new JLabel("型: Byte, 値: " + returnValue), gc);
+							} else if (returnValue.getClass() == java.lang.Short.class) {
+								returnValueArea.add(new JLabel("型: Short, 値: " + returnValue), gc);
+							} else if (returnValue.getClass() == java.lang.Integer.class) {
+								returnValueArea.add(new JLabel("型: Integer, 値: " + returnValue), gc);
+							} else if (returnValue.getClass() == java.lang.Long.class) {
+								returnValueArea.add(new JLabel("型: Long,  値: " + returnValue), gc);
+							} else if (returnValue.getClass() == java.lang.Float.class) {
+								returnValueArea.add(new JLabel("型: Float, 値: " + returnValue), gc);
+							} else if (returnValue.getClass() == java.lang.Double.class) {
+								returnValueArea.add(new JLabel("型: Double, 値: " + returnValue), gc);
+							} else if (returnValue.getClass() == java.lang.String.class) {
+								returnValueArea.add(new JLabel("型: String, 値: " + returnValue), gc);
+							} else {
+								if (returnValue.getClass().isArray()) {
+									// TODO
+								} else {
+									returnValueArea.add(new JLabel("String型" + returnValue), gc);
+									JButton button = new JButton("フィールド一覧を開く");
+									button.addActionListener(new ActionListener() {
+										
+										@Override
+										public void actionPerformed(ActionEvent e) {
+											new FieldDialog(returnValue).setVisible(true);
+										}
+									});
+									gc.gridy = 2;
+									returnValueArea.add(button, gc);
+								}
+							}							
 						} catch ( IllegalAccessException
 								| IllegalArgumentException ex) {
 							ex.printStackTrace();
@@ -399,6 +443,7 @@ public final class MethodDialog extends JDialog {
 						} catch (InvocationTargetException ie) {
 							JOptionPane.showMessageDialog(null, "メソッド実行中に例外 ("+ ie.getCause().getClass().toString() +") が発生しました。", "メソッド実行失敗", JOptionPane.ERROR_MESSAGE);
 						}
+						returnValueArea.revalidate();
 					}
 				});
 				GridBagConstraints componetConstraintsForButton = new GridBagConstraints();
@@ -418,6 +463,10 @@ public final class MethodDialog extends JDialog {
 		gc.gridy = 2;
 		gc.fill = GridBagConstraints.HORIZONTAL;
 		add(parameterArea, gc);
+		
+		gc.gridy = 3;
+		gc.fill = GridBagConstraints.HORIZONTAL;
+		add(returnValueArea, gc);
 	}
 	
 	private static Method[] mergeMethods(Method[] methods1, Method[] methods2) {
