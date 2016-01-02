@@ -11,6 +11,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
@@ -73,7 +74,7 @@ public final class ArrayElementsDialog extends JDialog {
 		gcForValueArea.gridy = 0;
 		gcForValueArea.fill = GridBagConstraints.HORIZONTAL;
 		
-		valueArea.add(new JLabel("変更したい要素の番号と値を指定してください"), gcForValueArea);
+		valueArea.add(new JLabel("操作したい要素の番号と値を指定してください"), gcForValueArea);
 		
 		if (this.createdArrayComponentType == boolean.class) {
 			boolean[] booleanCastedArray = (boolean[]) this.createdArray;
@@ -296,6 +297,54 @@ public final class ArrayElementsDialog extends JDialog {
 				}
 			});
 			valueArea.add(button, gcForValueArea);
+			
+			gcForValueArea.gridx = 2;
+			gcForValueArea.gridy = 0;
+			gcForValueArea.fill = GridBagConstraints.HORIZONTAL;
+			JButton nullButton = new JButton("nullを設定");
+			nullButton.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					int n = (Integer) arraySpinner.getValue();
+					stringCastedArray[n] = null;
+					
+					fieldArea.removeAll();
+					GridBagConstraints gc = new GridBagConstraints();
+					gc.gridx = 0;
+					gc.gridy = 0;
+					gc.fill = GridBagConstraints.HORIZONTAL;
+					fieldArea.add(new JLabel("型: String"), gc);
+					for (int i=0; i<stringCastedArray.length; i++) {
+						gc.gridy = i+1;
+						if (stringCastedArray[i] == null) {
+							fieldArea.add(new JLabel("要素番号:" + i + ", 値: null"), gc);					
+						} else {
+							fieldArea.add(new JLabel("要素番号:" + i + ", 値: " + stringCastedArray[i]), gc);	
+						}
+					}					
+					fieldArea.revalidate();
+				}
+			});
+			valueArea.add(nullButton, gcForValueArea);
+			
+			gcForValueArea.gridx = 3;
+			gcForValueArea.gridy = 0;
+			gcForValueArea.fill = GridBagConstraints.HORIZONTAL;
+			JButton buttonField = new JButton("フィールド一覧");
+			buttonField.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					int n = (Integer) arraySpinner.getValue();
+					if (stringCastedArray[n] == null) {
+						JOptionPane.showMessageDialog(null, "選択した要素はnullのためフィールド一覧を開けません", "選択エラー", JOptionPane.ERROR_MESSAGE);
+					} else {
+						new FieldDialog(stringCastedArray[n]).setVisible(true);;
+					}
+				}
+			});
+			valueArea.add(buttonField, gcForValueArea);
 
 		} else {
 			Object[] objectCastedArray = (Object[]) this.createdArray;
@@ -313,6 +362,99 @@ public final class ArrayElementsDialog extends JDialog {
 					fieldArea.add(new JLabel("要素番号:" + i + ", 値: " + objectCastedArray[i]), gc);	
 				}
 			}
+			
+			gcForValueArea.gridx = 0;
+			gcForValueArea.gridy = 1;
+			gcForValueArea.fill = GridBagConstraints.HORIZONTAL;
+			valueArea.add(new JLabel("要素番号: "), gcForValueArea);
+			
+			gcForValueArea.gridx = 1;
+			gcForValueArea.gridy = 1;
+			gcForValueArea.fill = GridBagConstraints.HORIZONTAL;
+			SpinnerNumberModel arrayModel = new SpinnerNumberModel(0, 0, objectCastedArray.length-1, 1);
+			JSpinner arraySpinner = new JSpinner(arrayModel);
+			valueArea.add(arraySpinner, gcForValueArea);
+			
+			gcForValueArea.gridx = 1;
+			gcForValueArea.gridy = 0;
+			gcForValueArea.fill = GridBagConstraints.HORIZONTAL;
+			JButton button = new JButton("インスタンスを生成");
+			button.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					int n = (Integer) arraySpinner.getValue();
+					InstanceCreationDialog icd = new InstanceCreationDialog(createdArrayComponentType);
+					icd.setVisible(true);
+					objectCastedArray[n] = icd.getCreatedInstance();
+					
+					fieldArea.removeAll();
+					GridBagConstraints gc = new GridBagConstraints();
+					gc.gridx = 0;
+					gc.gridy = 0;
+					gc.fill = GridBagConstraints.HORIZONTAL;
+					fieldArea.add(new JLabel("型: String"), gc);
+					for (int i=0; i<objectCastedArray.length; i++) {
+						gc.gridy = i+1;
+						if (objectCastedArray[i] == null) {
+							fieldArea.add(new JLabel("要素番号:" + i + ", 値: null"), gc);					
+						} else {
+							fieldArea.add(new JLabel("要素番号:" + i + ", 値: " + objectCastedArray[i]), gc);	
+						}
+					}					
+					fieldArea.revalidate();
+				}
+			});
+			valueArea.add(button, gcForValueArea);
+
+			gcForValueArea.gridx = 2;
+			gcForValueArea.gridy = 0;
+			gcForValueArea.fill = GridBagConstraints.HORIZONTAL;
+			JButton nullButton = new JButton("nullを設定");
+			nullButton.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					int n = (Integer) arraySpinner.getValue();
+					objectCastedArray[n] = null;
+					
+					fieldArea.removeAll();
+					GridBagConstraints gc = new GridBagConstraints();
+					gc.gridx = 0;
+					gc.gridy = 0;
+					gc.fill = GridBagConstraints.HORIZONTAL;
+					fieldArea.add(new JLabel("型: String"), gc);
+					for (int i=0; i<objectCastedArray.length; i++) {
+						gc.gridy = i+1;
+						if (objectCastedArray[i] == null) {
+							fieldArea.add(new JLabel("要素番号:" + i + ", 値: null"), gc);					
+						} else {
+							fieldArea.add(new JLabel("要素番号:" + i + ", 値: " + objectCastedArray[i]), gc);	
+						}
+					}					
+					fieldArea.revalidate();
+				}
+			});
+			valueArea.add(nullButton, gcForValueArea);
+		
+			gcForValueArea.gridx = 3;
+			gcForValueArea.gridy = 0;
+			gcForValueArea.fill = GridBagConstraints.HORIZONTAL;			
+			JButton buttonField = new JButton("フィールド一覧");
+			buttonField.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					int n = (Integer) arraySpinner.getValue();
+					if (objectCastedArray[n] == null) {
+						JOptionPane.showMessageDialog(null, "選択した要素はnullのためフィールド一覧を開けません", "選択エラー", JOptionPane.ERROR_MESSAGE);
+					} else {
+						new FieldDialog(objectCastedArray[n]).setVisible(true);
+					}
+				}
+			});
+			valueArea.add(buttonField, gcForValueArea);
+
 		}
 	}
 }
