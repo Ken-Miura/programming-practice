@@ -99,16 +99,14 @@ public final class ArrayCreationDialog extends JDialog {
 			gc.fill = GridBagConstraints.HORIZONTAL;
 			sizeArea.add(createAndCloseButton, gc);
 			
-			JButton createAndOpenButton = new JButton ("配列を生成して閉じる");
+			JButton createAndOpenButton = new JButton ("配列を生成して要素一覧を開く");
 			createAndOpenButton.addActionListener(new ActionListener() {
 				
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					int size = (Integer) intArraySpinner.getValue();
-					createdArray = Array.newInstance(parent, size);
-					
-					// open elements
-					
+					createdArray = Array.newInstance(searchResult, size);
+					new ArrayElementsDialog(createdArray).setVisible(true);
 					dispose();
 				}
 			});
@@ -184,16 +182,14 @@ public final class ArrayCreationDialog extends JDialog {
 					gc.fill = GridBagConstraints.HORIZONTAL;
 					sizeArea.add(createAndCloseButton, gc);
 					
-					JButton createAndOpenButton = new JButton ("配列を生成して閉じる");
+					JButton createAndOpenButton = new JButton ("配列を生成して要素一覧を開く");
 					createAndOpenButton.addActionListener(new ActionListener() {
 						
 						@Override
 						public void actionPerformed(ActionEvent e) {
 							int size = (Integer) intArraySpinner.getValue();
 							createdArray = Array.newInstance(searchResult, size);
-							
-							// open elements
-							
+							new ArrayElementsDialog(createdArray).setVisible(true);
 							dispose();
 						}
 					});
