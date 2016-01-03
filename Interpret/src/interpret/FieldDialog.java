@@ -12,6 +12,7 @@ import java.util.Hashtable;
 import java.util.Objects;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -135,7 +136,43 @@ public final class FieldDialog extends JDialog {
 				Field f = firstHierarchy.get(nodeInfo);
 				JLabel currentValue = new JLabel();
 				if (f.getType().isPrimitive() || f.getType() == java.lang.String.class ) {
-					if (f.getType() == char.class) {
+					if(f.getType() == boolean.class) {
+						try {
+							currentValue.setText("型: boolean, 値: " + f.getBoolean(createdObject));
+						} catch (IllegalArgumentException
+								| IllegalAccessException e1) {
+							e1.printStackTrace();
+						}
+						valueArea.add(currentValue);
+
+						JComboBox<Boolean> combo = new JComboBox<>();
+						combo.addItem(Boolean.TRUE);
+						combo.addItem(Boolean.FALSE);
+						valueArea.add(combo);
+						
+						JButton button = new JButton("値を変更する");
+						button.addActionListener(new ActionListener() {
+							
+							@Override
+							public void actionPerformed(ActionEvent e) {
+								boolean i = (Boolean) combo.getSelectedItem();
+								try {
+									f.setAccessible(true);
+									if (Modifier.isStatic(f.getModifiers()) && Modifier.isFinal(f.getModifiers())) {
+										setStaticFinalField(f, i);
+									} else {
+										f.setBoolean(createdObject, i);	
+									}
+									currentValue.setText("型: boolean, 値: " + f.getChar(createdObject));
+								} catch (IllegalArgumentException
+										| IllegalAccessException e1) {
+									e1.printStackTrace();
+								}
+								valueArea.revalidate();
+							}
+						});	
+						valueArea.add(button);												
+					} else if (f.getType() == char.class) {
 						try {
 							currentValue.setText("型: char, 値: " + f.getChar(createdObject));
 						} catch (IllegalArgumentException
@@ -156,7 +193,11 @@ public final class FieldDialog extends JDialog {
 								int i = (Integer) charSpinner.getValue();
 								try {
 									f.setAccessible(true);
-									f.setChar(createdObject, (char)i);
+									if (Modifier.isStatic(f.getModifiers()) && Modifier.isFinal(f.getModifiers())) {
+										setStaticFinalField(f, (char)i);
+									} else {
+										f.setChar(createdObject, (char)i);	
+									}
 									currentValue.setText("型: char, 値: " + f.getChar(createdObject));
 								} catch (IllegalArgumentException
 										| IllegalAccessException e1) {
@@ -187,7 +228,11 @@ public final class FieldDialog extends JDialog {
 								int i = (Integer) byteSpinner.getValue();
 								try {
 									f.setAccessible(true);
-									f.setByte(createdObject, (byte)i);
+									if (Modifier.isStatic(f.getModifiers()) && Modifier.isFinal(f.getModifiers())) {
+										setStaticFinalField(f, (byte)i);
+									} else {
+										f.setByte(createdObject, (byte)i);	
+									}
 									currentValue.setText("型: byte, 値: " + f.getByte(createdObject));
 								} catch (IllegalArgumentException
 										| IllegalAccessException e1) {
@@ -218,7 +263,11 @@ public final class FieldDialog extends JDialog {
 								int i = (Integer) shortSpinner.getValue();
 								try {
 									f.setAccessible(true);
-									f.setShort(createdObject, (short)i);
+									if (Modifier.isStatic(f.getModifiers()) && Modifier.isFinal(f.getModifiers())) {
+										setStaticFinalField(f, (short)i);
+									} else {
+										f.setShort(createdObject, (short)i);	
+									}
 									currentValue.setText("型: short, 値: " + f.getShort(createdObject));
 								} catch (IllegalArgumentException
 										| IllegalAccessException e1) {
@@ -249,7 +298,11 @@ public final class FieldDialog extends JDialog {
 								int i = (Integer) intSpinner.getValue();
 								try {
 									f.setAccessible(true);
-									f.setInt(createdObject, i);
+									if (Modifier.isStatic(f.getModifiers()) && Modifier.isFinal(f.getModifiers())) {
+										setStaticFinalField(f, i);
+									} else {
+										f.setInt(createdObject, i);	
+									}
 									currentValue.setText("型: int, 値: " + f.getInt(createdObject));
 								} catch (IllegalArgumentException
 										| IllegalAccessException e1) {
@@ -323,7 +376,11 @@ public final class FieldDialog extends JDialog {
 
 								try {
 									f.setAccessible(true);
-									f.setFloat(createdObject, floatValue);
+									if (Modifier.isStatic(f.getModifiers()) && Modifier.isFinal(f.getModifiers())) {
+										setStaticFinalField(f, floatValue);
+									} else {
+										f.setFloat(createdObject, floatValue);	
+									}
 									currentValue.setText("型: float, 値: " + f.getFloat(createdObject));
 								} catch (IllegalArgumentException
 										| IllegalAccessException e1) {
@@ -362,7 +419,11 @@ public final class FieldDialog extends JDialog {
 
 								try {
 									f.setAccessible(true);
-									f.setDouble(createdObject, doubleValue);
+									if (Modifier.isStatic(f.getModifiers()) && Modifier.isFinal(f.getModifiers())) {
+										setStaticFinalField(f, doubleValue);
+									} else {
+										f.setDouble(createdObject, doubleValue);	
+									}
 									currentValue.setText("型: double, 値: " + f.getDouble(createdObject));
 								} catch (IllegalArgumentException
 										| IllegalAccessException e1) {
@@ -398,7 +459,11 @@ public final class FieldDialog extends JDialog {
 								String strText = text.getText();
 								try {
 									f.setAccessible(true);
-									f.set(createdObject, strText);
+									if (Modifier.isStatic(f.getModifiers()) && Modifier.isFinal(f.getModifiers())) {
+										setStaticFinalField(f, strText);
+									} else {
+										f.set(createdObject, strText);	
+									}
 									String str = (String)f.get(createdObject);
 									currentValue.setText("型: String, 値: " + (str == null ? "null" : str));
 								} catch (IllegalArgumentException
@@ -420,7 +485,11 @@ public final class FieldDialog extends JDialog {
 							public void actionPerformed(ActionEvent e) {
 								try {
 									f.setAccessible(true);
-									f.set(createdObject, null);
+									if (Modifier.isStatic(f.getModifiers()) && Modifier.isFinal(f.getModifiers())) {
+										setStaticFinalField(f, null);
+									} else {
+										f.set(createdObject, null);	
+									}
 									currentValue.setText("型: String, 値: null");
 								} catch (IllegalArgumentException
 										| IllegalAccessException e1) {
@@ -488,7 +557,11 @@ public final class FieldDialog extends JDialog {
 								}
 								f.setAccessible(true);
 								try {
-									f.set(FieldDialog.this.createdObject, newObject);
+									if (Modifier.isStatic(f.getModifiers()) && Modifier.isFinal(f.getModifiers())) {
+										setStaticFinalField(f, newObject);
+									} else {
+										f.set(createdObject, newObject);	
+									}
 									currentValue.setText("型: "+ f.getType().getName() +", 値: " + newObject);
 								} catch (IllegalArgumentException
 										| IllegalAccessException e1) {
@@ -509,7 +582,11 @@ public final class FieldDialog extends JDialog {
 							public void actionPerformed(ActionEvent e) {
 								f.setAccessible(true);
 								try {
-									f.set(FieldDialog.this.createdObject, null);
+									if (Modifier.isStatic(f.getModifiers()) && Modifier.isFinal(f.getModifiers())) {
+										setStaticFinalField(f, null);
+									} else {
+										f.set(createdObject, null);	
+									}
 									currentValue.setText("型: "+ f.getType().getName() +", 値: null");
 								} catch (IllegalArgumentException
 										| IllegalAccessException e1) {
@@ -576,7 +653,11 @@ public final class FieldDialog extends JDialog {
 								}
 								f.setAccessible(true);
 								try {
-									f.set(FieldDialog.this.createdObject, newObject);
+									if (Modifier.isStatic(f.getModifiers()) && Modifier.isFinal(f.getModifiers())) {
+										setStaticFinalField(f, newObject);
+									} else {
+										f.set(createdObject, newObject);	
+									}
 									currentValue.setText("型: "+ f.getType().getName() +", 値: " + newObject);
 								} catch (IllegalArgumentException
 										| IllegalAccessException e1) {
@@ -597,7 +678,11 @@ public final class FieldDialog extends JDialog {
 							public void actionPerformed(ActionEvent e) {
 								f.setAccessible(true);
 								try {
-									f.set(FieldDialog.this.createdObject, null);
+									if (Modifier.isStatic(f.getModifiers()) && Modifier.isFinal(f.getModifiers())) {
+										setStaticFinalField(f, null);
+									} else {
+										f.set(createdObject, null);	
+									}
 									currentValue.setText("型: "+ f.getType().getName() +", 値: null");
 								} catch (IllegalArgumentException
 										| IllegalAccessException e1) {
