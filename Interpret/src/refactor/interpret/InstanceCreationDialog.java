@@ -79,13 +79,13 @@ public final class InstanceCreationDialog extends InstanceHoldingDialog {
 				
 				componentConstraints.gridx = 0;
 				componentConstraints.gridy = 5;
-				componentConstraints.fill = GridBagConstraints.NONE;
+				componentConstraints.fill = GridBagConstraints.HORIZONTAL;
 				componentConstraints.anchor = GridBagConstraints.CENTER;
 				add(createAndCloceButton, componentConstraints);
 				
 				componentConstraints.gridx = 0;
 				componentConstraints.gridy = 6;
-				componentConstraints.fill = GridBagConstraints.NONE;
+				componentConstraints.fill = GridBagConstraints.HORIZONTAL;
 				componentConstraints.anchor = GridBagConstraints.CENTER;
 				add(createAndOpenButton, componentConstraints);
 				
