@@ -61,7 +61,7 @@ final class ParameterPanel extends JPanel implements PropertyChangeListener {
 		parameterComponents.clear();
 		removeAll();
 		
-		setParametersIntoPanel(parameters);
+		addParametersOntoPanel(parameters);
 		
 		revalidate();
 	}
@@ -118,7 +118,7 @@ final class ParameterPanel extends JPanel implements PropertyChangeListener {
 		return parameterValues.toArray(new Object[0]);
 	}
 	
-	private void setParametersIntoPanel(Type[] parameters) {
+	private void addParametersOntoPanel(Type[] parameters) {
 		assert parameters != null;
 		componentConstraints.fill = GridBagConstraints.HORIZONTAL;
 		componentConstraints.insets = new Insets(MARGIN, MARGIN, MARGIN, MARGIN);

@@ -20,11 +20,8 @@ abstract class InstanceHoldingDialog extends JDialog implements PropertyChangeLi
 	protected static final int LEFT_RIGHT_MARGIN = 4;
 	
 	private Object instance = null;
-	private final Class<?> specifiedClass;
-	private final ClassSeachPanel classSeachPanel = ClassSeachPanel.createClassSeachPanel(this);
 	
-	public InstanceHoldingDialog (Class<?> specifiedClass) {
-		this.specifiedClass = specifiedClass;
+	public InstanceHoldingDialog () {
 		setModal(true);
 		setResizable(false);
 		setLayout(new GridBagLayout());
@@ -36,13 +33,5 @@ abstract class InstanceHoldingDialog extends JDialog implements PropertyChangeLi
 
 	public final void setInstance(Object instance) {
 		this.instance = instance;
-	}
-
-	public final Class<?> getSpecifiedClass() {
-		return specifiedClass;
-	}
-
-	public final ClassSeachPanel getClassSeachPanel() {
-		return classSeachPanel;
 	}
 }

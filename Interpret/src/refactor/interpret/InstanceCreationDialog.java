@@ -20,7 +20,7 @@ import javax.swing.JOptionPane;
  * @author Ken Miura
  *
  */
-public final class InstanceCreationDialog extends InstanceHoldingDialog {
+public final class InstanceCreationDialog extends CreationDialog {
 
 	/**
 	 * Ver 1.0
@@ -137,7 +137,7 @@ public final class InstanceCreationDialog extends InstanceHoldingDialog {
 		Class<?> specifiedClass = getSpecifiedClass();
 		if (specifiedClass != null) {
 			Constructor<?>[] constructors = specifiedClass.getDeclaredConstructors();
-			setComboBox(constructors);
+			addComboBox(constructors);
 		} else {
 			componentConstraints.gridx = 0;
 			componentConstraints.gridy = 0;
@@ -157,7 +157,7 @@ public final class InstanceCreationDialog extends InstanceHoldingDialog {
 			remove(constructorCombo);
 			
 			Class<?> searchResult = (Class<?>) evt.getNewValue();
-			setComboBox(searchResult.getDeclaredConstructors());
+			addComboBox(searchResult.getDeclaredConstructors());
 			
 			revalidate();
 			Dimension d = getPreferredSize();
@@ -165,7 +165,7 @@ public final class InstanceCreationDialog extends InstanceHoldingDialog {
 		}
 	}
 
-	private void setComboBox (Constructor<?>[] constructors) {
+	private void addComboBox (Constructor<?>[] constructors) {
 		assert constructors != null;
 		
 		componentConstraints.gridx = 0;

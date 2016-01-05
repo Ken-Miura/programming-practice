@@ -60,6 +60,31 @@ final class ClassSeachPanel extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				String binaryName = classNameField.getText();
+				if (binaryName.equals("boolean")) {
+					setSearchResult(boolean.class);
+					return;
+				} else if (binaryName.equals("char")) {
+					setSearchResult(char.class);
+					return;
+				} else if (binaryName.equals("byte")) {
+					setSearchResult(byte.class);
+					return;
+				} else if (binaryName.equals("short")) {
+					setSearchResult(short.class);
+					return;
+				} else if (binaryName.equals("int")) {
+					setSearchResult(int.class);
+					return;
+				} else if (binaryName.equals("long")) {
+					setSearchResult(long.class);
+					return;
+				} else if (binaryName.equals("float")) {
+					setSearchResult(float.class);
+					return;
+				} else if (binaryName.equals("double")) {
+					setSearchResult(double.class);
+					return;
+				}
 				try {
 					Class<?> clazz = Class.forName(binaryName);
 					if (clazz == null) {
@@ -81,7 +106,7 @@ final class ClassSeachPanel extends JPanel {
 		return new ClassSeachPanel(l);
 	}
 	
-	private Class<?> getSearchResult () {
+	public Class<?> getSearchResult () {
 		return searchResult;
 	}
 	
