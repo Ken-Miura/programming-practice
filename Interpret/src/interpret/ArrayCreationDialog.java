@@ -145,8 +145,29 @@ public final class ArrayCreationDialog extends JDialog {
 					throw new AssertionError("parent != null");
 				}
 				String binaryName = searchClass.getText();
+				
 				try {
-					searchResult = Class.forName(binaryName);
+					
+					if (binaryName.equals("boolean")) {
+						setSearchResult(boolean.class);
+					} else if (binaryName.equals("char")) {
+						setSearchResult(char.class);
+					} else if (binaryName.equals("byte")) {
+						setSearchResult(byte.class);
+					} else if (binaryName.equals("short")) {
+						setSearchResult(short.class);
+					} else if (binaryName.equals("int")) {
+						setSearchResult(int.class);
+					} else if (binaryName.equals("long")) {
+						setSearchResult(long.class);
+					} else if (binaryName.equals("float")) {
+						setSearchResult(float.class);
+					} else if (binaryName.equals("double")) {
+						setSearchResult(double.class);
+					} else {
+						searchResult = Class.forName(binaryName);						
+					}
+
 					sizeArea.removeAll();
 					
 					GridBagConstraints gc = new GridBagConstraints();
@@ -204,6 +225,7 @@ public final class ArrayCreationDialog extends JDialog {
 					JOptionPane.showMessageDialog(null, "指定されたクラス(" + binaryName + ") が見つかりませんでした。", "クラス検索エラー", JOptionPane.ERROR_MESSAGE);
 				}
 			}
+
 		});
 		
 		componetConstraintsForPanel.insets = new Insets(MARGIN, MARGIN, MARGIN, MARGIN);
@@ -212,6 +234,10 @@ public final class ArrayCreationDialog extends JDialog {
 		componetConstraintsForPanel.anchor = GridBagConstraints.NORTH;
 		componetConstraintsForPanel.fill = GridBagConstraints.HORIZONTAL;
 		add(sizeArea, componetConstraintsForPanel);
+	}
+	
+	private void setSearchResult(Class<?> clazz) {
+		this.searchResult = clazz;
 	}
 
 	public Object getCreatedArray() {
