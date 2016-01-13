@@ -64,7 +64,7 @@ public final class ArrayCreationDialog extends CreationDialog {
 				} else {
 					createAndSetInstance(getSpecifiedClass());	
 				}
-				// element open
+				// element open　TODO
 				dispose();
 			}
 		});

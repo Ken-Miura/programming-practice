@@ -28,7 +28,6 @@ public final class InstanceCreationDialog extends CreationDialog {
 	private static final long serialVersionUID = 6657680895410091655L;
 	private static final String TITLE = "インスタンスの生成";
 	private static final int MARGIN = 3;
-	public static final String CONSTRUCTOR_CHANGE_KEY = "constructor_change";
 	
 	private final PropertyChangeSupport properChangeSupport;
 	
@@ -63,7 +62,7 @@ public final class InstanceCreationDialog extends CreationDialog {
 				remove(createAndOpenButton);
 				
 				java.lang.reflect.Type[] parameters = selectedConstructor.getGenericParameterTypes();
-				properChangeSupport.firePropertyChange(CONSTRUCTOR_CHANGE_KEY, null, parameters);
+				properChangeSupport.firePropertyChange(ParameterPanel.PARAMETER_CHANGE_KEY, null, parameters);
 				
 				componentConstraints.gridx = 0;
 				componentConstraints.gridy = 3;
@@ -119,7 +118,7 @@ public final class InstanceCreationDialog extends CreationDialog {
 			public void actionPerformed(ActionEvent evt) {
 				try {
 					createAndSetInstance((Constructor<?>)constructorCombo.getSelectedItem());
-					new FieldDialog (getInstance()).setVisible(true);
+					new FieldDialog (getInstance()).setVisible(true); // TODO
 					dispose();
 				} catch (InstantiationException | IllegalAccessException | IllegalArgumentException e) {
 					e.printStackTrace();

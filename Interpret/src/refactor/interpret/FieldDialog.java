@@ -63,7 +63,7 @@ public final class FieldDialog extends JDialog {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO
+				new MethodDialog(instance).setVisible(true);
 			}
 		});
 		

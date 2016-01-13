@@ -9,7 +9,7 @@ import javax.swing.JTextField;
  */
 final class TextFieldUtil {
 
-	private static final int col = 16;
+	private static final int col = 10;
 	
 	private TextFieldUtil() {
 		throw new AssertionError("not to be passed.");

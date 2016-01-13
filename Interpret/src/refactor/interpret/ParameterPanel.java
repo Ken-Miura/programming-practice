@@ -31,6 +31,7 @@ final class ParameterPanel extends JPanel implements PropertyChangeListener {
 	 */
 	private static final long serialVersionUID = -3970068781988466673L;
 	private static final int MARGIN = 3;
+	public static final String PARAMETER_CHANGE_KEY = "parameter_change";
 	// コンポーネントの区別のために利用
 	private static final String BOOLEAN = "boolean";
 	private static final String CHAR = "char";
@@ -53,6 +54,9 @@ final class ParameterPanel extends JPanel implements PropertyChangeListener {
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
+		if (!(evt.getPropertyName().equals(PARAMETER_CHANGE_KEY))) {
+			return;	
+		}
 		if (!(evt.getNewValue() instanceof Type[])) {
 			throw new AssertionError("not to be passed.");
 		}
@@ -256,25 +260,28 @@ final class ParameterPanel extends JPanel implements PropertyChangeListener {
 		assert cls != null;
 		componentConstraints.gridx = 1;
 		componentConstraints.anchor = GridBagConstraints.WEST;
-		final InstanceHoldingDialog instanceHoldingDialog;
 		JButton button = null;
 		if (cls.isArray()) {
-			instanceHoldingDialog = new ArrayCreationDialog(cls.getComponentType());
 			button = new JButton("配列を生成する (生成しない場合はnullを使用)");
 		} else {
-			instanceHoldingDialog = new InstanceCreationDialog(cls);
 			button = new JButton("インスタンスを生成する (生成しない場合はnullを使用)");
 		}
 		button.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				InstanceHoldingDialog instanceHoldingDialog = null;
+				if (cls.isArray()) {
+					instanceHoldingDialog = new ArrayCreationDialog(cls.getComponentType());
+				} else {
+					instanceHoldingDialog = new InstanceCreationDialog(cls);
+				}
+				assert instanceHoldingDialog != null;
+				instanceHoldingDialog.setName(OBJECT);
+				parameterComponents.add(instanceHoldingDialog);
 				instanceHoldingDialog.setVisible(true);
 			}
 		});
 		add(button, componentConstraints);
-		assert instanceHoldingDialog != null;
-		instanceHoldingDialog.setName(OBJECT);
-		parameterComponents.add(instanceHoldingDialog);
 	}
 }
