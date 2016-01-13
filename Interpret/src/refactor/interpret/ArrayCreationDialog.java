@@ -46,12 +46,12 @@ public final class ArrayCreationDialog extends CreationDialog {
 			
 			@Override
 			public void actionPerformed(ActionEvent evt) {
-				if (getSpecifiedClass() == null) {
-					createAndSetInstance(getClassSeachPanel().getSearchResult());						
-				} else {
-					createAndSetInstance(getSpecifiedClass());	
-				}
-				dispose();
+//				if (getSpecifiedClass() == null) {
+//					createAndSetInstance(getClassSeachPanel().getSearchResult());						
+//				} else {
+//					createAndSetInstance(getSpecifiedClass());	
+//				}
+//				dispose();
 			}
 		});
 
@@ -59,27 +59,27 @@ public final class ArrayCreationDialog extends CreationDialog {
 			
 			@Override
 			public void actionPerformed(ActionEvent evt) {
-				if (getSpecifiedClass() == null) {
-					createAndSetInstance(getClassSeachPanel().getSearchResult());						
-				} else {
-					createAndSetInstance(getSpecifiedClass());	
-				}
-				// element open　TODO
-				dispose();
+//				if (getSpecifiedClass() == null) {
+//					createAndSetInstance(getClassSeachPanel().getSearchResult());						
+//				} else {
+//					createAndSetInstance(getSpecifiedClass());	
+//				}
+//				// element open　TODO
+//				dispose();
 			}
 		});
 
 		
-		Class<?> specifiedClass = getSpecifiedClass();
-		if (specifiedClass != null) {
-			addArrayCreationComponents(specifiedClass);
-		} else {
-			componentConstraints.gridx = 0;
-			componentConstraints.gridy = 0;
-			componentConstraints.fill = GridBagConstraints.HORIZONTAL;
-			componentConstraints.anchor = GridBagConstraints.CENTER;
-			add(getClassSeachPanel(), componentConstraints);
-		}
+//		Class<?> specifiedClass = getSpecifiedClass();
+//		if (specifiedClass != null) {
+//			addArrayCreationComponents(specifiedClass);
+//		} else {
+//			componentConstraints.gridx = 0;
+//			componentConstraints.gridy = 0;
+//			componentConstraints.fill = GridBagConstraints.HORIZONTAL;
+//			componentConstraints.anchor = GridBagConstraints.CENTER;
+//			add(getClassSeachPanel(), componentConstraints);
+//		}
 		Dimension d = getPreferredSize();
 		setSize(LEFT_RIGHT_MARGIN + d.width, TOP_BOTTOM_MARGIN + d.height);
 	}

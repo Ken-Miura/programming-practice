@@ -39,14 +39,20 @@ public final class InstanceCreationDialog extends CreationDialog {
 	private final JButton createAndCloceButton = new JButton("インスタンスを生成して閉じる");
 	private final JButton createAndOpenButton = new JButton("インスタンスを生成してフィールドを確認する");
 	
-	public InstanceCreationDialog(Class<?> clazz) {
-		super(clazz);
+	public InstanceCreationDialog(Class<?> superClass) {
+		super(superClass);
 		setTitle(TITLE);
 		
 		componentConstraints.insets = new Insets(MARGIN, MARGIN, MARGIN, MARGIN);
 		
 		properChangeSupport = new PropertyChangeSupport(this);
 		properChangeSupport.addPropertyChangeListener(parameterPanel);
+		
+		componentConstraints.gridx = 0;
+		componentConstraints.gridy = 0;
+		componentConstraints.fill = GridBagConstraints.HORIZONTAL;
+		componentConstraints.anchor = GridBagConstraints.CENTER;
+		add(getClassSeachPanel(), componentConstraints);		
 		
 		constructorCombo.addActionListener(new ActionListener() {
 			
@@ -132,18 +138,6 @@ public final class InstanceCreationDialog extends CreationDialog {
 			}
 		});
 
-		
-		Class<?> specifiedClass = getSpecifiedClass();
-		if (specifiedClass != null) {
-			Constructor<?>[] constructors = specifiedClass.getDeclaredConstructors();
-			addComboBox(constructors);
-		} else {
-			componentConstraints.gridx = 0;
-			componentConstraints.gridy = 0;
-			componentConstraints.fill = GridBagConstraints.HORIZONTAL;
-			componentConstraints.anchor = GridBagConstraints.CENTER;
-			add(getClassSeachPanel(), componentConstraints);
-		}
 		Dimension d = getPreferredSize();
 		setSize(LEFT_RIGHT_MARGIN + d.width, TOP_BOTTOM_MARGIN + d.height);
 	}

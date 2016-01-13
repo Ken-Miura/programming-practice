@@ -13,15 +13,10 @@ abstract class CreationDialog extends InstanceHoldingDialog {
 	 */
 	private static final long serialVersionUID = -2121890427136178457L;
 	
-	private final Class<?> specifiedClass;
-	private final ClassSeachPanel classSeachPanel = ClassSeachPanel.createClassSeachPanel(this);
+	private final ClassSeachPanel classSeachPanel;
 	
-	public CreationDialog(Class<?> specifiedClass) {
-		this.specifiedClass = specifiedClass;
-	}
-
-	public final Class<?> getSpecifiedClass() {
-		return specifiedClass;
+	public CreationDialog(Class<?> superClass) {
+		classSeachPanel = ClassSeachPanel.createClassSeachPanel(this, superClass);
 	}
 
 	public final ClassSeachPanel getClassSeachPanel() {

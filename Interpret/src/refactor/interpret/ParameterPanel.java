@@ -70,7 +70,7 @@ final class ParameterPanel extends JPanel implements PropertyChangeListener {
 		revalidate();
 	}
 
-	@SuppressWarnings("unchecked") /* setParametersIntoPanelから正しい型にキャストできていることは明らか */ 
+	@SuppressWarnings("unchecked") /* addParametersOntoPanelから正しい型にキャストできていることは明らか */ 
 	public Object[] getParameterValues () throws InvalidInputException {
 		List<Object> parameterValues = new ArrayList<>();
 		
@@ -117,7 +117,7 @@ final class ParameterPanel extends JPanel implements PropertyChangeListener {
 			}
 		}
 		if (parameterValues.size() != parameterComponents.size()) {
-			throw new AssertionError("not to be pass.");
+			throw new AssertionError("not to be passed.");
 		}
 		return parameterValues.toArray(new Object[0]);
 	}

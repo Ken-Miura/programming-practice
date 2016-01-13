@@ -33,11 +33,11 @@ final class ClassSeachPanel extends JPanel {
 	private final GridBagConstraints componentConstraints = new GridBagConstraints();
 	
 	private Class<?> searchResult = null;
-	private final JLabel caption = new JLabel("検索したいクラスのバイナリ名を入力してください");
+	private final JLabel caption;
 	private final JTextField classNameField = TextFieldUtil.createStringTextField();
 	private final JButton searchButton = new JButton("検索");
 	
-	private ClassSeachPanel (PropertyChangeListener l) {
+	private ClassSeachPanel (PropertyChangeListener l, Class<?> superClass) {
 		super (new GridBagLayout());
 		
 		properChangeSupport = new PropertyChangeSupport(this);
@@ -47,6 +47,11 @@ final class ClassSeachPanel extends JPanel {
 		componentConstraints.anchor = GridBagConstraints.CENTER;
 		componentConstraints.fill = GridBagConstraints.HORIZONTAL;
 		
+		if (superClass == null) {
+			caption = new JLabel("検索したいクラスのバイナリ名を入力してください");
+		} else {
+			caption = new JLabel(superClass.getName() + "または" + superClass.getName() + "のサブクラスのバイナリ名を入力してください");
+		}
 		componentConstraints.gridx = 0;
 		componentConstraints.gridy = 0;
 		add(caption, componentConstraints);
@@ -90,6 +95,10 @@ final class ClassSeachPanel extends JPanel {
 					if (clazz == null) {
 						throw new AssertionError("not to be passed.");
 					}
+					if (superClass != null && !superClass.isAssignableFrom(clazz)) {
+						JOptionPane.showMessageDialog(null, "指定されたクラス ("+binaryName+") は" + superClass.getName() + "のサブクラスではありません", "クラス検索失敗", JOptionPane.ERROR_MESSAGE);
+						return;
+					}
 					setSearchResult(clazz);
 				} catch (ClassNotFoundException exception) {
 					JOptionPane.showMessageDialog(null, "指定されたクラス ("+binaryName+") が見つかりませんでした", "クラス検索失敗", JOptionPane.ERROR_MESSAGE);
@@ -102,8 +111,8 @@ final class ClassSeachPanel extends JPanel {
 		add(searchButton, componentConstraints);
 	}
 	
-	public static ClassSeachPanel createClassSeachPanel (PropertyChangeListener l) {
-		return new ClassSeachPanel(l);
+	public static ClassSeachPanel createClassSeachPanel (PropertyChangeListener l, Class<?> superClass) {
+		return new ClassSeachPanel(l, superClass);
 	}
 	
 	public Class<?> getSearchResult () {
