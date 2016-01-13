@@ -58,6 +58,32 @@ public final class InstanceCreationDialog extends JDialog {
 	private final JLabel parameterCaptionLabel = new JLabel("引数一覧");
 	
 	private final List<? super JDialog> dialogList = new ArrayList<>();
+	private final ActionListener actionListener = new ActionListener() {
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if (parent != null) {
+				return;
+			}
+			String binaryName = searchClass.getText();
+			try {
+				searchResult = Class.forName(binaryName);
+				constructors = searchResult.getDeclaredConstructors();
+				constructorsComboBox.removeAllItems();
+				for (Constructor<?> c: constructors) {
+					if (c.getDeclaringClass() == Class.class) { // SecurityException回避のため
+						continue;
+					}
+					c.setAccessible(true);
+					constructorsComboBox.addItem(c);
+				}
+				constructorArea.revalidate();
+			} catch (ClassNotFoundException cnfe) {
+				cnfe.printStackTrace();
+				JOptionPane.showMessageDialog(null, "指定されたクラス(" + binaryName + ") が見つかりませんでした。", "クラス検索エラー", JOptionPane.ERROR_MESSAGE);
+			}
+		}
+	};
 	
 	public InstanceCreationDialog (Class<?> clazz) {
 		parent = clazz;
@@ -112,32 +138,7 @@ public final class InstanceCreationDialog extends JDialog {
 		componetConstraintsForClassArea.fill = GridBagConstraints.HORIZONTAL;
 		classArea.add(searchButton, componetConstraintsForClassArea);
 		
-		searchButton.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (parent != null) {
-					return;
-				}
-				String binaryName = searchClass.getText();
-				try {
-					searchResult = Class.forName(binaryName);
-					constructors = searchResult.getDeclaredConstructors();
-					constructorsComboBox.removeAllItems();
-					for (Constructor<?> c: constructors) {
-						if (c.getDeclaringClass() == Class.class) { // SecurityException回避のため
-							continue;
-						}
-						c.setAccessible(true);
-						constructorsComboBox.addItem(c);
-					}
-					constructorArea.revalidate();
-				} catch (ClassNotFoundException cnfe) {
-					cnfe.printStackTrace();
-					JOptionPane.showMessageDialog(null, "指定されたクラス(" + binaryName + ") が見つかりませんでした。", "クラス検索エラー", JOptionPane.ERROR_MESSAGE);
-				}
-			}
-		});
+		searchButton.addActionListener(actionListener);
 		
 		GridBagConstraints componetConstraintsForConstructorArea = new GridBagConstraints();
 		
@@ -153,15 +154,43 @@ public final class InstanceCreationDialog extends JDialog {
 		componetConstraintsForConstructorArea.fill = GridBagConstraints.HORIZONTAL;
 		constructorArea.add(constructorsComboBox, componetConstraintsForConstructorArea);
 		if (parent != null) {
+			
+			componetConstraintsForPanel.insets = new Insets(MARGIN, MARGIN, MARGIN, MARGIN);
+			componetConstraintsForPanel.gridx = 0;
+			componetConstraintsForPanel.gridy = 0;
+			componetConstraintsForPanel.anchor = GridBagConstraints.NORTH;
+			componetConstraintsForPanel.fill = GridBagConstraints.HORIZONTAL;
+			add(classArea, componetConstraintsForPanel);	
+			
 			constructorsComboBox.removeAllItems();
-			Constructor<?>[] constructors = parent.getDeclaredConstructors();
-			for (Constructor<?> c: constructors) {
-				if (c.getDeclaringClass() == Class.class) { // SecurityException回避のため
-					continue;
+			searchButton.removeActionListener(actionListener);
+			searchButton.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					String binaryName = searchClass.getText();
+					try {
+						searchResult = Class.forName(binaryName);
+						if (!(parent.isAssignableFrom(searchResult))) {
+							JOptionPane.showMessageDialog(null, "指定されたクラス(" + binaryName + ") は" + parent.getName() + "のサブクラスではありません", "クラス検索エラー", JOptionPane.ERROR_MESSAGE);
+							return;
+						}
+						constructors = searchResult.getDeclaredConstructors();
+						constructorsComboBox.removeAllItems();
+						for (Constructor<?> c: constructors) {
+							if (c.getDeclaringClass() == Class.class) { // SecurityException回避のため
+								continue;
+							}
+							c.setAccessible(true);
+							constructorsComboBox.addItem(c);
+						}
+						constructorArea.revalidate();
+					} catch (ClassNotFoundException cnfe) {
+						cnfe.printStackTrace();
+						JOptionPane.showMessageDialog(null, "指定されたクラス(" + binaryName + ") が見つかりませんでした。", "クラス検索エラー", JOptionPane.ERROR_MESSAGE);
+					}
 				}
-				c.setAccessible(true);
-				constructorsComboBox.addItem(c);
-			}
+			});
 			constructorArea.revalidate();
 		}
 		

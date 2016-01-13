@@ -737,5 +737,5 @@ public final class FieldDialog extends JDialog {
       sun.reflect.FieldAccessor accessor =
          sun.reflect.ReflectionFactory.getReflectionFactory().newFieldAccessor(field, false);
       accessor.set(null, value);
-   }	
+   }
 }
