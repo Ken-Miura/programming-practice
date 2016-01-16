@@ -84,6 +84,7 @@ final class ParameterPanel extends JPanel implements PropertyChangeListener {
 				if (str.length() != 1) {
 					throw new InvalidInputException("charには、サロゲートペアを必要としない1文字のみ指定してください");
 				}
+				parameterValues.add(str.charAt(0));
 			} else if (c.getName().equals(BYTE)) {
 				parameterValues.add(((ByteSpinner)c).getByte());
 			} else if (c.getName().equals(SHORT)) {
@@ -260,16 +261,13 @@ final class ParameterPanel extends JPanel implements PropertyChangeListener {
 		assert cls != null;
 		componentConstraints.gridx = 1;
 		componentConstraints.anchor = GridBagConstraints.WEST;
-		JButton button = null;
-		if (cls.isArray()) {
-			button = new JButton("配列を生成する (生成しない場合はnullを使用)");
-		} else {
-			button = new JButton("インスタンスを生成する (生成しない場合はnullを使用)");
-		}
+		final JButton button;
 		final InstanceHoldingDialog instanceHoldingDialog;
 		if (cls.isArray()) {
+			button = new JButton("配列を生成する (生成しない場合はnullを使用)");
 			instanceHoldingDialog = new ArrayCreationDialog(cls.getComponentType());
 		} else {
+			button = new JButton("インスタンスを生成する (生成しない場合はnullを使用)");
 			instanceHoldingDialog = new InstanceCreationDialog(cls);
 		}
 		instanceHoldingDialog.setName(OBJECT);

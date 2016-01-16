@@ -6,6 +6,8 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeSupport;
 import java.lang.reflect.Constructor;
@@ -54,10 +56,10 @@ public final class InstanceCreationDialog extends CreationDialog {
 		componentConstraints.anchor = GridBagConstraints.CENTER;
 		add(getClassSeachPanel(), componentConstraints);		
 		
-		constructorCombo.addActionListener(new ActionListener() {
+		constructorCombo.addItemListener(new ItemListener() {
 			
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void itemStateChanged(ItemEvent e) {
 				Constructor<?> selectedConstructor = (Constructor<?>) constructorCombo.getSelectedItem();
 				if (selectedConstructor == null) { // removeAllのとき
 					return;
@@ -124,7 +126,8 @@ public final class InstanceCreationDialog extends CreationDialog {
 			public void actionPerformed(ActionEvent evt) {
 				try {
 					createAndSetInstance((Constructor<?>)constructorCombo.getSelectedItem());
-					new FieldDialog (getInstance()).setVisible(true); // TODO
+					//new FieldDialog (getInstance()).setVisible(true); // TODO
+					new OperationDialog(getInstance()).setVisible(true);
 					dispose();
 				} catch (InstantiationException | IllegalAccessException | IllegalArgumentException e) {
 					e.printStackTrace();
