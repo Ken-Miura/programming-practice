@@ -99,6 +99,7 @@ public final class InstanceCreationDialog extends CreationDialog {
 				revalidate();
 				Dimension d = getPreferredSize();
 				setSize(LEFT_RIGHT_MARGIN + d.width, TOP_BOTTOM_MARGIN + d.height);
+				repaint();
 			}
 		});
 		
@@ -159,6 +160,7 @@ public final class InstanceCreationDialog extends CreationDialog {
 			revalidate();
 			Dimension d = getPreferredSize();
 			setSize(LEFT_RIGHT_MARGIN + d.width, TOP_BOTTOM_MARGIN + d.height);
+			repaint();
 		}
 	}
 

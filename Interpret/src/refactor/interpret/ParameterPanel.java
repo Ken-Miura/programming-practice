@@ -68,6 +68,7 @@ final class ParameterPanel extends JPanel implements PropertyChangeListener {
 		addParametersOntoPanel(parameters);
 		
 		revalidate();
+		repaint();
 	}
 
 	@SuppressWarnings("unchecked") /* addParametersOntoPanelから正しい型にキャストできていることは明らか */ 

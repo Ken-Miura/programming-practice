@@ -91,6 +91,7 @@ final class FieldPanel extends JPanel {
 				}
 				addValueAndComponents((Field) fieldCombo.getSelectedItem());
 				revalidate();
+				repaint();
 				notifier.firePropertyChange(FIELD_CHANGE, null, null);
 			}
 
@@ -134,6 +135,7 @@ final class FieldPanel extends JPanel {
 				displayAndInputValuePanel.removeAll();
 				addValueAndComponents(selectedField);
 				FieldPanel.this.revalidate();
+				FieldPanel.this.repaint();
 				notifier.firePropertyChange(FIELD_CHANGE, null, null);
 			}
 		});
