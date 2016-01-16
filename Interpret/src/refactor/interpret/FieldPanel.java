@@ -152,7 +152,7 @@ final class FieldPanel extends JPanel {
 		componentConstraints.gridx = 0;
 		componentConstraints.gridy = 0;
 		componentConstraints.anchor = GridBagConstraints.EAST;
-		displayAndInputValuePanel.add(new JLabel("型: " + type.getName() + ", 現在値: "), componentConstraints);
+		displayAndInputValuePanel.add(new JLabel("型: " + type.getName() + ", "), componentConstraints);
 		
 		String currentValue = null;
 		try {
@@ -164,16 +164,11 @@ final class FieldPanel extends JPanel {
 		componentConstraints.gridx = 1;
 		componentConstraints.gridy = 0;
 		componentConstraints.anchor = GridBagConstraints.WEST;
-		displayAndInputValuePanel.add(new JLabel(currentValue), componentConstraints);		
+		displayAndInputValuePanel.add(new JLabel("現在値: " + currentValue), componentConstraints);		
 		
 		componentConstraints.gridx = 0;
 		componentConstraints.gridy = 1;
-		componentConstraints.anchor = GridBagConstraints.EAST;
-		displayAndInputValuePanel.add(new JLabel(type.getName() + ": "), componentConstraints);
-		
-		componentConstraints.gridx = 1;
-		componentConstraints.gridy = 1;
-		componentConstraints.anchor = GridBagConstraints.WEST;
+		componentConstraints.anchor = GridBagConstraints.CENTER;
 		
 		if (type == boolean.class) {			
 			JComboBox<Boolean> combo = new JComboBox<>();

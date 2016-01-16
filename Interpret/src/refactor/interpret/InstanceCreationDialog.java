@@ -96,6 +96,7 @@ public final class InstanceCreationDialog extends CreationDialog {
 				componentConstraints.anchor = GridBagConstraints.CENTER;
 				add(createAndOpenButton, componentConstraints);
 				
+				revalidate();
 				Dimension d = getPreferredSize();
 				setSize(LEFT_RIGHT_MARGIN + d.width, TOP_BOTTOM_MARGIN + d.height);
 			}
