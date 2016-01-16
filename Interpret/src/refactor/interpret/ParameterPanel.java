@@ -251,12 +251,12 @@ final class ParameterPanel extends JPanel implements PropertyChangeListener {
 				componentConstraints.anchor = GridBagConstraints.EAST;
 				add(new JLabel(cls.getName() + ": "), componentConstraints);
 				
-				setInstanceCreationButton(cls);
+				addInstanceCreationButton(cls);
 			}
 		}
 	}
 
-	private void setInstanceCreationButton(Class<?> cls) {
+	private void addInstanceCreationButton(Class<?> cls) {
 		assert cls != null;
 		componentConstraints.gridx = 1;
 		componentConstraints.anchor = GridBagConstraints.WEST;
@@ -266,22 +266,21 @@ final class ParameterPanel extends JPanel implements PropertyChangeListener {
 		} else {
 			button = new JButton("インスタンスを生成する (生成しない場合はnullを使用)");
 		}
+		final InstanceHoldingDialog instanceHoldingDialog;
+		if (cls.isArray()) {
+			instanceHoldingDialog = new ArrayCreationDialog(cls.getComponentType());
+		} else {
+			instanceHoldingDialog = new InstanceCreationDialog(cls);
+		}
+		instanceHoldingDialog.setName(OBJECT);
 		button.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				InstanceHoldingDialog instanceHoldingDialog = null;
-				if (cls.isArray()) {
-					instanceHoldingDialog = new ArrayCreationDialog(cls.getComponentType());
-				} else {
-					instanceHoldingDialog = new InstanceCreationDialog(cls);
-				}
-				assert instanceHoldingDialog != null;
-				instanceHoldingDialog.setName(OBJECT);
-				parameterComponents.add(instanceHoldingDialog);
 				instanceHoldingDialog.setVisible(true);
 			}
 		});
+		parameterComponents.add(instanceHoldingDialog);
 		add(button, componentConstraints);
 	}
 }
