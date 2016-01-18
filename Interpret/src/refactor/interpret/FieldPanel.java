@@ -65,7 +65,7 @@ final class FieldPanel extends JPanel {
 		
 		componentConstraints.insets = new Insets(MARGIN, MARGIN, MARGIN, MARGIN);
 		componentConstraints.anchor = GridBagConstraints.CENTER;
-		componentConstraints.fill = GridBagConstraints.HORIZONTAL;
+		componentConstraints.fill = GridBagConstraints.NONE;
 		
 		Field[] fields = instance.getClass().getDeclaredFields();
 		for (final Field f: fields) {
@@ -100,10 +100,6 @@ final class FieldPanel extends JPanel {
 		componentConstraints.gridx = 0;
 		componentConstraints.gridy = 2;
 		add(displayAndInputValuePanel, componentConstraints);
-		
-		componentConstraints.gridx = 0;
-		componentConstraints.gridy = 3;
-		add(modifyValueButton, componentConstraints);
 		
 		modifyValueButton.addActionListener(new ActionListener() {
 			
@@ -166,10 +162,11 @@ final class FieldPanel extends JPanel {
 		componentConstraints.gridx = 1;
 		componentConstraints.gridy = 0;
 		componentConstraints.anchor = GridBagConstraints.WEST;
-		displayAndInputValuePanel.add(new JLabel("現在値: " + currentValue), componentConstraints);		
+		displayAndInputValuePanel.add(new JLabel("現在値: " + currentValue), componentConstraints);
 		
 		componentConstraints.gridx = 0;
 		componentConstraints.gridy = 1;
+		componentConstraints.gridwidth = 2;
 		componentConstraints.anchor = GridBagConstraints.CENTER;
 		
 		if (type == boolean.class) {			
@@ -230,7 +227,13 @@ final class FieldPanel extends JPanel {
 			fieldComponent = text;
 		} else {
 			addInstanceCreationButton(type);
-		}		
+		}
+		
+		componentConstraints.gridx = 0;
+		componentConstraints.gridy = 2;
+		componentConstraints.gridwidth = 2;
+		componentConstraints.anchor = GridBagConstraints.CENTER;
+		displayAndInputValuePanel.add(modifyValueButton, componentConstraints);
 	}
 	
 	private void addInstanceCreationButton(Class<?> cls) {

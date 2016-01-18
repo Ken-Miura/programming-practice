@@ -17,15 +17,17 @@ public final class OperationDialog extends InstanceHoldingDialog {
 	 */
 	private static final long serialVersionUID = 3485186338834021751L;
 	private static final String TITLE = "インスタンスの操作";
-	private static final int MARGIN = 3;
+	private static final int MARGIN = 0;
 	
 	private final GridBagConstraints componentConstraints = new GridBagConstraints();
 	private final FieldPanel fieldPanel;
+	private final MethodPanel methodPanel;
 	
 	public OperationDialog (Object instance) {
 		setTitle(TITLE);
 		setInstance(instance);
 		fieldPanel = FieldPanel.createFieldPanel(instance, this);
+		methodPanel = MethodPanel.createMethodPanel(instance, this);
 		
 		componentConstraints.insets = new Insets(MARGIN, MARGIN, MARGIN, MARGIN);
 		componentConstraints.fill = GridBagConstraints.HORIZONTAL;
@@ -35,13 +37,17 @@ public final class OperationDialog extends InstanceHoldingDialog {
 		componentConstraints.gridy = 0;
 		add(fieldPanel, componentConstraints);
 		
+		componentConstraints.gridx = 0;
+		componentConstraints.gridy = 1;
+		add(methodPanel, componentConstraints);
+		
 		Dimension d = getPreferredSize();
 		setSize(LEFT_RIGHT_MARGIN + d.width, TOP_BOTTOM_MARGIN + d.height);
 	}
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		if (evt.getPropertyName().equals(FieldPanel.FIELD_CHANGE)) {
+		if (evt.getPropertyName().equals(FieldPanel.FIELD_CHANGE) || evt.getPropertyName().equals(MethodPanel.METHOD_CHANGE)) {
 			revalidate();
 			Dimension d = getPreferredSize();
 			setSize(LEFT_RIGHT_MARGIN + d.width, TOP_BOTTOM_MARGIN + d.height);

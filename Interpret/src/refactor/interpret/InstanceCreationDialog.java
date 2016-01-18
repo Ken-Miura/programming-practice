@@ -39,7 +39,7 @@ public final class InstanceCreationDialog extends CreationDialog {
 	private final JLabel parameterLabel = new JLabel("引数一覧");
 	private final ParameterPanel parameterPanel = new ParameterPanel();
 	private final JButton createAndCloceButton = new JButton("インスタンスを生成して閉じる");
-	private final JButton createAndOpenButton = new JButton("インスタンスを生成してフィールドを確認する");
+	private final JButton createAndOpenButton = new JButton("インスタンスを生成して操作する");
 	
 	public InstanceCreationDialog(Class<?> superClass) {
 		super(superClass);
@@ -128,7 +128,6 @@ public final class InstanceCreationDialog extends CreationDialog {
 			public void actionPerformed(ActionEvent evt) {
 				try {
 					createAndSetInstance((Constructor<?>)constructorCombo.getSelectedItem());
-					//new FieldDialog (getInstance()).setVisible(true); // TODO
 					new OperationDialog(getInstance()).setVisible(true);
 					dispose();
 				} catch (InstantiationException | IllegalAccessException | IllegalArgumentException e) {
