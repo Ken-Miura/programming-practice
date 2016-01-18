@@ -10,7 +10,7 @@ import java.beans.PropertyChangeEvent;
  * @author Ken Miura
  *
  */
-public final class OperationDialog extends InstanceHoldingDialog {
+public final class InstanceOperationDialog extends InstanceHoldingDialog {
 
 	/**
 	 * Ver 1.0
@@ -23,7 +23,7 @@ public final class OperationDialog extends InstanceHoldingDialog {
 	private final FieldPanel fieldPanel;
 	private final MethodPanel methodPanel;
 	
-	public OperationDialog (Object instance) {
+	public InstanceOperationDialog (Object instance) {
 		setTitle(TITLE);
 		setInstance(instance);
 		fieldPanel = FieldPanel.createFieldPanel(instance, this);
