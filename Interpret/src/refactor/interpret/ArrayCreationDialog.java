@@ -7,7 +7,6 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
-import java.lang.reflect.Array;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -137,9 +136,9 @@ public final class ArrayCreationDialog extends CreationDialog {
 		add(createAndOpenButton, componentConstraints);
 	}
 	
-	private void createAndSetInstance (Class<?> clazz) {
-		assert clazz != null;
-		setInstance(Array.newInstance(clazz, (Integer) arraySizeSpinner.getValue()));
-	}
+//	private void createAndSetInstance (Class<?> clazz) {
+//		assert clazz != null;
+//		setInstance(Array.newInstance(clazz, (Integer) arraySizeSpinner.getValue()));
+//	}
 
 }
