@@ -131,6 +131,7 @@ final class MethodPanel extends JPanel {
 					return;
 				}
 				
+				resultLabel.removeAll();
 				if (returnValue == null) {
 					resultLabel.setText("戻り値なし");
 				} else {

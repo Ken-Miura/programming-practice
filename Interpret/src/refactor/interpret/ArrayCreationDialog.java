@@ -7,9 +7,11 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
+import java.lang.reflect.Array;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 
@@ -30,73 +32,79 @@ public final class ArrayCreationDialog extends CreationDialog {
 	private final GridBagConstraints componentConstraints = new GridBagConstraints();
 	private final JLabel arrayLabel = new JLabel();
 	private final JLabel arraySizeLabel = new JLabel("要素数を入力してください ");
-	private final SpinnerNumberModel arraySizeModel = new SpinnerNumberModel(0, 0, Integer.MAX_VALUE, 1);  
-	private final JSpinner arraySizeSpinner = new JSpinner(arraySizeModel);
+	private final JSpinner arraySizeSpinner = new JSpinner(new SpinnerNumberModel(0, 0, Integer.MAX_VALUE, 1));
 	private final JButton createAndCloceButton = new JButton("配列を生成して閉じる");
-	private final JButton createAndOpenButton = new JButton("配列を生成して要素を確認する");
+	private final JButton createAndOpenButton = new JButton("配列を生成して要素を操作する");
+	private final ClassSearchPanel classSearchPanel;
+	private Class<?> componentType = null;
 	
 	public ArrayCreationDialog(Class<?> clazz) {
 		super(clazz);
 		setTitle(TITLE);
 		
+		classSearchPanel = ClassSearchPanel.createClassSearchPanel(this, clazz);
+		
 		componentConstraints.insets = new Insets(MARGIN, MARGIN, MARGIN, MARGIN);
+		componentConstraints.fill = GridBagConstraints.HORIZONTAL;
+		componentConstraints.anchor = GridBagConstraints.CENTER;
+		
+		componentConstraints.gridx = 0;
+		componentConstraints.gridy = 0;
+		add (classSearchPanel, componentConstraints);
+		
+		Dimension d = getPreferredSize();
+		setSize(LEFT_RIGHT_MARGIN + d.width, TOP_BOTTOM_MARGIN + d.height);
 		
 		createAndCloceButton.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent evt) {
-//				if (getSpecifiedClass() == null) {
-//					createAndSetInstance(getClassSeachPanel().getSearchResult());						
-//				} else {
-//					createAndSetInstance(getSpecifiedClass());	
-//				}
-//				dispose();
+				try {
+					assert componentType != null; //　クラス検索が行われた後なのでこの時点でnullはあり得ない
+					createAndSetArrayInstance(componentType);
+					dispose();
+				} catch (IllegalArgumentException e) {
+					e.printStackTrace();
+					JOptionPane.showMessageDialog(null, "例外 ("+e.getClass()+") がスローされ、配列の生成に失敗しました", "配列生成失敗", JOptionPane.ERROR_MESSAGE);
+				}
 			}
 		});
-
+		
 		createAndOpenButton.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent evt) {
-//				if (getSpecifiedClass() == null) {
-//					createAndSetInstance(getClassSeachPanel().getSearchResult());						
-//				} else {
-//					createAndSetInstance(getSpecifiedClass());	
-//				}
-//				// element open　TODO
-//				dispose();
+				try {
+					assert componentType != null; //　クラス検索が行われた後なのでこの時点でnullはあり得ない
+					createAndSetArrayInstance(componentType);
+					
+					// TODO
+					
+					dispose();
+				} catch (IllegalArgumentException e) {
+					e.printStackTrace();
+					JOptionPane.showMessageDialog(null, "例外 ("+e.getClass()+") がスローされ、配列の生成に失敗しました", "配列生成失敗", JOptionPane.ERROR_MESSAGE);
+				}
 			}
 		});
-
-		
-//		Class<?> specifiedClass = getSpecifiedClass();
-//		if (specifiedClass != null) {
-//			addArrayCreationComponents(specifiedClass);
-//		} else {
-//			componentConstraints.gridx = 0;
-//			componentConstraints.gridy = 0;
-//			componentConstraints.fill = GridBagConstraints.HORIZONTAL;
-//			componentConstraints.anchor = GridBagConstraints.CENTER;
-//			add(getClassSeachPanel(), componentConstraints);
-//		}
-		Dimension d = getPreferredSize();
-		setSize(LEFT_RIGHT_MARGIN + d.width, TOP_BOTTOM_MARGIN + d.height);
 	}
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		if (evt.getPropertyName().equals(ClassSeachPanel.SEARCH_RESULT_KEY)) {
+		if (evt.getPropertyName().equals(ClassSearchPanel.SEARCH_RESULT_KEY)) {
 			remove(arrayLabel);
 			remove(arraySizeLabel);
 			remove(arraySizeSpinner);
 			remove(createAndCloceButton);
 			remove(createAndOpenButton);
 			
-			addArrayCreationComponents((Class<?>) evt.getNewValue());
+			componentType = (Class<?>) evt.getNewValue();
+			addArrayCreationComponents(componentType);
 			
 			revalidate();
 			Dimension d = getPreferredSize();
 			setSize(LEFT_RIGHT_MARGIN + d.width, TOP_BOTTOM_MARGIN + d.height);
+			repaint();
 		}
 	}
 
@@ -136,9 +144,9 @@ public final class ArrayCreationDialog extends CreationDialog {
 		add(createAndOpenButton, componentConstraints);
 	}
 	
-//	private void createAndSetInstance (Class<?> clazz) {
-//		assert clazz != null;
-//		setInstance(Array.newInstance(clazz, (Integer) arraySizeSpinner.getValue()));
-//	}
+	private void createAndSetArrayInstance (Class<?> clazz) {
+		assert clazz != null;
+		setInstance(Array.newInstance(clazz, (Integer) arraySizeSpinner.getValue()));
+	}
 
 }

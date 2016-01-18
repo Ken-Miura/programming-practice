@@ -19,7 +19,7 @@ import javax.swing.JTextField;
  * @author Ken Miura
  *
  */
-final class ClassSeachPanel extends JPanel {
+final class ClassSearchPanel extends JPanel {
 
 	/**
 	 * Ver 1.0
@@ -37,7 +37,7 @@ final class ClassSeachPanel extends JPanel {
 	private final JTextField classNameField = TextFieldUtil.createStringTextField();
 	private final JButton searchButton = new JButton("検索");
 	
-	private ClassSeachPanel (PropertyChangeListener l, Class<?> superClass) {
+	private ClassSearchPanel (PropertyChangeListener l, Class<?> superClass) {
 		super (new GridBagLayout());
 		
 		properChangeSupport = new PropertyChangeSupport(this);
@@ -111,8 +111,8 @@ final class ClassSeachPanel extends JPanel {
 		add(searchButton, componentConstraints);
 	}
 	
-	public static ClassSeachPanel createClassSeachPanel (PropertyChangeListener l, Class<?> superClass) {
-		return new ClassSeachPanel(l, superClass);
+	public static ClassSearchPanel createClassSearchPanel (PropertyChangeListener l, Class<?> superClass) {
+		return new ClassSearchPanel(l, superClass);
 	}
 	
 	public Class<?> getSearchResult () {

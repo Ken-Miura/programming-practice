@@ -148,7 +148,7 @@ public final class InstanceCreationDialog extends CreationDialog {
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		if (evt.getPropertyName().equals(ClassSeachPanel.SEARCH_RESULT_KEY)) {
+		if (evt.getPropertyName().equals(ClassSearchPanel.SEARCH_RESULT_KEY)) {
 			remove(constructoComboLabel);
 			constructorCombo.removeAllItems();
 			remove(constructorCombo);
