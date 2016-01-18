@@ -229,6 +229,8 @@ final class FieldPanel extends JPanel {
 			addInstanceCreationButton(type);
 		}
 		
+		// TODO インスタンス内容＋配列要素内容確認
+		
 		componentConstraints.gridx = 0;
 		componentConstraints.gridy = 2;
 		componentConstraints.gridwidth = 2;
@@ -255,6 +257,11 @@ final class FieldPanel extends JPanel {
 				instanceHoldingDialog.setVisible(true);
 			}
 		});
+		GridBagConstraints componentConstraints = new GridBagConstraints();
+		componentConstraints.gridx = 0;
+		componentConstraints.gridy = 1;
+		componentConstraints.gridwidth = 2;
+		componentConstraints.anchor = GridBagConstraints.CENTER;
 		displayAndInputValuePanel.add(button, componentConstraints);
 		fieldComponent = instanceHoldingDialog;
 	}

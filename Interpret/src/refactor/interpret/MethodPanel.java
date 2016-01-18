@@ -138,6 +138,8 @@ final class MethodPanel extends JPanel {
 					resultLabel.setText("型: " + returnValue.getClass().getName() + ", 返り値: " + returnValue);
 				}
 				
+				// TODO インスタンス内容＋配列要素内容確認
+				
 				componentConstraints.gridy = 5;
 				add (resultLabel, componentConstraints);
 				
