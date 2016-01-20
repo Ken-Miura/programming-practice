@@ -79,6 +79,7 @@ public final class ArrayCreationDialog extends CreationDialog {
 					createAndSetArrayInstance(componentType);
 					
 					// TODO
+					new ArrayOperationDialog(getInstance()).setVisible(true);
 					
 					dispose();
 				} catch (IllegalArgumentException e) {
