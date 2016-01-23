@@ -44,6 +44,7 @@ final class MethodPanel extends JPanel {
 	private final ParameterPanel parameterPanel = new ParameterPanel();
 	private final JButton methodExecutionButton = new JButton("メソッドを実行する");
 	private final JLabel resultLabel = new JLabel();
+	private final JButton contentsButton = new JButton();
 	private final PropertyChangeSupport notifier;
 	
 	private MethodPanel (Object instance, PropertyChangeListener listener) {
@@ -105,10 +106,10 @@ final class MethodPanel extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent evt) {
 				remove(resultLabel);
+				remove(contentsButton);
 				
 				Method selectedMethod = (Method) methodCombo.getSelectedItem();
-				Object returnValue = null;
-				
+				final Object returnValue;
 				try {
 					returnValue = selectedMethod.invoke(MethodPanel.this.instance, parameterPanel.getParameterValues());
 				} catch (IllegalAccessException | IllegalArgumentException e) {
@@ -132,19 +133,45 @@ final class MethodPanel extends JPanel {
 				}
 				
 				resultLabel.removeAll();
-				if (returnValue == null) {
+				if (selectedMethod.getReturnType() == void.class) {
 					resultLabel.setText("戻り値なし");
+				} else if (returnValue == null) {
+					resultLabel.setText("型: " + selectedMethod.getReturnType().getName() + ", 返り値: null");
 				} else {
-					resultLabel.setText("型: " + returnValue.getClass().getName() + ", 返り値: " + returnValue);
-				}
-				
-				// TODO インスタンス内容＋配列要素内容確認
-				
+					resultLabel.setText("型: " + selectedMethod.getReturnType().getName() + ", 返り値: " + returnValue);
+				}				
 				componentConstraints.gridy = 5;
 				add (resultLabel, componentConstraints);
 				
+				if (returnValue != null && !(selectedMethod.getReturnType().isPrimitive() || selectedMethod.getReturnType() == String.class)) {
+					contentsButton.removeAll();
+					if (returnValue.getClass().isArray()) {
+						contentsButton.setText("配列の要素を確認する");
+						contentsButton.addActionListener(new ActionListener() {
+							
+							@Override
+							public void actionPerformed(ActionEvent e) {
+								new ArrayOperationDialog(returnValue).setVisible(true);	
+							}
+						});
+					} else {
+						contentsButton.setText("フィールドを確認する");
+						contentsButton.addActionListener(new ActionListener() {
+							
+							@Override
+							public void actionPerformed(ActionEvent e) {
+								new InstanceOperationDialog(returnValue).setVisible(true);									
+							}
+						});
+					}
+					componentConstraints.gridy = 6;
+					add(contentsButton, componentConstraints);
+				}
+				
 				revalidate();
 				repaint();
+				
+				notifier.firePropertyChange(METHOD_CHANGE, null, null);
 			}
 		});
 	}
