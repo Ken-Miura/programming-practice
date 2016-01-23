@@ -52,6 +52,7 @@ public final class ArrayOperationDialog extends InstanceHoldingDialog {
 	private final JSpinner arraySizeSpinner;
 	private final JLabel inputCaption = new JLabel("値を入力してください");
 	private final JButton changeValueButton = new JButton("値を変更する");
+	private final JButton contentsButton = new JButton();
 	private Component elementComponent = null;
 	
 	private final JPanel panel = new JPanel(new GridBagLayout());
@@ -91,6 +92,7 @@ public final class ArrayOperationDialog extends InstanceHoldingDialog {
 				}
 				
 				panel.removeAll();
+				contentsButton.removeAll();
 				
 				addComponets();
 				
@@ -100,7 +102,26 @@ public final class ArrayOperationDialog extends InstanceHoldingDialog {
 				repaint();
 			}
 
-		});		
+		});	
+		
+		contentsButton.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				int index = (Integer) arraySizeSpinner.getValue();
+				Object o = Array.get(getInstance(), index);
+				if (o == null) {
+					JOptionPane.showMessageDialog(null, "参照値がnullです", "エラー", JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+				if (o.getClass().isArray()) {
+					new ArrayOperationDialog(o).setVisible(true);	
+				} else {
+					new InstanceOperationDialog(o).setVisible(true);	
+				}
+			}
+		});
+
 	}
 	
 	private void addComponets() {
@@ -137,6 +158,17 @@ public final class ArrayOperationDialog extends InstanceHoldingDialog {
 		
 		componentConstraints.gridy = length+5;
 		panel.add(changeValueButton, componentConstraints);
+
+		Class<?> componentType = getInstance().getClass().getComponentType();
+		if (!(componentType.isPrimitive() || componentType == String.class)) {
+			if (componentType.isArray()) {
+				contentsButton.setText("配列要素を確認する");
+			} else {
+				contentsButton.setText("フィールドを確認する");	
+			}
+			componentConstraints.gridy = length+6;
+			panel.add(contentsButton, componentConstraints);
+		}
 	}
 
 	private void addInputComponents() {
