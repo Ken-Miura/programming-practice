@@ -229,8 +229,6 @@ final class FieldPanel extends JPanel {
 			addInstanceCreationButton(type);
 		}
 		
-		// TODO インスタンス内容＋配列要素内容確認
-		
 		componentConstraints.gridx = 0;
 		componentConstraints.gridy = 2;
 		componentConstraints.gridwidth = 2;
@@ -242,12 +240,15 @@ final class FieldPanel extends JPanel {
 		assert cls != null;
 		final JButton button;
 		final InstanceHoldingDialog instanceHoldingDialog;
+		final JButton contentsButton;
 		if (cls.isArray()) {
 			button = new JButton("配列を生成する (生成しない場合はnullを使用)");
 			instanceHoldingDialog = new ArrayCreationDialog(cls.getComponentType());
+			contentsButton = new JButton("配列の要素を確認する");
 		} else {
 			button = new JButton("インスタンスを生成する (生成しない場合はnullを使用)");
 			instanceHoldingDialog = new InstanceCreationDialog(cls);
+			contentsButton = new JButton("フィールドを確認する");
 		}
 		instanceHoldingDialog.setName(OBJECT);
 		button.addActionListener(new ActionListener() {
@@ -258,12 +259,42 @@ final class FieldPanel extends JPanel {
 			}
 		});
 		GridBagConstraints componentConstraints = new GridBagConstraints();
+		componentConstraints.insets = new Insets(MARGIN, MARGIN, MARGIN, MARGIN);
 		componentConstraints.gridx = 0;
 		componentConstraints.gridy = 1;
-		componentConstraints.gridwidth = 2;
+		componentConstraints.gridwidth = 1;
 		componentConstraints.anchor = GridBagConstraints.CENTER;
+		componentConstraints.fill = GridBagConstraints.HORIZONTAL;
 		displayAndInputValuePanel.add(button, componentConstraints);
 		fieldComponent = instanceHoldingDialog;
+		
+		componentConstraints.gridx = 1;
+		componentConstraints.gridy = 1;
+		displayAndInputValuePanel.add(contentsButton, componentConstraints);
+		
+		contentsButton.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent evt) {
+				Field selectedField = (Field) fieldCombo.getSelectedItem();
+				Object o = null;
+				try {
+					o = selectedField.get(instance);
+				} catch (IllegalArgumentException | IllegalAccessException e) {
+					e.printStackTrace();
+					throw new AssertionError("not to be passed");
+				}
+				if (o == null) {
+					JOptionPane.showMessageDialog(null, "参照値がnullです", "エラー", JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+				if (o.getClass().isArray()) {
+					new ArrayOperationDialog(o).setVisible(true);
+				} else {
+					new InstanceOperationDialog(o).setVisible(true);
+				}
+			}
+		});
 	}
 
 	@SuppressWarnings("unchecked") /* 正しい型にキャストできていることは明らか */ 
