@@ -4,6 +4,7 @@ package refactor.interpret;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -14,6 +15,8 @@ import java.util.Objects;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
@@ -51,6 +54,8 @@ public final class ArrayOperationDialog extends InstanceHoldingDialog {
 	private final JButton changeValueButton = new JButton("値を変更する");
 	private Component elementComponent = null;
 	
+	private final JPanel panel = new JPanel(new GridBagLayout());
+	
 	public ArrayOperationDialog (Object instance) {
 		Objects.requireNonNull(instance, "instance must not be null");
 		if (!(instance.getClass().isArray())) {
@@ -67,25 +72,35 @@ public final class ArrayOperationDialog extends InstanceHoldingDialog {
 		componentConstraints.insets = new Insets(MARGIN, MARGIN, MARGIN, MARGIN);
 		
 		addComponets();
-				
+		
+		add(panel);	
+		
 		Dimension d = getPreferredSize();
 		setSize(LEFT_RIGHT_MARGIN + d.width, TOP_BOTTOM_MARGIN + d.height);
 		
 		changeValueButton.addActionListener(new ActionListener() {
 			
 			@Override
-			public void actionPerformed(ActionEvent e) {
-				removeAll();
+			public void actionPerformed(ActionEvent evt) {
+				try {
+					setValueIntoElement();
+				} catch (InvalidInputException e) {
+					e.printStackTrace();
+					JOptionPane.showMessageDialog(null, e.getMessage(), "入力エラー", JOptionPane.ERROR_MESSAGE);
+					return;
+				}
 				
-				// TODO
+				panel.removeAll();
+				
 				addComponets();
 				
-				revalidate();
+				panel.revalidate();
 				Dimension d = getPreferredSize();
 				setSize(LEFT_RIGHT_MARGIN + d.width, TOP_BOTTOM_MARGIN + d.height);
 				repaint();
 			}
-		});	
+
+		});		
 	}
 	
 	private void addComponets() {
@@ -94,34 +109,34 @@ public final class ArrayOperationDialog extends InstanceHoldingDialog {
 		componentConstraints.gridx = 0;
 		componentConstraints.gridy = 0;
 
-		add(new JLabel("要素型: " + getInstance().getClass().getComponentType()), componentConstraints);
+		panel.add(new JLabel("要素型: " + getInstance().getClass().getComponentType()), componentConstraints);
 		for (int i=0; i<length; i++) {
 			componentConstraints.gridy = i+1;
 			Object value = Array.get(getInstance(), i);
 			if (value == null) {
-				add(new JLabel("要素番号: " + i + ", 値: null"), componentConstraints);	
+				panel.add(new JLabel("要素番号: " + i + ", 値: null"), componentConstraints);	
 			} else {
-				add(new JLabel("要素番号: " + i + ", 値: " + value), componentConstraints);	
+				panel.add(new JLabel("要素番号: " + i + ", 値: " + value), componentConstraints);	
 			}
 		}
 		
 		componentConstraints.gridy = length+1;
-		add(caption, componentConstraints);
+		panel.add(caption, componentConstraints);
 		
 		componentConstraints.fill = GridBagConstraints.HORIZONTAL;
 		componentConstraints.gridy = length+2;
-		add(arraySizeSpinner, componentConstraints);
+		panel.add(arraySizeSpinner, componentConstraints);
 		
 		componentConstraints.fill = GridBagConstraints.NONE;
 		componentConstraints.gridy = length+3;
-		add(inputCaption, componentConstraints);
+		panel.add(inputCaption, componentConstraints);
 		
 		componentConstraints.fill = GridBagConstraints.HORIZONTAL;
 		componentConstraints.gridy = length+4;
 		addInputComponents();
 		
 		componentConstraints.gridy = length+5;
-		add(changeValueButton, componentConstraints);
+		panel.add(changeValueButton, componentConstraints);
 	}
 
 	private void addInputComponents() {
@@ -132,42 +147,42 @@ public final class ArrayOperationDialog extends InstanceHoldingDialog {
 			combo.setName(BOOLEAN);
 			combo.addItem(Boolean.TRUE);
 			combo.addItem(Boolean.FALSE);
-			add(combo, componentConstraints);
+			panel.add(combo, componentConstraints);
 			elementComponent = combo;
 		} else if (componentType == char.class) {
 			JTextField text = TextFieldUtil.createStringTextField();
 			text.setName(CHAR);
-			add(text, componentConstraints);
+			panel.add(text, componentConstraints);
 			elementComponent = text;
 		} else if (componentType == byte.class) {
 			ByteSpinner byteSpinner = new ByteSpinner();
 			byteSpinner.setName(BYTE);
-			add(byteSpinner, componentConstraints);
+			panel.add(byteSpinner, componentConstraints);
 			elementComponent = byteSpinner;
 		} else if (componentType == short.class) {
 			ShortSpinner shortSpinner = new ShortSpinner();
 			shortSpinner.setName(SHORT);
-			add(shortSpinner, componentConstraints);
+			panel.add(shortSpinner, componentConstraints);
 			elementComponent = shortSpinner;
 		} else if (componentType == int.class) {
 			IntSpinner intSpinner = new IntSpinner();
 			intSpinner.setName(INT);
-			add(intSpinner, componentConstraints);
+			panel.add(intSpinner, componentConstraints);
 			elementComponent = intSpinner;
 		} else if (componentType == long.class) {
 			LongSpinner longSpinner = new LongSpinner();
 			longSpinner.setName(LONG);
-			add(longSpinner, componentConstraints);
+			panel.add(longSpinner, componentConstraints);
 			elementComponent = longSpinner;
 		} else if (componentType == float.class) {
 			JTextField text = TextFieldUtil.createFloatingPointNumberTextField();
 			text.setName(FLOAT);
-			add(text, componentConstraints);
+			panel.add(text, componentConstraints);
 			elementComponent = text;
 		} else if (componentType == double.class) {
 			JTextField text = TextFieldUtil.createFloatingPointNumberTextField();
 			text.setName(DOUBLE);
-			add(text, componentConstraints);
+			panel.add(text, componentConstraints);
 			elementComponent = text;
 		} else if (componentType == String.class) {
 			JTextField text = TextFieldUtil.createStringTextField();
@@ -197,8 +212,54 @@ public final class ArrayOperationDialog extends InstanceHoldingDialog {
 				instanceHoldingDialog.setVisible(true);
 			}
 		});
-		add(button, componentConstraints);
+		panel.add(button, componentConstraints);
 		elementComponent = instanceHoldingDialog;
+	}
+	
+	@SuppressWarnings("unchecked") /* 正しい型にキャストできていることは明らか */ 
+	private void setValueIntoElement() throws InvalidInputException {
+		int index = (Integer) arraySizeSpinner.getValue();
+		Object value = null;
+		if (elementComponent.getName().equals(BOOLEAN)) {
+			value = ((JComboBox<Boolean>)elementComponent).getSelectedItem();
+		} else if (elementComponent.getName().equals(CHAR)) {
+			String str = ((JTextField) elementComponent).getText();
+			if (str.length() != 1) {
+				throw new InvalidInputException("charには、サロゲートペアを必要としない1文字のみ指定してください");
+			}
+			value =  str.charAt(0);
+		} else if (elementComponent.getName().equals(BYTE)) {
+			value = ((ByteSpinner)elementComponent).getByte();
+		} else if (elementComponent.getName().equals(SHORT)) {
+			value = ((ShortSpinner)elementComponent).getShort();
+		} else if (elementComponent.getName().equals(INT)) {
+			value = ((IntSpinner)elementComponent).getInt();
+		} else if (elementComponent.getName().equals(LONG)) {
+			value = ((LongSpinner)elementComponent).getLong();
+		} else if (elementComponent.getName().equals(FLOAT)) {
+			float f = 0.0f;
+			try {
+				f = Float.parseFloat(((JTextField)elementComponent).getText());
+			} catch (NumberFormatException e) {
+				throw new InvalidInputException("floatの入力として不正な値が使用されています。");
+			}
+			value = f;
+		} else if (elementComponent.getName().equals(DOUBLE)) {
+			double d = 0.0;
+			try {
+				d = Double.parseDouble(((JTextField)elementComponent).getText());
+			} catch (NumberFormatException e) {
+				throw new InvalidInputException("doubleの入力として不正な値が使用されています。");
+			}
+			value = d;
+		} else if (elementComponent.getName().equals(STRING)) {
+			value = ((JTextField)elementComponent).getText();
+		} else if (elementComponent.getName().equals(OBJECT)) {
+			value = ((InstanceHoldingDialog)elementComponent).getInstance();
+		} else {
+			throw new AssertionError("not to be passed.");
+		}
+		Array.set(getInstance(), index, value);
 	}
 
 	@Override
