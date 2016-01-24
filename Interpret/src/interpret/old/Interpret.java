@@ -1,5 +1,5 @@
 /* Copyright (C) 2015 Ken Miura */
-package refactor.interpret;
+package interpret.old;
 
 import javax.swing.SwingUtilities;
 

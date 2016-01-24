@@ -1,5 +1,5 @@
 /* Copyright (C) 2016 Ken Miura */
-package refactor.interpret;
+package interpret;
 
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;

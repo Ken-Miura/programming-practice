@@ -20,19 +20,19 @@ public final class InterpretFrame extends JFrame {
 	/**
 	 * Ver 1.0
 	 */
-	private static final long serialVersionUID = 4537958849872139727L;
+	private static final long serialVersionUID = 776059298091831885L;
 	private static final String TITLE = "Interpret";
 	private static final int WIDTH = 400;
 	private static final int HEIGHT = 200;
 	private static final int MARGIN = 5;
 	
 	private final JPanel buttonArea = new JPanel(new GridBagLayout());
-	private final JButton instanceCreationButton = new JButton ("インスタンスの生成に関する操作");
-	private final JButton arrayCreationButton = new JButton ("配列の生成に関する操作");
+	private final JButton instanceCreationButton = new JButton ("インスタンスを生成する");
+	private final JButton arrayCreationButton = new JButton ("配列を生成する");
 	
-	private final InstanceCreationDialog instanceCreationDialog = new InstanceCreationDialog((null));
-	private final ArrayCreationDialog arrayCreationDialog = new ArrayCreationDialog(null);
-
+	private final InstanceHoldingDialog instanceDialog = new InstanceCreationDialog(null);
+	private final InstanceHoldingDialog arrayDialog = new ArrayCreationDialog(null);
+	
 	public InterpretFrame() {
 		setTitle(TITLE);
 		setSize(WIDTH, HEIGHT);
@@ -43,8 +43,8 @@ public final class InterpretFrame extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				instanceCreationDialog.setLocation(getLocation());
-				instanceCreationDialog.setVisible(true);
+				instanceDialog.setLocation(getLocation());
+				instanceDialog.setVisible(true);
 			}
 		});
 		
@@ -52,24 +52,21 @@ public final class InterpretFrame extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				arrayCreationDialog.setLocation(getLocation());
-				arrayCreationDialog.setVisible(true);
+				arrayDialog.setLocation(getLocation());
+				arrayDialog.setVisible(true);
 			}
 		});
 		
 		GridBagConstraints componetConstraints = new GridBagConstraints();
 		componetConstraints.insets = new Insets(MARGIN, MARGIN, MARGIN, MARGIN);
-		
 		componetConstraints.gridx = 0;
-		componetConstraints.gridy = 0;
 		componetConstraints.anchor = GridBagConstraints.CENTER;
 		componetConstraints.fill = GridBagConstraints.HORIZONTAL;
+		
+		componetConstraints.gridy = 0;
 		buttonArea.add(instanceCreationButton, componetConstraints);
 		
-		componetConstraints.gridx = 0;
 		componetConstraints.gridy = 1;
-		componetConstraints.anchor = GridBagConstraints.CENTER;
-		componetConstraints.fill = GridBagConstraints.HORIZONTAL;
 		buttonArea.add(arrayCreationButton, componetConstraints);
 		
 		add(buttonArea, "Center");

@@ -1,5 +1,5 @@
 /* Copyright (C) 2015 Ken Miura */
-package interpret;
+package interpret.old;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
