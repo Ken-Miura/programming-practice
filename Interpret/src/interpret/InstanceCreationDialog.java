@@ -154,6 +154,7 @@ public final class InstanceCreationDialog extends CreationDialog {
 			remove(constructorCombo);
 			
 			Class<?> searchResult = (Class<?>) evt.getNewValue();
+			// TODO 基本型が検索されたらエラーになるように
 			addComboBox(searchResult.getDeclaredConstructors());
 			
 			revalidate();
