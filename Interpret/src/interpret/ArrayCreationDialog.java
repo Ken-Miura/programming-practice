@@ -78,8 +78,9 @@ public final class ArrayCreationDialog extends CreationDialog {
 					assert componentType != null; //　クラス検索が行われた後なのでこの時点でnullはあり得ない
 					createAndSetArrayInstance(componentType);
 					
-					// TODO
-					new ArrayOperationDialog(getInstance()).setVisible(true);
+					ArrayOperationDialog arrayOperationDialog = new ArrayOperationDialog(getInstance());
+					arrayOperationDialog.setLocation(ArrayCreationDialog.this.getLocation());
+					arrayOperationDialog.setVisible(true);
 					
 					dispose();
 				} catch (IllegalArgumentException e) {

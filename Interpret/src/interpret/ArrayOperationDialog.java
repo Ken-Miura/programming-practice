@@ -84,6 +84,7 @@ public final class ArrayOperationDialog extends InstanceHoldingDialog {
 			@Override
 			public void actionPerformed(ActionEvent evt) {
 				if (length == 0) {
+					JOptionPane.showMessageDialog(null, "空配列なので要素の値変更は出来ません", "エラー", JOptionPane.ERROR_MESSAGE);
 					return;
 				}
 				try {
@@ -118,9 +119,13 @@ public final class ArrayOperationDialog extends InstanceHoldingDialog {
 					return;
 				}
 				if (o.getClass().isArray()) {
-					new ArrayOperationDialog(o).setVisible(true);	
+					ArrayOperationDialog arrayOperationDialog = new ArrayOperationDialog(o);
+					arrayOperationDialog.setLocation(ArrayOperationDialog.this.getLocation());
+					arrayOperationDialog.setVisible(true);	
 				} else {
-					new InstanceOperationDialog(o).setVisible(true);	
+					InstanceOperationDialog instanceOperationDialog = new InstanceOperationDialog(o);
+					instanceOperationDialog.setLocation(ArrayOperationDialog.this.getLocation());
+					instanceOperationDialog.setVisible(true);	
 				}
 			}
 		});
@@ -222,6 +227,7 @@ public final class ArrayOperationDialog extends InstanceHoldingDialog {
 		} else if (componentType == String.class) {
 			JTextField text = TextFieldUtil.createStringTextField();
 			text.setName(STRING);
+			panel.add(text, componentConstraints);
 			elementComponent = text;
 		} else {
 			addInstanceCreationButton(componentType);
@@ -244,6 +250,7 @@ public final class ArrayOperationDialog extends InstanceHoldingDialog {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				instanceHoldingDialog.setLocation(ArrayOperationDialog.this.getLocation());
 				instanceHoldingDialog.setVisible(true);
 			}
 		});
