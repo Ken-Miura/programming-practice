@@ -83,6 +83,9 @@ public final class ArrayOperationDialog extends InstanceHoldingDialog {
 			
 			@Override
 			public void actionPerformed(ActionEvent evt) {
+				if (length == 0) {
+					return;
+				}
 				try {
 					setValueIntoElement();
 				} catch (InvalidInputException e) {
