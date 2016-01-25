@@ -128,7 +128,9 @@ public final class InstanceCreationDialog extends CreationDialog {
 			public void actionPerformed(ActionEvent evt) {
 				try {
 					createAndSetInstance((Constructor<?>)constructorCombo.getSelectedItem());
-					new InstanceOperationDialog(getInstance()).setVisible(true);
+					InstanceOperationDialog instanceOperationDialog = new InstanceOperationDialog(getInstance());
+					instanceOperationDialog.setLocation(InstanceCreationDialog.this.getLocation());
+					instanceOperationDialog.setVisible(true);
 					dispose();
 				} catch (InstantiationException | IllegalAccessException | IllegalArgumentException e) {
 					e.printStackTrace();
