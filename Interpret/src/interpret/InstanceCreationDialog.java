@@ -149,12 +149,17 @@ public final class InstanceCreationDialog extends CreationDialog {
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		if (evt.getPropertyName().equals(ClassSearchPanel.SEARCH_RESULT_KEY)) {
+			
+			Class<?> searchResult = (Class<?>) evt.getNewValue();
+			if (searchResult.isPrimitive()) {
+				JOptionPane.showMessageDialog(null, "基本型はインスタンス化できません", "クラス検索失敗", JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+			
 			remove(constructoComboLabel);
 			constructorCombo.removeAllItems();
 			remove(constructorCombo);
 			
-			Class<?> searchResult = (Class<?>) evt.getNewValue();
-			// TODO 基本型が検索されたらエラーになるように
 			addComboBox(searchResult.getDeclaredConstructors());
 			
 			revalidate();
