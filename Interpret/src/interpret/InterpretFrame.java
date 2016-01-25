@@ -30,9 +30,6 @@ public final class InterpretFrame extends JFrame {
 	private final JButton instanceCreationButton = new JButton ("インスタンスを生成する");
 	private final JButton arrayCreationButton = new JButton ("配列を生成する");
 	
-	private final InstanceHoldingDialog instanceDialog = new InstanceCreationDialog(null);
-	private final InstanceHoldingDialog arrayDialog = new ArrayCreationDialog(null);
-	
 	public InterpretFrame() {
 		setTitle(TITLE);
 		setSize(WIDTH, HEIGHT);
@@ -43,6 +40,7 @@ public final class InterpretFrame extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				InstanceHoldingDialog instanceDialog = new InstanceCreationDialog(null);
 				instanceDialog.setLocation(getLocation());
 				instanceDialog.setVisible(true);
 			}
@@ -52,6 +50,7 @@ public final class InterpretFrame extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				InstanceHoldingDialog arrayDialog = new ArrayCreationDialog(null);
 				arrayDialog.setLocation(getLocation());
 				arrayDialog.setVisible(true);
 			}
