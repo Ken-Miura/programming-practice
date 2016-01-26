@@ -17,7 +17,6 @@ import java.util.Objects;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -57,20 +56,12 @@ final class FieldPanel extends JPanel {
 	private final JButton modifyValueButton = new JButton("値を変更する");
 	private Component fieldComponent = null;
 	
-	private final JDialog jDialog; // 出現位置合わせ用
-	
 	private FieldPanel (Object instance, PropertyChangeListener listener) {
 		super (new GridBagLayout());
 		this.instance = Objects.requireNonNull(instance, "instance must not be null");
 		Objects.requireNonNull(listener, "listener must not be null");
 		notifier = new PropertyChangeSupport(this);
 		notifier.addPropertyChangeListener(listener);
-		
-		if (listener instanceof JDialog) {
-			jDialog = (JDialog) listener;
-		} else {
-			jDialog = null;
-		}
 		
 		componentConstraints.insets = new Insets(MARGIN, MARGIN, MARGIN, MARGIN);
 		componentConstraints.anchor = GridBagConstraints.CENTER;
@@ -264,9 +255,7 @@ final class FieldPanel extends JPanel {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (jDialog != null) {
-					instanceHoldingDialog.setLocation(jDialog.getLocation());
-				}
+				instanceHoldingDialog.setLocationRelativeTo(null);
 				instanceHoldingDialog.setVisible(true);
 			}
 		});
@@ -302,15 +291,11 @@ final class FieldPanel extends JPanel {
 				}
 				if (o.getClass().isArray()) {
 					ArrayOperationDialog  arrayOperationDialog = new ArrayOperationDialog(o);
-					if (jDialog != null) {
-						arrayOperationDialog.setLocation(jDialog.getLocation());
-					}
+					arrayOperationDialog.setLocationRelativeTo(null);
 					arrayOperationDialog.setVisible(true);
 				} else {
 					InstanceOperationDialog instanceOperationDialog = new InstanceOperationDialog(o);
-					if (jDialog != null) {
-						instanceOperationDialog.setLocation(jDialog.getLocation());
-					}
+					instanceOperationDialog.setLocationRelativeTo(null);
 					instanceOperationDialog.setVisible(true);
 				}
 			}

@@ -14,7 +14,9 @@ public final class Interpret {
 
 			@Override
 			public void run() {
-				new InterpretFrame();
+				InterpretFrame interpretFrame = new InterpretFrame();
+				interpretFrame.setLocationRelativeTo(null);
+				interpretFrame.setVisible(true);
 			}
 			
 		});

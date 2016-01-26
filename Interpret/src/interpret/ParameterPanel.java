@@ -276,6 +276,7 @@ final class ParameterPanel extends JPanel implements PropertyChangeListener {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				instanceHoldingDialog.setLocationRelativeTo(null);
 				instanceHoldingDialog.setVisible(true);
 			}
 		});

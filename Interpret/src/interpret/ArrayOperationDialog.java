@@ -120,11 +120,11 @@ public final class ArrayOperationDialog extends InstanceHoldingDialog {
 				}
 				if (o.getClass().isArray()) {
 					ArrayOperationDialog arrayOperationDialog = new ArrayOperationDialog(o);
-					arrayOperationDialog.setLocation(ArrayOperationDialog.this.getLocation());
+					arrayOperationDialog.setLocationRelativeTo(null);
 					arrayOperationDialog.setVisible(true);	
 				} else {
 					InstanceOperationDialog instanceOperationDialog = new InstanceOperationDialog(o);
-					instanceOperationDialog.setLocation(ArrayOperationDialog.this.getLocation());
+					instanceOperationDialog.setLocationRelativeTo(null);
 					instanceOperationDialog.setVisible(true);	
 				}
 			}
@@ -250,7 +250,7 @@ public final class ArrayOperationDialog extends InstanceHoldingDialog {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				instanceHoldingDialog.setLocation(ArrayOperationDialog.this.getLocation());
+				instanceHoldingDialog.setLocationRelativeTo(null);
 				instanceHoldingDialog.setVisible(true);
 			}
 		});

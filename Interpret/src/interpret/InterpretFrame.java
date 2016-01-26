@@ -41,7 +41,7 @@ public final class InterpretFrame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				InstanceHoldingDialog instanceDialog = new InstanceCreationDialog(null);
-				instanceDialog.setLocation(getLocation());
+				instanceDialog.setLocationRelativeTo(null);
 				instanceDialog.setVisible(true);
 			}
 		});
@@ -51,7 +51,7 @@ public final class InterpretFrame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				InstanceHoldingDialog arrayDialog = new ArrayCreationDialog(null);
-				arrayDialog.setLocation(getLocation());
+				arrayDialog.setLocationRelativeTo(null);
 				arrayDialog.setVisible(true);
 			}
 		});
@@ -69,7 +69,5 @@ public final class InterpretFrame extends JFrame {
 		buttonArea.add(arrayCreationButton, componetConstraints);
 		
 		add(buttonArea, "Center");
-		
-		setVisible(true);
 	}
 }

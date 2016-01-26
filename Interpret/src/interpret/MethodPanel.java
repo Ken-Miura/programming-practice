@@ -18,7 +18,6 @@ import java.util.Objects;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -48,8 +47,6 @@ final class MethodPanel extends JPanel {
 	private final JButton contentsButton = new JButton();
 	private final PropertyChangeSupport notifier;
 	
-	private final JDialog jDialog; // 出現位置合わせ用
-	
 	private MethodPanel (Object instance, PropertyChangeListener listener) {
 		super(new GridBagLayout());
 		this.instance = Objects.requireNonNull(instance, "instance must not be null");
@@ -57,12 +54,6 @@ final class MethodPanel extends JPanel {
 		notifier = new PropertyChangeSupport(this);
 		notifier.addPropertyChangeListener(parameterPanel);
 		notifier.addPropertyChangeListener(listener);
-		
-		if (listener instanceof JDialog) {
-			jDialog = (JDialog) listener;
-		} else {
-			jDialog = null;
-		}
 		
 		componentConstraints.fill = GridBagConstraints.NONE;
 		componentConstraints.anchor = GridBagConstraints.CENTER;
@@ -161,9 +152,7 @@ final class MethodPanel extends JPanel {
 							@Override
 							public void actionPerformed(ActionEvent e) {
 								ArrayOperationDialog arrayOperationDialog = new ArrayOperationDialog(returnValue);
-								if (jDialog != null) {
-									arrayOperationDialog.setLocation(jDialog.getLocation());
-								}
+								arrayOperationDialog.setLocationRelativeTo(null);
 								arrayOperationDialog.setVisible(true);	
 							}
 						});
@@ -174,9 +163,7 @@ final class MethodPanel extends JPanel {
 							@Override
 							public void actionPerformed(ActionEvent e) {
 								InstanceOperationDialog instanceOperationDialog = new InstanceOperationDialog(returnValue);
-								if (jDialog != null) {
-									instanceOperationDialog.setLocation(jDialog.getLocation());
-								}
+								instanceOperationDialog.setLocationRelativeTo(null);
 								instanceOperationDialog.setVisible(true);									
 							}
 						});

@@ -79,7 +79,7 @@ public final class ArrayCreationDialog extends CreationDialog {
 					createAndSetArrayInstance(componentType);
 					
 					ArrayOperationDialog arrayOperationDialog = new ArrayOperationDialog(getInstance());
-					arrayOperationDialog.setLocation(ArrayCreationDialog.this.getLocation());
+					arrayOperationDialog.setLocationRelativeTo(null);
 					arrayOperationDialog.setVisible(true);
 					
 					dispose();
