@@ -112,6 +112,10 @@ public final class ArrayOperationDialog extends InstanceHoldingDialog {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				if (length == 0) {
+					JOptionPane.showMessageDialog(null, "空配列なので内容の確認は出来ません", "エラー", JOptionPane.ERROR_MESSAGE);
+					return;
+				}
 				int index = (Integer) arraySizeSpinner.getValue();
 				Object o = Array.get(getInstance(), index);
 				if (o == null) {
