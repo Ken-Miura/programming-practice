@@ -29,10 +29,6 @@ public final class DigitalClock extends JFrame {
 
 	private static final class DigitalClockCanvas extends JPanel {
 
-		/**
-		 * Ver 1.0
-		 */
-		private static final long serialVersionUID = -546560808092491620L;
 		private final int frameWidth;
 		private final int stringHeight;
 		private final int frameHeight;
@@ -72,7 +68,6 @@ public final class DigitalClock extends JFrame {
 	private static final int FONT_SIZE = 128;
 	private static final long INTERVAL = 1000; /* ミリ秒単位 */
 	private final DigitalClockCanvas canvas;
-	private final Timer timer;
 
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(() -> {
@@ -97,7 +92,7 @@ public final class DigitalClock extends JFrame {
 
 		setSize(canvas.getFrameWidth(), canvas.getFrameHeight());
 		
-		timer = new Timer(true);
+		Timer timer = new Timer(true);
 		timer.scheduleAtFixedRate(new TimerTask() {
 			@Override
 			public void run() {
