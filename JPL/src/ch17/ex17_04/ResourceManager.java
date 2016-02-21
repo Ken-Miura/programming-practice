@@ -48,11 +48,12 @@ public final class ResourceManager {
 	
 	class ReaperThread extends Thread {
 		private boolean shouldShutdown = false;
+		private final static long INTERVAL = 1000;
 		
 		public void run () {
-			while (!shouldShutdown && queue.poll() != null) {
+			Reference<?> ref = null;
+			while (!shouldShutdown && (ref = queue.poll()) != null) {
 				try {
-					Reference<?> ref = queue.remove();
 					Resource res = null;
 					synchronized (ResourceManager.this) {
 						res = refs.get(ref);
@@ -60,6 +61,7 @@ public final class ResourceManager {
 					}
 					res.release();
 					ref.clear();
+					Thread.sleep(INTERVAL);
 				} catch (InterruptedException e) {
 					shouldShutdown = true;
 				}

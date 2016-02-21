@@ -29,34 +29,34 @@ public final class ResourceManager {
 	public synchronized void shutdown () {
 		if (!shutdown) {
 			shutdown = true;
-			while (queue.poll() != null) {
-				Reference<?> polledRef = queue.poll();
-				Resource polledRes = null;
-				polledRes = refs.get(polledRef);
-				refs.remove(polledRef);
-				polledRes.release();
-				polledRef.clear();				
-			}
+			releaseWhileQueueIsNotEmpty();
 		}
 	}
 	
+	/**
+	 * リソース獲得前にリリースできるものがあれば開放する
+	 **/
 	public synchronized Resource getResource (Object key) {
 		if (shutdown) {
 			throw new IllegalStateException();
 		}
+		
+		releaseWhileQueueIsNotEmpty();
+		
 		Resource res = new ResourceImpl(key);
 		Reference<?> ref = new PhantomReference<Object>(key, queue);
-		refs.put(ref, res);
-		
-		Reference<?> polledRef = queue.poll();
-		Resource polledRes = null;
-		if (polledRef != null) {
+		refs.put(ref, res);		
+		return res;
+	}
+	
+	private void releaseWhileQueueIsNotEmpty () {
+		while (queue.poll() != null) {
+			Reference<?> polledRef = queue.poll();
+			Resource polledRes = null;
 			polledRes = refs.get(polledRef);
 			refs.remove(polledRef);
 			polledRes.release();
-			polledRef.clear();
+			polledRef.clear();				
 		}
-		
-		return res;
 	}
 }
