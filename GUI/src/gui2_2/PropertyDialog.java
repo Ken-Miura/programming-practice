@@ -7,6 +7,7 @@ import java.awt.Font;
 import java.awt.GraphicsEnvironment;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeListener;
@@ -15,6 +16,7 @@ import java.beans.PropertyChangeSupport;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 /**
@@ -25,9 +27,9 @@ import javax.swing.JPanel;
 @SuppressWarnings("serial")
 final class PropertyDialog extends JDialog {
 
-	private static final int WIDTH = 300;
+	private static final int WIDTH = 400;
 	private static final int HEIGHT = 300;
-	private static final int FONT_SIZE = 24;
+	private static final int FONT_SIZE = 60;
 	
 	private final JPanel propertyArea = new JPanel(new GridBagLayout());
 	private final JPanel okCancelArea = new JPanel(new FlowLayout(FlowLayout.RIGHT));
@@ -45,10 +47,10 @@ final class PropertyDialog extends JDialog {
 	{
 		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		fontSet = ge.getAllFonts();
-		final int FONT_SIZE_NUM = 30;
+		final int FONT_SIZE_NUM = 31;
 		fontSizeSet = new int[FONT_SIZE_NUM];
 		for (int i=0; i<FONT_SIZE_NUM; i++) {
-			fontSizeSet[i] = 10 + (i * 10);
+			fontSizeSet[i] = 100 + (i * 10);
 		}
 		
 		for (Font f: fontSet) {
@@ -86,9 +88,56 @@ final class PropertyDialog extends JDialog {
 		setTitle("property");
 		setSize(WIDTH, HEIGHT);
 		setFont(new Font(null, Font.PLAIN, FONT_SIZE));
+		propertyArea.setFont(getFont());
+		okCancelArea.setFont(getFont());
 		
 		GridBagConstraints componentConstraints = new GridBagConstraints();
-		// TODO
+		final int MARGIN = 5;
+		componentConstraints.insets = new Insets(MARGIN, MARGIN, MARGIN, MARGIN);
+		
+		componentConstraints.gridx = 0;
+		componentConstraints.gridy = 0;
+		componentConstraints.anchor = GridBagConstraints.EAST;
+		componentConstraints.fill = GridBagConstraints.NONE;
+		propertyArea.add(new JLabel("font"), componentConstraints);
+		componentConstraints.gridx = 1;
+		componentConstraints.gridy = 0;
+		componentConstraints.anchor = GridBagConstraints.WEST;
+		componentConstraints.fill = GridBagConstraints.HORIZONTAL;
+		propertyArea.add(fontCombo, componentConstraints);
+
+		componentConstraints.gridx = 0;
+		componentConstraints.gridy = 1;
+		componentConstraints.anchor = GridBagConstraints.EAST;
+		componentConstraints.fill = GridBagConstraints.NONE;
+		propertyArea.add(new JLabel("font size"), componentConstraints);
+		componentConstraints.gridx = 1;
+		componentConstraints.gridy = 1;
+		componentConstraints.anchor = GridBagConstraints.WEST;
+		componentConstraints.fill = GridBagConstraints.HORIZONTAL;
+		propertyArea.add(fontSizeCombo, componentConstraints);
+		
+		componentConstraints.gridx = 0;
+		componentConstraints.gridy = 2;
+		componentConstraints.anchor = GridBagConstraints.EAST;
+		componentConstraints.fill = GridBagConstraints.NONE;
+		propertyArea.add(new JLabel("font color"), componentConstraints);
+		componentConstraints.gridx = 1;
+		componentConstraints.gridy = 2;
+		componentConstraints.anchor = GridBagConstraints.WEST;
+		componentConstraints.fill = GridBagConstraints.HORIZONTAL;
+		propertyArea.add(fontColorCombo, componentConstraints);
+		
+		componentConstraints.gridx = 0;
+		componentConstraints.gridy = 3;
+		componentConstraints.anchor = GridBagConstraints.EAST;
+		componentConstraints.fill = GridBagConstraints.NONE;
+		propertyArea.add(new JLabel("background color"), componentConstraints);
+		componentConstraints.gridx = 1;
+		componentConstraints.gridy = 3;
+		componentConstraints.anchor = GridBagConstraints.WEST;
+		componentConstraints.fill = GridBagConstraints.HORIZONTAL;
+		propertyArea.add(backgroundColorCombo, componentConstraints);
 		
 		add(propertyArea, "Center");
 		
@@ -125,7 +174,7 @@ final class PropertyDialog extends JDialog {
 		backgroundColorOnOpening = digitalClock.canvasBackgroungColor();
 		
 		fontCombo.setSelectedItem(fontOnOpening.getFontName());
-		fontSizeCombo.setSelectedIndex(fontOnOpening.getSize());
+		fontSizeCombo.setSelectedItem(fontOnOpening.getSize());
 		fontColorCombo.setSelectedItem(ColorNameConverter.convertColorToName(fontColorOnOpening));
 		backgroundColorCombo.setSelectedItem(ColorNameConverter.convertColorToName(backgroundColorOnOpening));
 	}

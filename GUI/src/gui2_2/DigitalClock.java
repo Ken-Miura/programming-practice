@@ -91,7 +91,7 @@ public final class DigitalClock extends JFrame implements PropertyChangeListener
 	}
 	
 	private static final String TITLE = "DIGITAL CLOCK";
-	private static final int FONT_SIZE = 128;
+	private static final int FONT_SIZE = 100;
 	private static final long INTERVAL = 1000; /* ミリ秒単位 */
 	private final PropertyDialog propertyDialog;
 	private final DigitalClockCanvas canvas;
