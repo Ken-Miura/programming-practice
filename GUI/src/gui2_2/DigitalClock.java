@@ -33,7 +33,7 @@ import javax.swing.SwingUtilities;
 /* シリアライズして利用することを想定しない */
 @SuppressWarnings("serial")
 public final class DigitalClock extends JFrame implements PropertyChangeListener {
-
+	
 	private static final class DigitalClockCanvas extends JPanel {
 
 		private int canvasWidth;
@@ -89,6 +89,11 @@ public final class DigitalClock extends JFrame implements PropertyChangeListener
 			return backgroungColor;
 		}
 	}
+	
+	static final String FONT_EVT = "FONT_EVT";
+	static final String FONT_SIZE_EVT = "FONT_SIZE_EVT";
+	static final String FONT_COLOR_EVT = "FONT_COLOR_EVT";
+	static final String BACKGROUND_COLOR_EVT = "BACKGROUND_COLOR_EVT";
 	
 	private static final String TITLE = "DIGITAL CLOCK";
 	private static final int FONT_SIZE = 100;
@@ -159,7 +164,16 @@ public final class DigitalClock extends JFrame implements PropertyChangeListener
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		// TODO 自動生成されたメソッド・スタブ
-		
+		if (evt.getPropertyName().equals(FONT_EVT)) {
+			System.out.println("font");
+		} else if (evt.getPropertyName().equals(FONT_SIZE_EVT)) {
+			System.out.println("font size");
+		} else if (evt.getPropertyName().equals(FONT_COLOR_EVT)) {
+			System.out.println("font color");
+		} else if (evt.getPropertyName().equals(BACKGROUND_COLOR_EVT)) {
+			System.out.println("background color");
+		} else {
+			throw new AssertionError("not to be passed");
+		}
 	}
 }

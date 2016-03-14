@@ -10,6 +10,8 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
@@ -82,6 +84,7 @@ final class PropertyDialog extends JDialog {
 		}
 		digitalClock = (DigitalClock) listener;
 		notifier = new PropertyChangeSupport(listener);
+		notifier.addPropertyChangeListener(listener);
 		
 		setResizable(false);
 		setModal(true);
@@ -158,6 +161,49 @@ final class PropertyDialog extends JDialog {
 		okCancelArea.add(okButton);
 		okCancelArea.add(cancelButton);
 		add(okCancelArea, "South");
+		
+		fontCombo.addItemListener(new ItemListener() {
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				String selectedFontString = (String) fontCombo.getSelectedItem();
+				Font selectedFont = null;
+				for (final Font f: fontSet) {
+					if (selectedFontString.equals(f.toString())) {
+						selectedFont = f;
+						break;
+					}
+				}
+				assert selectedFont != null;
+				notifier.firePropertyChange(DigitalClock.FONT_EVT, null, selectedFont);
+			}
+		});
+		
+		fontSizeCombo.addItemListener(new ItemListener() {
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				int selectedFontSize = (int) fontSizeCombo.getSelectedItem();
+				notifier.firePropertyChange(DigitalClock.FONT_SIZE_EVT, null, selectedFontSize);
+			}
+		});
+		
+		fontColorCombo.addItemListener(new ItemListener() {
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				String selectedColorString = (String) fontColorCombo.getSelectedItem();
+				Color selectedColor = ColorNameConverter.convertNameToColor(selectedColorString);
+				notifier.firePropertyChange(DigitalClock.FONT_COLOR_EVT, null, selectedColor);
+			}
+		});
+		
+		backgroundColorCombo.addItemListener(new ItemListener() {
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				String selectedColorString = (String) backgroundColorCombo.getSelectedItem();
+				Color selectedColor = ColorNameConverter.convertNameToColor(selectedColorString);
+				notifier.firePropertyChange(DigitalClock.BACKGROUND_COLOR_EVT, null, selectedColor);
+			}
+		});
+
 	}
 
 	@Override
