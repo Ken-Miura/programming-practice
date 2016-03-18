@@ -175,5 +175,6 @@ public final class DigitalClock extends JFrame implements PropertyChangeListener
 		} else {
 			throw new AssertionError("not to be passed");
 		}
+		System.out.println(evt.getNewValue());
 	}
 }

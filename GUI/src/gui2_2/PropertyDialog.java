@@ -54,9 +54,8 @@ final class PropertyDialog extends JDialog {
 		for (int i=0; i<FONT_SIZE_NUM; i++) {
 			fontSizeSet[i] = 100 + (i * 10);
 		}
-		
-		for (Font f: fontSet) {
-			fontCombo.addItem(f.getFontName());
+		for (int i=0; i<fontSet.length; i++) {
+			fontCombo.addItem(fontSet[i].getFontName());
 		}
 		for (int n: fontSizeSet) {
 			fontSizeCombo.addItem(n);
@@ -166,15 +165,12 @@ final class PropertyDialog extends JDialog {
 			@Override
 			public void itemStateChanged(ItemEvent e) {
 				String selectedFontString = (String) fontCombo.getSelectedItem();
-				Font selectedFont = null;
 				for (final Font f: fontSet) {
-					if (selectedFontString.equals(f.toString())) {
-						selectedFont = f;
+					if (selectedFontString.equals(f.getFontName())) {
+						notifier.firePropertyChange(DigitalClock.FONT_EVT, null, f);
 						break;
 					}
 				}
-				assert selectedFont != null;
-				notifier.firePropertyChange(DigitalClock.FONT_EVT, null, selectedFont);
 			}
 		});
 		
