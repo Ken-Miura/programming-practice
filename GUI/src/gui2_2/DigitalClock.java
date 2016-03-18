@@ -40,21 +40,16 @@ public final class DigitalClock extends JFrame implements PropertyChangeListener
 		private int stringHeight;
 		private int canvasHeight;
 		
-		private Font font = new Font(null, Font.PLAIN, FONT_SIZE);
 		private Color fontColor = Color.BLACK;
-		private Color backgroungColor = Color.WHITE;
 		private final Graphics graphics;
 		
 		DigitalClockCanvas (Graphics graphics) {
 			assert graphics != null;
-			setFont(font);
-			setBackground(backgroungColor);
 			this.graphics = graphics;
-			FontMetrics fm = this.graphics.getFontMetrics(font);
-			canvasWidth = fm.stringWidth("00:00:00");
-			stringHeight = fm.getAscent(); /* 数字のみの表示で、ベースラインから上端までで十分なのでgetAscent */
-			int margin = stringHeight / 3; /* 数字の下側のマージン。値は見た目を調整しながら適当に */
-			canvasHeight = stringHeight + margin;
+			Font font = new Font(null, Font.PLAIN, FONT_SIZE);
+			setFont(font);
+			setBackground(Color.WHITE);
+			setCanvasWidthAndHeight(font);
 		}
 		
 		@Override
@@ -77,16 +72,20 @@ public final class DigitalClock extends JFrame implements PropertyChangeListener
 			return canvasHeight;
 		}
 
-		public final Font getFont() {
-			return font;
-		}
-
 		public final Color getFontColor() {
 			return fontColor;
 		}
+		
+		public final void setFontColor (Color fontColor) {
+			this.fontColor = fontColor;
+		}
 
-		public final Color getBackgroungColor() {
-			return backgroungColor;
+		public final void setCanvasWidthAndHeight (Font font) {
+			FontMetrics fm = graphics.getFontMetrics(font);
+			canvasWidth = fm.stringWidth("00:00:00");
+			stringHeight = fm.getAscent(); /* 数字のみの表示で、ベースラインから上端までで十分なのでgetAscent */
+			int margin = stringHeight / 3; /* 数字の下側のマージン。値は見た目を調整しながら適当に */
+			canvasHeight = stringHeight + margin;
 		}
 	}
 	
@@ -159,22 +158,31 @@ public final class DigitalClock extends JFrame implements PropertyChangeListener
 	}
 
 	public final Color canvasBackgroungColor() {
-		return canvas.getBackgroungColor();
+		return canvas.getBackground();
 	}	
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		if (evt.getPropertyName().equals(FONT_EVT)) {
-			System.out.println("font");
+			Font selectedFont = (Font) evt.getNewValue();
+			Font newFont = selectedFont.deriveFont((float) canvas.getFont().getSize());
+			canvas.setFont(newFont);
+			canvas.setCanvasWidthAndHeight(newFont);
 		} else if (evt.getPropertyName().equals(FONT_SIZE_EVT)) {
-			System.out.println("font size");
+			int selectedFontSize = (int) evt.getNewValue();
+			Font newFont = canvas.getFont().deriveFont((float)selectedFontSize);
+			canvas.setFont(newFont);
+			canvas.setCanvasWidthAndHeight(newFont);
 		} else if (evt.getPropertyName().equals(FONT_COLOR_EVT)) {
-			System.out.println("font color");
+			Color selectedFontColor = (Color) evt.getNewValue();
+			canvas.setFontColor(selectedFontColor);
 		} else if (evt.getPropertyName().equals(BACKGROUND_COLOR_EVT)) {
-			System.out.println("background color");
+			Color selectedBackgroundColor = (Color) evt.getNewValue();
+			canvas.setBackground(selectedBackgroundColor);
 		} else {
 			throw new AssertionError("not to be passed");
 		}
-		System.out.println(evt.getNewValue());
+		setSize(insets.left + canvas.canvasWidth() + insets.right, 
+				insets.top + canvas.canvasHeight() + insets.bottom);
 	}
 }

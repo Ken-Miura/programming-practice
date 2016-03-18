@@ -154,7 +154,11 @@ final class PropertyDialog extends JDialog {
 		cancelButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO
+				notifier.firePropertyChange(DigitalClock.FONT_EVT, null, fontOnOpening);
+				notifier.firePropertyChange(DigitalClock.FONT_SIZE_EVT, null, fontOnOpening.getSize());
+				notifier.firePropertyChange(DigitalClock.FONT_COLOR_EVT, null, fontColorOnOpening);
+				notifier.firePropertyChange(DigitalClock.BACKGROUND_COLOR_EVT, null, backgroundColorOnOpening);
+				dispose();
 			}
 		});
 		okCancelArea.add(okButton);
