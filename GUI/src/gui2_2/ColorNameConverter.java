@@ -3,6 +3,7 @@ package gui2_2;
 
 import java.awt.Color;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -50,5 +51,9 @@ final class ColorNameConverter {
 	
 	static Set<String> getColorNameSet () {
 		return colorSet.keySet();
+	}
+	
+	static Set<Color> getColorSet () {
+		return new HashSet<Color>(colorSet.values());
 	}
 }

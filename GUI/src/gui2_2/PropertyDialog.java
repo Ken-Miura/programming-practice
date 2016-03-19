@@ -41,31 +41,37 @@ final class PropertyDialog extends JDialog {
 	
 	private final JComboBox<String> fontCombo = new JComboBox<>();
 	private final JComboBox<Integer> fontSizeCombo = new JComboBox<>();
-	private final JComboBox<String> fontColorCombo = new JComboBox<>();
-	private final JComboBox<String> backgroundColorCombo = new JComboBox<>();
+	private final JComboBox<Color> fontColorCombo = new JComboBox<>();
+	private final JComboBox<Color> backgroundColorCombo = new JComboBox<>();
 	
 	private final Font[] fontSet;
 	private final int[] fontSizeSet;
 	{
 		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		fontSet = ge.getAllFonts();
+		for (int i=0; i<fontSet.length; i++) {
+			fontCombo.addItem(fontSet[i].getFontName());
+		}
 		final int FONT_SIZE_NUM = 31;
 		fontSizeSet = new int[FONT_SIZE_NUM];
 		for (int i=0; i<FONT_SIZE_NUM; i++) {
 			fontSizeSet[i] = 100 + (i * 10);
 		}
-		for (int i=0; i<fontSet.length; i++) {
-			fontCombo.addItem(fontSet[i].getFontName());
-		}
 		for (int n: fontSizeSet) {
 			fontSizeCombo.addItem(n);
 		}
-		for (String color: ColorNameConverter.getColorNameSet()) {
+		for (Color color: ColorNameConverter.getColorSet()) {
 			fontColorCombo.addItem(color);
 		}
-		for (String color: ColorNameConverter.getColorNameSet()) {
+		for (Color color: ColorNameConverter.getColorSet()) {
 			backgroundColorCombo.addItem(color);
 		}
+		
+		fontColorCombo.setEditable(false);
+		backgroundColorCombo.setEditable(false);
+		ItemWithColorTip item = new ItemWithColorTip();
+		fontColorCombo.setRenderer(item);
+		backgroundColorCombo.setRenderer(item);
 	}
 	
 	private final JButton okButton;
@@ -189,8 +195,7 @@ final class PropertyDialog extends JDialog {
 		fontColorCombo.addItemListener(new ItemListener() {
 			@Override
 			public void itemStateChanged(ItemEvent e) {
-				String selectedColorString = (String) fontColorCombo.getSelectedItem();
-				Color selectedColor = ColorNameConverter.convertNameToColor(selectedColorString);
+				Color selectedColor = (Color) fontColorCombo.getSelectedItem();
 				notifier.firePropertyChange(DigitalClock.FONT_COLOR_EVT, null, selectedColor);
 			}
 		});
@@ -198,8 +203,7 @@ final class PropertyDialog extends JDialog {
 		backgroundColorCombo.addItemListener(new ItemListener() {
 			@Override
 			public void itemStateChanged(ItemEvent e) {
-				String selectedColorString = (String) backgroundColorCombo.getSelectedItem();
-				Color selectedColor = ColorNameConverter.convertNameToColor(selectedColorString);
+				Color selectedColor = (Color) backgroundColorCombo.getSelectedItem();
 				notifier.firePropertyChange(DigitalClock.BACKGROUND_COLOR_EVT, null, selectedColor);
 			}
 		});
