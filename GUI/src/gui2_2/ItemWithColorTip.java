@@ -3,6 +3,7 @@ package gui2_2;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.net.URL;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -18,20 +19,19 @@ import javax.swing.ListCellRenderer;
 public final class ItemWithColorTip extends JLabel implements
 		ListCellRenderer<Color> {
 
-	private static final Icon BLACK_ICON = new ImageIcon("./colors/Black.png");
-	private static final Icon BLUE_ICON = new ImageIcon("./colors/Blue.png");
-	private static final Icon CYAN_ICON = new ImageIcon("./colors/Cyan.png");
-	private static final Icon DARK_GRAY_ICON = new ImageIcon("./colors/DarkGray.png");
-	private static final Icon GRAY_ICON = new ImageIcon("./colors/Gray.png");
-	private static final Icon GREEN_ICON = new ImageIcon("./colors/Green.png");
-	private static final Icon LIGHT_GRAY_ICON = new ImageIcon("./colors/LightGray.png");
-	private static final Icon MAGENTA_ICON = new ImageIcon("./colors/Magenta.png");
-	private static final Icon ORANGE_ICON = new ImageIcon("./colors/Orange.png");
-	private static final Icon PINK_ICON = new ImageIcon("./colors/Pink.png");
-	private static final Icon RED_ICON = new ImageIcon("./colors/Red.png");
-	private static final Icon WHITE_ICON = new ImageIcon("./colors/White.png");
-	private static final Icon YELLOW_ICON = new ImageIcon("./colors/Yellow.png");
-	
+	private final Icon BLACK_ICON = new ImageIcon(getURL("colors/Black.png"));
+	private final Icon BLUE_ICON = new ImageIcon(getURL("colors/Blue.png"));
+	private final Icon CYAN_ICON = new ImageIcon(getURL("colors/Cyan.png"));
+	private final Icon DARK_GRAY_ICON = new ImageIcon(getURL("colors/DarkGray.png"));
+	private final Icon GRAY_ICON = new ImageIcon(getURL("colors/Gray.png"));
+	private final Icon GREEN_ICON = new ImageIcon(getURL("colors/Green.png"));
+	private final Icon LIGHT_GRAY_ICON = new ImageIcon(getURL("colors/LightGray.png"));
+	private final Icon MAGENTA_ICON = new ImageIcon(getURL("colors/Magenta.png"));
+	private final Icon ORANGE_ICON = new ImageIcon(getURL("colors/Orange.png"));
+	private final Icon PINK_ICON = new ImageIcon(getURL("colors/Pink.png"));
+	private final Icon RED_ICON = new ImageIcon(getURL("colors/Red.png"));
+	private final Icon WHITE_ICON = new ImageIcon(getURL("colors/White.png"));
+	private final Icon YELLOW_ICON = new ImageIcon(getURL("colors/Yellow.png"));
 	
 	@Override
 	public Component getListCellRendererComponent(JList<? extends Color> list,
@@ -70,4 +70,8 @@ public final class ItemWithColorTip extends JLabel implements
 		return this;
 	}
 
+	private URL getURL (String fileName) {
+		URL url = getClass().getClassLoader().getResource(fileName);
+		return url;
+	}
 }
