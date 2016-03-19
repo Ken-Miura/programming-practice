@@ -225,7 +225,7 @@ final class PropertyDialog extends JDialog {
 		
 		fontCombo.setSelectedItem(fontOnOpening.getFontName());
 		fontSizeCombo.setSelectedItem(fontOnOpening.getSize());
-		fontColorCombo.setSelectedItem(ColorNameConverter.convertColorToName(fontColorOnOpening));
-		backgroundColorCombo.setSelectedItem(ColorNameConverter.convertColorToName(backgroundColorOnOpening));
+		fontColorCombo.setSelectedItem(fontColorOnOpening);
+		backgroundColorCombo.setSelectedItem(backgroundColorOnOpening);
 	}
 }
