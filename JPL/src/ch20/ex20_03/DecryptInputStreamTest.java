@@ -13,7 +13,7 @@ import org.junit.Test;
  * @author Ken Miura
  *
  */
-public class TestDecryptInputStream {
+public class DecryptInputStreamTest {
 
 	/**
 	 * {@link ch20.ex20_03.DecryptInputStream#read()} のためのテスト・メソッド。

@@ -13,7 +13,7 @@ import org.junit.Test;
  * @author Ken Miura
  *
  */
-public class TestTranslateByte {
+public class TranslateByteTest {
 
 	/**
 	 * {@link ch20.ex20_02.TranslateByte#read()} のためのテスト・メソッド。

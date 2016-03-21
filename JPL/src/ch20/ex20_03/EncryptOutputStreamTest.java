@@ -12,7 +12,7 @@ import org.junit.Test;
  * @author Ken Miura
  *
  */
-public class TestEncryptOutputStream {
+public class EncryptOutputStreamTest {
 
 	/**
 	 * {@link ch20.ex20_03.EncryptOutputStream#write(int)} のためのテスト・メソッド。
