@@ -16,3 +16,6 @@ JPL, 380, 1, 6, InvocationHandler.invokeの第一引数のproxyの使い道が�
 JPL, 395, 4, 4, 非システムリソースとは具体的にどのようなものか？
 JPL, 401, 3, 2, 注釈とは具体的にどのようなものがあるのか？
 Tiger, 113, 4, 1, RetentionPolicy.CLASSのアノテーションは、どのような使い道があるのか？
+
+JPL, 463, 3, 1, SequenceInputStreamは、例えばどんな状況で役に立つのでしょうか？
+JPL, 475, 2, 5, rwsモードが必要な状況がわかりません。
