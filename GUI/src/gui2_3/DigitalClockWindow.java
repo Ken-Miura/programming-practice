@@ -4,7 +4,6 @@ package gui2_3;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
-import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.HeadlessException;
@@ -45,7 +44,6 @@ final class DigitalClockWindow extends JWindow implements DigitalClockPropertyOb
 	public static final String[] EXCLUDED_FONTS = { "Bookshelf Symbol 7", "MT Extra", "Wide Latin", "Viner Hand ITC", "Vladimir Script", "Webdings", "Wingdings", "Wingdings 2", "Wingdings 3" };
 	
 	DigitalClockWindow() throws HeadlessException {
-		super(new Frame());
 		setVisible(true);
 		
 		Font font = new Font(DigitalClockProperty.PROPERTY.getFontName(), Font.PLAIN, DigitalClockProperty.PROPERTY.getFontSize());
