@@ -4,9 +4,6 @@ package gui2_3;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.GraphicsEnvironment;
-import java.awt.Menu;
-import java.awt.MenuItem;
-import java.awt.PopupMenu;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -15,9 +12,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JPopupMenu;
 
-final class DigitalClockPopupMenu extends PopupMenu {
+final class DigitalClockPopupMenu extends JPopupMenu {
 
 	/**
 	 * 
@@ -51,7 +51,7 @@ final class DigitalClockPopupMenu extends PopupMenu {
 		initBackgroungColorMenu();
 		
 		addSeparator();
-		MenuItem exitMenu = new MenuItem("exit");
+		JMenuItem exitMenu = new JMenuItem("exit");
 		exitMenu.addActionListener(new ActionListener() {
 			
 			@Override
@@ -63,7 +63,7 @@ final class DigitalClockPopupMenu extends PopupMenu {
 	}
 
 	private void initFontMenu() {
-		Menu fontMenu = new Menu("font");
+		JMenu fontMenu = new JMenu("font");
 		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		Font[] fontSet = ge.getAllFonts();
 		List<String> list = new ArrayList<>();
@@ -75,7 +75,7 @@ final class DigitalClockPopupMenu extends PopupMenu {
 			list.remove(DigitalClockWindow.EXCLUDED_FONTS[i]);
 		}
 		for (final String fontName: list) {
-			MenuItem mi = new MenuItem(fontName);
+			JMenuItem mi = new JMenuItem(fontName);
 			mi.addActionListener(new ActionListener() {
 				
 				@Override
@@ -91,11 +91,11 @@ final class DigitalClockPopupMenu extends PopupMenu {
 	}
 
 	private void initFontSizeMenu() {
-		Menu fontSizeMenu = new Menu("font size");
+		JMenu fontSizeMenu = new JMenu("font size");
 		int numOfFontSize = 30;
 		for (int i = 0; i<numOfFontSize; i++) {
 			int fontSize = i * 10 + 10;
-			MenuItem mi = new MenuItem(Integer.valueOf(fontSize).toString());
+			JMenuItem mi = new JMenuItem(Integer.valueOf(fontSize).toString());
 			mi.addActionListener(new ActionListener() {
 				
 				@Override
@@ -112,9 +112,9 @@ final class DigitalClockPopupMenu extends PopupMenu {
 	}
 
 	private void initFontColorMenu() {
-		Menu fontColorMenu = new Menu("font color");
+		JMenu fontColorMenu = new JMenu("font color");
 		for (final Entry<String, Color> colorEntry: colorSet.entrySet()) {
-			MenuItem mi = new MenuItem(colorEntry.getKey());
+			JMenuItem mi = new JMenuItem(colorEntry.getKey());
 			mi.addActionListener(new ActionListener() {
 				
 				@Override
@@ -134,9 +134,9 @@ final class DigitalClockPopupMenu extends PopupMenu {
 	}
 	
 	private void initBackgroungColorMenu() {
-		Menu bgColorMenu = new Menu("background color");
+		JMenu bgColorMenu = new JMenu("background color");
 		for (final Entry<String, Color> colorEntry: colorSet.entrySet()) {
-			MenuItem mi = new MenuItem(colorEntry.getKey());
+			JMenuItem mi = new JMenuItem(colorEntry.getKey());
 			mi.addActionListener(new ActionListener() {
 				
 				@Override

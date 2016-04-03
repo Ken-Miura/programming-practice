@@ -9,9 +9,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.HeadlessException;
 import java.awt.Image;
-import java.awt.PopupMenu;
 import java.awt.RenderingHints;
-import java.awt.Window;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -20,14 +18,17 @@ import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
-final class DigitalClockWindow extends Window implements DigitalClockPropertyObserver {
+import javax.swing.JPopupMenu;
+import javax.swing.JWindow;
+
+final class DigitalClockWindow extends JWindow implements DigitalClockPropertyObserver {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -1330034521147739183L;
 	
-	private final PopupMenu digitalClockPopupMenu;
+	private final JPopupMenu digitalClockPopupMenu;
 	
 	private int xOnClicked = 0;
 	private int yOnClicked = 0;
@@ -55,7 +56,6 @@ final class DigitalClockWindow extends Window implements DigitalClockPropertyObs
 		fontColor = DigitalClockProperty.PROPERTY.getFontColor();		
 
 		digitalClockPopupMenu = new DigitalClockPopupMenu(this);
-		add(digitalClockPopupMenu);
 		
 		addMouseListener(new MouseListener() {
 			
@@ -73,7 +73,6 @@ final class DigitalClockWindow extends Window implements DigitalClockPropertyObs
 			@Override
 			public void mouseExited(MouseEvent e) {
 				// Do nothing
-				
 			}
 			
 			@Override
@@ -84,7 +83,7 @@ final class DigitalClockWindow extends Window implements DigitalClockPropertyObs
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if (e.getButton() == MouseEvent.BUTTON3) {
-					digitalClockPopupMenu.show(DigitalClockWindow.this, e.getX(), e.getY());	
+					digitalClockPopupMenu.show(DigitalClockWindow.this, e.getX(), e.getY());
 				}
 			}
 		});
