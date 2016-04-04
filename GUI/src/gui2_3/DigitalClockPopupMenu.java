@@ -6,6 +6,8 @@ import java.awt.Font;
 import java.awt.GraphicsEnvironment;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -14,7 +16,6 @@ import java.util.Map.Entry;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 
 final class DigitalClockPopupMenu extends JPopupMenu {
@@ -23,12 +24,14 @@ final class DigitalClockPopupMenu extends JPopupMenu {
 	 * 
 	 */
 	private static final long serialVersionUID = -7914779750101277674L;
-	private final DigitalClockPropertyObserver digitalClockPropertyObserver;
+	private final PropertyChangeSupport notifier;
 	private final Font POPUP_MENU_FONT = new Font("Monospace", Font.PLAIN, 12);
 	private final Map<String, Color> colorSet = new HashMap<>();
 	
-	DigitalClockPopupMenu(DigitalClockPropertyObserver digitalClockPropertyObserver) {
-		this.digitalClockPropertyObserver = digitalClockPropertyObserver;
+	DigitalClockPopupMenu(PropertyChangeListener digitalClockPropertyObserver) {
+		notifier = new PropertyChangeSupport(this);
+		notifier.addPropertyChangeListener(digitalClockPropertyObserver);
+		
 		setFont(POPUP_MENU_FONT);
 		
 		colorSet.put("BLACK", Color.BLACK);
@@ -70,19 +73,19 @@ final class DigitalClockPopupMenu extends JPopupMenu {
 		for (Font f : fontSet) {
 				list.add(f.getName());
 		}
-		int num = DigitalClockWindow.EXCLUDED_FONTS.length;
-		for (int i=0; i<num; i++) {
-			list.remove(DigitalClockWindow.EXCLUDED_FONTS[i]);
-		}
 		for (final String fontName: list) {
 			JMenuItem mi = new JMenuItem(fontName);
 			mi.addActionListener(new ActionListener() {
 				
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					DigitalClockProperty.PROPERTY.setFontName(fontName);
-					digitalClockPropertyObserver.notifyPropertyChanged(DigitalClockProperty.PROPERTY);
-					DigitalClockPopupMenu.this.setFont(POPUP_MENU_FONT);
+					String selectedFontString = fontName;
+					for (final Font f: fontSet) {
+						if (selectedFontString.equals(f.getFontName())) {
+							notifier.firePropertyChange(DigitalClock.FONT_EVT, null, f);
+							break;
+						}
+					}
 				}
 			});
 			fontMenu.add(mi);
@@ -100,9 +103,8 @@ final class DigitalClockPopupMenu extends JPopupMenu {
 				
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					DigitalClockProperty.PROPERTY.setFontSize(fontSize);
-					digitalClockPropertyObserver.notifyPropertyChanged(DigitalClockProperty.PROPERTY);
-					DigitalClockPopupMenu.this.setFont(POPUP_MENU_FONT);
+					int selectedFontSize = fontSize;
+					notifier.firePropertyChange(DigitalClock.FONT_SIZE_EVT, null, selectedFontSize);
 				}
 			});
 			fontSizeMenu.add(mi);
@@ -119,13 +121,8 @@ final class DigitalClockPopupMenu extends JPopupMenu {
 				
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					if(colorEntry.getValue().equals(DigitalClockProperty.PROPERTY.getBackgroungColor())){
-						JOptionPane.showMessageDialog(null, colorEntry.getKey() + " is same color of background. Select different color for font.", "Error", JOptionPane.ERROR_MESSAGE);
-						return;
-					}
-					DigitalClockProperty.PROPERTY.setFontColor(colorEntry.getValue());
-					digitalClockPropertyObserver.notifyPropertyChanged(DigitalClockProperty.PROPERTY);
-					DigitalClockPopupMenu.this.setFont(POPUP_MENU_FONT);
+					Color selectedColor = colorEntry.getValue();
+					notifier.firePropertyChange(DigitalClock.FONT_COLOR_EVT, null, selectedColor);
 				}
 			});
 			fontColorMenu.add(mi);
@@ -141,13 +138,8 @@ final class DigitalClockPopupMenu extends JPopupMenu {
 				
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					if(colorEntry.getValue().equals(DigitalClockProperty.PROPERTY.getFontColor())){
-						JOptionPane.showMessageDialog(null, colorEntry.getKey() + " is same color of font. Select different color for background.", "Error", JOptionPane.ERROR_MESSAGE);
-						return;
-					}
-					DigitalClockProperty.PROPERTY.setBackgroungColor(colorEntry.getValue());
-					digitalClockPropertyObserver.notifyPropertyChanged(DigitalClockProperty.PROPERTY);
-					DigitalClockPopupMenu.this.setFont(POPUP_MENU_FONT);
+					Color selectedColor = colorEntry.getValue();
+					notifier.firePropertyChange(DigitalClock.BACKGROUND_COLOR_EVT, null, selectedColor);
 				}
 			});
 			bgColorMenu.add(mi);
