@@ -18,6 +18,7 @@ public class ReadCSVTableTest {
 
 	@Test
 	public void test() {
+		// 入力の終わりに空行
 		String testData = "1, 2, 3\n4, 5, 6\n";
 		StringReader reader = new StringReader(testData);
 		
