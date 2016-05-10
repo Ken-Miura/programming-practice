@@ -1,4 +1,4 @@
-package ch24.ex24_01; /* 無名パッケージでコンパイルして、クラスパス（無名パッケージと同一階層）上に配置 */
+package ch24.ex24_01;
 /* Copyright (C) 2016 Ken Miura */
 
 
