@@ -11,6 +11,8 @@ import javafx.stage.Stage;
 
 // git の練習。test branchへコミット。
 //　git の練習。test branchの削除。
+// 修正1
+// 修正2
 /**
  * @author Ken
  *
