@@ -10,6 +10,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 // git の練習。test branchへコミット。
+//　git の練習。test branchの削除。
 /**
  * @author Ken
  *
