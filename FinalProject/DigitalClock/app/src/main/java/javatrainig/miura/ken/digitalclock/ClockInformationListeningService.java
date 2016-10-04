@@ -4,6 +4,7 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -39,8 +40,14 @@ public final class ClockInformationListeningService extends Service {
     private static final String KEYWORD_TO_CHANGE_BACKGROUND_COLOR = "背景";
     private static final String KEYWORD_TO_HIDE_CLOCK = "消";
 
+    // サポートするのはandroidシステムから取得できるこの三つの論理フォントのみ
+    static final String SAN_SERIF = "サンセリフ";
+    static final String SERIF = "セリフ";
+    static final String MONO_SPACE = "monospace";
+
+    private static final String ERROR_MESSAGE_NO_SUPPORTED_FONT = "サポートされていないフォントを指定しています";
     private static final String ERROR_MESSAGE_NO_RECOGNITION = "正しく音声が認識されていません。はっきりと発音してください";
-    private static final String ERROR_MESSAGE_NO_SUPPORTED_FONT_SIZE = "サポートされていないフォントサイズを指定しています。";
+    private static final String ERROR_MESSAGE_NO_SUPPORTED_FONT_SIZE = "サポートされていないフォントサイズを指定しています";
 
     private static final Map<String, Integer> supportedColors = new HashMap<>();
     static {
@@ -87,8 +94,9 @@ public final class ClockInformationListeningService extends Service {
         // SpeechRecognizerの通知音を消すためにstartListeningする直前で、直前の音量を記憶し、ミュートにする
         tempMusicVolume = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
         tempAlarmVolume = mAudioManager.getStreamVolume(AudioManager.STREAM_ALARM);
-        mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, 0, 0);
-        mAudioManager.setStreamVolume(AudioManager.STREAM_ALARM, 0, 0);
+        //mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, 0, 0);
+        //mAudioManager.setStreamVolume(AudioManager.STREAM_ALARM, 0, 0);
+        mAudioManager.adjustVolume(AudioManager.ADJUST_MUTE, 0);
 
         if (mSpeechRecognizer == null) {
             mSpeechRecognizer = SpeechRecognizer.createSpeechRecognizer(this);
@@ -108,8 +116,9 @@ public final class ClockInformationListeningService extends Service {
             mSpeechRecognizer = null;
         }
         // SpeechRecognizerの通知音を消すためにミュートにしていた音量をもとに戻す
-        mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, tempMusicVolume, 0);
-        mAudioManager.setStreamVolume(AudioManager.STREAM_ALARM, tempAlarmVolume, 0);
+        //mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, tempMusicVolume, 0);
+        //mAudioManager.setStreamVolume(AudioManager.STREAM_ALARM, tempAlarmVolume, 0);
+        mAudioManager.adjustVolume(AudioManager.ADJUST_UNMUTE, 0);
     }
 
     private void restartListening() {
@@ -192,10 +201,19 @@ public final class ClockInformationListeningService extends Service {
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
                 } else if (s.contains(KEYWORD_TO_CHANGE_FONT )) {
-                    // TODO フォント変更について、物理フォントのアンドロイド上での取得方法が不明なので後で。
-                    Log.d(TAG, "Detected keyword: "+ KEYWORD_TO_CHANGE_FONT);
-                    //Intent intent = new Intent(MainActivity.ACTION_CHANGE_FONT);
-                    //getBaseContext().sendBroadcast(intent);
+                    Intent intent = new Intent(MainActivity.ACTION_CHANGE_FONT);
+                    if (s.contains(SAN_SERIF)) {
+                        intent.putExtra(ClockInformationReceiver.KEY_FONT, SAN_SERIF);
+                        getBaseContext().sendBroadcast(intent);
+                    } else if (s.contains(SERIF)) {
+                        intent.putExtra(ClockInformationReceiver.KEY_FONT, SERIF);
+                        getBaseContext().sendBroadcast(intent);
+                    } else if (s.contains(MONO_SPACE)) {
+                        intent.putExtra(ClockInformationReceiver.KEY_FONT, MONO_SPACE);
+                        getBaseContext().sendBroadcast(intent);
+                    } else {
+                        Toast.makeText(ClockInformationListeningService.this, ERROR_MESSAGE_NO_SUPPORTED_FONT, Toast.LENGTH_SHORT).show();
+                    }
                 } else if (s.contains(KEYWORD_TO_CHANGE_FONT_SIZE)) {
                     try {
                         final int extractedFontSize = Integer.parseInt(s.replaceAll("[^0-9]", ""));

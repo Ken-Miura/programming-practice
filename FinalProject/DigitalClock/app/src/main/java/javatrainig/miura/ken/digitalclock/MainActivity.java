@@ -78,6 +78,10 @@ public final class MainActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
+    void changeFont (Typeface newFont) {
+        textClock.setTypeface(newFont);
+    }
+
     void changeFontSize(int newFontSize) {
         textClock.setTextSize(newFontSize);
     }
