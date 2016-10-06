@@ -94,9 +94,8 @@ public final class ClockInformationListeningService extends Service {
         // SpeechRecognizerの通知音を消すためにstartListeningする直前で、直前の音量を記憶し、ミュートにする
         tempMusicVolume = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
         tempAlarmVolume = mAudioManager.getStreamVolume(AudioManager.STREAM_ALARM);
-        //mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, 0, 0);
-        //mAudioManager.setStreamVolume(AudioManager.STREAM_ALARM, 0, 0);
-        mAudioManager.adjustVolume(AudioManager.ADJUST_MUTE, 0);
+        mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, 0, 0);
+        mAudioManager.setStreamVolume(AudioManager.STREAM_ALARM, 0, 0);
 
         if (mSpeechRecognizer == null) {
             mSpeechRecognizer = SpeechRecognizer.createSpeechRecognizer(this);
@@ -116,9 +115,8 @@ public final class ClockInformationListeningService extends Service {
             mSpeechRecognizer = null;
         }
         // SpeechRecognizerの通知音を消すためにミュートにしていた音量をもとに戻す
-        //mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, tempMusicVolume, 0);
-        //mAudioManager.setStreamVolume(AudioManager.STREAM_ALARM, tempAlarmVolume, 0);
-        mAudioManager.adjustVolume(AudioManager.ADJUST_UNMUTE, 0);
+        mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, tempMusicVolume, 0);
+        mAudioManager.setStreamVolume(AudioManager.STREAM_ALARM, tempAlarmVolume, 0);
     }
 
     private void restartListening() {
