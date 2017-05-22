@@ -104,6 +104,7 @@ public class ThreadPool {
 	}
 
 	private boolean hasStarted = false;
+	private boolean hasStopped = false;
 	private final TaskQueue taskQueue;
 	private final Thread[] threads;
 
@@ -155,7 +156,7 @@ public class ThreadPool {
 		if (!hasStarted) {
 			throw new IllegalStateException("start has not been invoked yet.");
 		}
-		if (taskQueue.closed()) {
+		if (hasStopped) {
 			throw new IllegalStateException("stop has already been invoked.");
 		}
 		taskQueue.close();
@@ -167,6 +168,7 @@ public class ThreadPool {
 				return;
 			}
 		}
+		hasStopped = true;
 	}
 
 	/**
